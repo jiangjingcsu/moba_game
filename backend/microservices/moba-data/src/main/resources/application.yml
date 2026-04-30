@@ -1,0 +1,70 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: moba-data
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration
+  config:
+    import: "optional:nacos:moba-data.yml?group=MOBA_GROUP&refreshEnabled=false"
+  cloud:
+    nacos:
+      discovery:
+        enabled: true
+        server-addr: 192.168.1.45:8848
+        namespace: public
+        group: MOBA_GROUP
+        register-enabled: true
+      config:
+        server-addr: 192.168.1.45:8848
+        namespace: public
+        group: MOBA_GROUP
+        import-check:
+          enabled: false
+  data:
+    mongodb:
+      host: 192.168.1.45
+      port: 27017
+      database: moba_data
+    redis:
+      host: 192.168.1.45
+      port: 6379
+      password: jiangjing
+      database: 3
+      timeout: 5000
+
+dubbo:
+  qos:
+    enable: false
+  registry:
+    address: nacos://192.168.1.45:8848
+  protocol:
+    name: dubbo
+    port: 20884
+
+rocketmq:
+  name-server: 192.168.1.45:9876
+  consumer:
+    group: moba-data-consumer
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+logging:
+  level:
+    root: INFO
+    com.moba.data: DEBUG

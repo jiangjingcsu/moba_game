@@ -1,0 +1,77 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: moba-match
+  autoconfigure:
+    exclude:
+      - org.apache.rocketmq.spring.autoconfigure.RocketMQAutoConfiguration
+  config:
+    import: "optional:nacos:moba-match.yml?group=MOBA_GROUP&refreshEnabled=false"
+  cloud:
+    nacos:
+      discovery:
+        enabled: true
+        server-addr: 192.168.1.45:8848
+        namespace: public
+        group: MOBA_GROUP
+        register-enabled: true
+        metadata:
+          dubbo.port: 20882
+          dubbo.protocol: dubbo
+          dubbo.service.interfaces: com.moba.common.service.MatchService
+      config:
+        server-addr: 192.168.1.45:8848
+        namespace: public
+        group: MOBA_GROUP
+        import-check:
+          enabled: false
+  data:
+    redis:
+      host: 192.168.1.45
+      port: 6379
+      password: jiangjing
+      database: 1
+      timeout: 5000
+
+dubbo:
+  qos:
+    enable: false
+  registry:
+    address: nacos://192.168.1.45:8848
+    parameters:
+      namespace: public
+    register-mode: all
+  protocol:
+    name: dubbo
+    port: 20882
+    serialization: hessian2
+  provider:
+    prefer-serialization: hessian2
+  consumer:
+    prefer-serialization: hessian2
+
+rocketmq:
+  name-server: ${ROCKETMQ_NAMESRV:}
+  producer:
+    group: moba-match-producer
+    send-message-timeout: 3000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+logging:
+  level:
+    root: INFO
+    com.moba.match: DEBUG

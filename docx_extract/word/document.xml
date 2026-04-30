@@ -1,0 +1,7444 @@
+<?xml version="1.0" encoding="UTF-8"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">
+<w:body>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="48"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1001" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="48"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>3v3v3 MOBA游戏战斗服务器架构设计文档</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1001"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1002" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>文档版本：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 1.1</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1002"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1003" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t/>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>编制日期：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 2024年12月</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1003"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1004" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t/>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>编制人：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 系统架构师</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1004"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1005" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t/>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>审核人：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 技术负责人</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1005"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1006" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>文档修订记录</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1006"/>
+</w:p>
+<w:tbl>
+<w:tblPr>
+<w:tblW w:type="auto" w:w="0"/>
+<w:jc w:val="start"/>
+<w:tblBorders>
+<w:top w:color="auto" w:space="0" w:sz="8" w:val="single"/>
+<w:left w:color="auto" w:space="0" w:sz="8" w:val="single"/>
+<w:bottom w:color="auto" w:space="0" w:sz="8" w:val="single"/>
+<w:right w:color="auto" w:space="0" w:sz="8" w:val="single"/>
+<w:insideH w:color="auto" w:space="0" w:sz="8" w:val="single"/>
+<w:insideV w:color="auto" w:space="0" w:sz="8" w:val="single"/>
+</w:tblBorders>
+<w:tblLayout w:type="fixed"/>
+<w:tblCellMar>
+<w:top w:type="dxa" w:w="0"/>
+<w:left w:type="dxa" w:w="0"/>
+<w:bottom w:type="dxa" w:w="0"/>
+<w:right w:type="dxa" w:w="0"/>
+</w:tblCellMar>
+</w:tblPr>
+<w:tblGrid>
+<w:gridCol w:w="4000"/>
+<w:gridCol w:w="4000"/>
+<w:gridCol w:w="4000"/>
+<w:gridCol w:w="4000"/>
+</w:tblGrid>
+<w:tr>
+<w:trPr>
+<w:trHeight w:hRule="atLeast" w:val="800"/>
+</w:trPr>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="4000"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="0"/>
+<w:ind w:firstLine="0" w:hanging="0" w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1007" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>版本</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1007"/>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="4000"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="0"/>
+<w:ind w:firstLine="0" w:hanging="0" w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1008" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>日期</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1008"/>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="4000"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="0"/>
+<w:ind w:firstLine="0" w:hanging="0" w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1009" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>修改内容</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1009"/>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="4000"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="0"/>
+<w:ind w:firstLine="0" w:hanging="0" w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1010" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>修改人</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1010"/>
+</w:p>
+</w:tc>
+</w:tr>
+<w:tr>
+<w:trPr>
+<w:trHeight w:hRule="atLeast" w:val="800"/>
+</w:trPr>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="4000"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="0"/>
+<w:ind w:firstLine="0" w:hanging="0" w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1011" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>1.0</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1011"/>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="4000"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="0"/>
+<w:ind w:firstLine="0" w:hanging="0" w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1012" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>2024-12-01</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1012"/>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="4000"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="0"/>
+<w:ind w:firstLine="0" w:hanging="0" w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1013" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>初始版本</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1013"/>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="4000"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="0"/>
+<w:ind w:firstLine="0" w:hanging="0" w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1014" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>架构师</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1014"/>
+</w:p>
+</w:tc>
+</w:tr>
+<w:tr>
+<w:trPr>
+<w:trHeight w:hRule="atLeast" w:val="800"/>
+</w:trPr>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="4000"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="0"/>
+<w:ind w:firstLine="0" w:hanging="0" w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1015" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>1.1</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1015"/>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="4000"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="0"/>
+<w:ind w:firstLine="0" w:hanging="0" w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1016" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>2024-12-02</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1016"/>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="4000"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="0"/>
+<w:ind w:firstLine="0" w:hanging="0" w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1017" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>重构战斗服务器架构，引入单进程多房间模型</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1017"/>
+</w:p>
+</w:tc>
+<w:tc>
+<w:tcPr>
+<w:tcW w:type="dxa" w:w="4000"/>
+</w:tcPr>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="0"/>
+<w:ind w:firstLine="0" w:hanging="0" w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1018" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>架构师</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1018"/>
+</w:p>
+</w:tc>
+</w:tr>
+</w:tbl>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1019" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>1. 概述</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1019"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1020" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>1.1 文档目的</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1020"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1021" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>本文档旨在定义3v3v3 MOBA游戏战斗服务器的架构设计，包括技术选型、核心功能、通信机制和性能优化策略。</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1021"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1022" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>1.2 系统目标</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1022"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="1"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1023" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>支持10万+并发用户</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1023"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="1"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1024" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>战斗延迟&lt;100ms</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1024"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="1"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1025" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>高可用性，支持全球多地域部署</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1025"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="1"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1026" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>可扩展的微服务架构</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1026"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1027" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>2. 系统架构概览</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1027"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1028" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>2.1 整体架构图</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1028"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1029" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>2.2 技术栈</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1029"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="2"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1030" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>后端框架：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> Golang/Netty</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1030"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="2"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1031" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>数据库：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> MySQL + Redis + MongoDB</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1031"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="2"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1032" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>消息队列：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> Kafka</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1032"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="2"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1033" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>部署平台：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> Kubernetes</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1033"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="2"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1034" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>监控：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> Prometheus + Grafana</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1034"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1035" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>3. 战斗服务器设计</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1035"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1036" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>3.1 功能描述</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1036"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1037" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>实现权威的游戏逻辑服务器，采用**帧同步（Lockstep）**技术，支持3v3v3实时对战。</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1037"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1038" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>3.2 技术选型</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1038"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="3"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1039" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>核心框架：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> Golang (推荐) 或 Netty 4.x</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1039"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="3"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1040" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>数学库：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 定点数数学库 (Fixed Point Math)</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1040"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="3"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1041" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>同步频率：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 15Hz (66ms/Tick)</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1041"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="3"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1042" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>部署模式：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 有状态服务集群</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1042"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1043" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>3.3 核心架构</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1043"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1044" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>3.3.1 单进程多房间模型</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1044"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1045" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>架构特点：</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1045"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="4"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1046" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>单个战斗服进程支持50-100个战斗房间</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1046"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="4"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1047" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>每个房间运行在独立的Goroutine中</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1047"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="4"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1048" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>内存隔离，避免相互影响</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1048"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="4"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1049" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>进程预启动，避免动态创建开销</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1049"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1050" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>优势：</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1050"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="5"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1051" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>资源利用率提升300%</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1051"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="5"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1052" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>启动延迟从秒级降至毫秒级</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1052"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="5"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1053" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>K8s调度压力大幅降低</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1053"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1054" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>3.3.2 帧同步机制</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1054"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1055" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>同步流程：</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1055"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="6"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1056" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>客户端收集玩家操作指令</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1056"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="6"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1057" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>服务器广播所有玩家指令</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1057"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="6"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1058" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>客户端执行相同逻辑，保证结果一致</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1058"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1059" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>关键实现：</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1059"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="7"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1060" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>指令收集：第N帧玩家操作</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1060"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="7"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1061" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>状态同步：每帧广播战场状态</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1061"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="7"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1062" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>输入延迟：3-5帧确保网络同步</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1062"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1063" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>3.3.3 确定性保障</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1063"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1064" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>防不同步机制：</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1064"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="8"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1065" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>定点数计算：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 替代浮点数，确保跨平台一致性</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1065"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="8"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1066" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>随机数种子同步：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 全局统一分发种子</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1066"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="8"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1067" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>状态哈希校验：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 每10帧校验一次状态一致性</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1067"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="8"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1068" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>逻辑回放：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 支持战斗过程重现</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1068"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1069" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>4. 核心功能模块</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1069"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1070" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>4.1 房间管理</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1070"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1071" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>4.1.1 房间生命周期</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1071"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1072" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>4.1.2 房间分配策略</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1072"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="9"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1073" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>负载均衡：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 基于房间数量和CPU使用率</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1073"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="9"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1074" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>地域亲和：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 优先分配同地域服务器</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1074"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="9"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1075" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>玩家匹配：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 确保玩家连接同一战斗服</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1075"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1076" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>4.2 战斗逻辑处理</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1076"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1077" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>4.2.1 Tick处理流程</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1077"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="10"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1078" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>收集本Tick所有玩家指令</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1078"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="10"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1079" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>执行战斗逻辑计算</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1079"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="10"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1080" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>生成状态更新消息</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1080"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="10"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1081" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>广播给所有客户端</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1081"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="10"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1082" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>检查游戏结束条件</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1082"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1083" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>4.2.2 核心算法</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1083"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="11"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1084" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>AOI算法：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 感兴趣区域优化</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1084"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="11"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1085" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>碰撞检测：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 网格划分加速</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1085"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="11"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1086" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>技能判定：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 帧精确计算</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1086"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1087" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>4.3 观战与回放</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1087"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1088" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>4.3.1 观战系统</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1088"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="12"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1089" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>独立通道：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 观战流量与战斗流量分离</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1089"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="12"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1090" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>低延迟转发：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 保证观战体验</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1090"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="12"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1091" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>权限控制：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 支持好友观战和公开观战</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1091"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1092" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>4.3.2 战斗回放</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1092"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="13"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1093" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>操作流记录：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 持久化所有玩家操作</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1093"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="13"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1094" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>关键帧快照：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 每60帧生成一次状态快照</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1094"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="13"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1095" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>快速加载：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 支持任意位置开始回放</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1095"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1096" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>5. 通信机制设计</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1096"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1097" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>5.1 内部通信</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1097"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1098" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>5.1.1 gRPC通信</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1098"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1099" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>战斗服 &lt;-&gt; 数据服务</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1099"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="14"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1100" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>协议：gRPC Streaming</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1100"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="14"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1101" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>场景：实时战斗日志上报</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1101"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="14"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1102" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>优势：低延迟，流式传输</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1102"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1103" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>5.1.2 消息队列</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1103"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1104" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>组件：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> Kafka</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1104"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1105" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t/>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>场景：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 战斗日志异步落盘</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1105"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1106" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t/>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>流程：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 战斗服 → Kafka → 日志消费者 → MongoDB</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1106"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1107" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>5.2 外部通信</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1107"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1108" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>5.2.1 客户端协议</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1108"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="15"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1109" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>协议格式：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> Protobuf</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1109"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="15"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1110" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>通信方式：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> WebSocket长连接</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1110"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="15"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1111" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>心跳机制：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 30秒心跳保活</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1111"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1112" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>5.2.2 协议头定义</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1112"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1113" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>6. 数据存储设计</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1113"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1114" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>6.1 战斗日志存储</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1114"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1115" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>6.1.1 存储方案</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1115"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="16"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1116" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>存储引擎：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> MongoDB</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1116"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="16"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1117" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>数据格式：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> BSON文档</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1117"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="16"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1118" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>分片策略：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 按日期和房间ID分片</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1118"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1119" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>6.1.2 数据结构</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1119"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1120" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>6.2 结算数据处理</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1120"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1121" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>6.2.1 强一致性保障</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1121"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="17"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1122" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>主库写入：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 核心数据强制写入主库</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1122"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="17"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1123" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>Redis缓存：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 实时更新玩家资产</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1123"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="17"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1124" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>异步通知：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 通过消息队列通知其他服务</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1124"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1125" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>7. 性能优化策略</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1125"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1126" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>7.1 内存优化</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1126"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1127" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>7.1.1 对象池技术</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1127"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="18"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1128" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>复用对象：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 子弹、技能特效、临时坐标</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1128"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="18"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1129" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>减少GC：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 降低垃圾回收频率</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1129"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="18"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1130" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>性能提升：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 预期减少30%GC开销</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1130"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1131" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>7.1.2 内存预分配</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1131"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="19"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1132" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>战斗开始时：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 预分配战斗所需内存</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1132"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="19"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1133" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>避免运行时分配：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 减少内存碎片</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1133"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1134" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>7.2 网络优化</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1134"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1135" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>7.2.1 数据压缩</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1135"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="20"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1136" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>压缩算法：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> Snappy</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1136"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="20"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1137" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>压缩级别：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 3级平衡点</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1137"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="20"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1138" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>预期效果：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 减少40%网络流量</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1138"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1139" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>7.2.2 批量处理</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1139"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="21"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1140" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>批量广播：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 合并多个消息一起发送</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1140"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="21"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1141" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>延迟发送：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 10ms延迟窗口合并消息</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1141"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1142" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>7.3 CPU优化</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1142"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1143" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>7.3.1 算法优化</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1143"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="22"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1144" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>空间划分：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 网格划分优化碰撞检测</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1144"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="22"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1145" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>状态机：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 优化英雄状态切换逻辑</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1145"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="22"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1146" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>事件驱动：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 减少轮询开销</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1146"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1147" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>8. 安全与防作弊</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1147"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1148" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>8.1 逻辑校验</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1148"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1149" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>8.1.1 操作合法性检查</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1149"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="23"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1150" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>移动速度校验：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 防止加速作弊</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1150"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="23"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1151" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>技能CD校验：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 防止无CD作弊</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1151"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="23"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1152" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>伤害计算校验：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 防止修改伤害数值</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1152"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1153" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>8.1.2 状态一致性校验</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1153"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="24"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1154" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>哈希值比对：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 每10帧校验状态</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1154"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="24"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1155" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>关键点校验：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 游戏结束时最终校验</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1155"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1156" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>8.2 反外挂机制</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1156"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1157" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>8.2.1 客户端校验</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1157"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="25"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1158" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>内存校验：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 检测内存修改</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1158"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="25"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1159" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>行为分析：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 分析玩家操作模式</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1159"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="25"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1160" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>设备指纹：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 识别作弊设备</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1160"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1161" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>9. 部署与运维</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1161"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1162" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>9.1 部署架构</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1162"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1163" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>9.1.1 K8s部署策略</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1163"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="26"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1164" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>有状态服务：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> StatefulSet部署</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1164"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="26"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1165" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>资源限制：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> CPU 4核，内存 8GB</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1165"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="26"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1166" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>副本数量：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 根据负载动态调整</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1166"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1167" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>9.1.2 服务发现</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1167"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="27"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1168" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>服务注册：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> Consul</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1168"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="27"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1169" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>负载均衡：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> Nginx + K8s Service</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1169"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1170" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>9.2 监控告警</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1170"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1171" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>9.2.1 监控指标</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1171"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="28"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1172" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>性能指标：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> CPU、内存、网络</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1172"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="28"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1173" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>业务指标：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 房间数量、Tick延迟</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1173"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="28"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1174" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>错误指标：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 不同步次数、断线重连</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1174"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1175" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>9.2.2 告警策略</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1175"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="29"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1176" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>阈值告警：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> CPU&gt;80%，内存&gt;90%</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1176"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="29"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1177" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>异常告警：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 不同步率&gt;0.1%</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1177"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="29"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1178" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>延迟告警：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> Tick延迟&gt;100ms</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1178"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1179" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>10. 测试验证计划</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1179"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1180" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>10.1 功能测试</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1180"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1181" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>10.1.1 核心功能测试</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1181"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="30"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1182" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>战斗逻辑测试：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 1000+测试用例</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1182"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="30"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1183" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>帧同步测试：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 跨平台一致性验证</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1183"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="30"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1184" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>观战回放测试：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 完整功能验证</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1184"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1185" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>10.1.2 边界测试</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1185"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="31"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1186" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>最大房间数测试：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 单进程100房间</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1186"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="31"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1187" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>最大玩家数测试：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 900玩家/进程</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1187"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="31"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1188" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>长时间运行测试：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 72小时稳定性测试</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1188"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1189" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>10.2 性能测试</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1189"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1190" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>10.2.1 基准测试</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1190"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="32"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1191" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>单房间性能：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> CPU&lt;5%，内存&lt;100MB</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1191"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="32"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1192" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>多房间性能：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 线性扩展验证</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1192"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="32"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1193" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>网络性能：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 带宽&lt;1Mbps/房间</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1193"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1194" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>10.2.2 压力测试</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1194"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="33"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1195" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>极限压力：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 120%设计容量</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1195"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="33"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1196" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>恢复能力：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 故障恢复时间&lt;5秒</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1196"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="33"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1197" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>降级策略：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 优雅降级机制</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1197"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1198" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>11. 风险与应对</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1198"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1199" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>11.1 技术风险</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1199"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1200" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>11.1.1 帧同步不同步风险</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1200"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1201" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>应对措施：</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1201"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="34"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1202" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>完善的哈希校验机制</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1202"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="34"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1203" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>确定性数学库保证</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1203"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="34"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1204" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>全面的测试验证</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1204"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1205" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>11.1.2 高并发性能风险</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1205"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1206" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>应对措施：</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1206"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="35"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1207" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>对象池和内存优化</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1207"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="35"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1208" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>算法复杂度优化</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1208"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="35"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1209" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>充分的压测验证</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1209"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1210" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>11.2 运维风险</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1210"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1211" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>11.2.1 滚动升级风险</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1211"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1212" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>应对措施：</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1212"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="36"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1213" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>蓝绿部署策略</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1213"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="36"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1214" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>流量逐步切换</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1214"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="36"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1215" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>回滚机制准备</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1215"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="36"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1216" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="36"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>12. 附录</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1216"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1217" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>12.1 术语表</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1217"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="37"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1218" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>Tick：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 帧同步的基本时间单位</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1218"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="37"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1219" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>AOI：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 感兴趣区域</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1219"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="37"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1220" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>Room-in-Process：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 单进程多房间模型</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1220"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="37"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1221" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>Hash Checksum：</w:t>
+</w:r>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t xml:space="preserve"> 状态哈希校验</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1221"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="28"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1222" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="28"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>12.2 参考资料</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1222"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="38"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1223" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>《游戏服务器架构设计》</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1223"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="38"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1224" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>《分布式系统原理与范型》</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1224"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="38"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1225" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>《高性能MySQL》</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1225"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:numPr>
+<w:ilvl w:val="0"/>
+<w:numId w:val="38"/>
+</w:numPr>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:hanging="440" w:left="440" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1226" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="off"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>《Kubernetes权威指南》</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1226"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:pageBreakBefore w:val="off"/>
+<w:tabs/>
+<w:wordWrap w:val="on"/>
+<w:spacing w:after="0" w:before="160"/>
+<w:ind w:left="0" w:right="0"/>
+<w:jc w:val="left"/>
+<w:textAlignment w:val="auto"/>
+<w:rPr>
+<w:sz w:val="24"/>
+</w:rPr>
+</w:pPr>
+<w:bookmarkStart w:id="1227" w:name=""/>
+<w:r>
+<w:rPr>
+<w:rFonts w:ascii="宋体" w:cs="宋体" w:eastAsia="宋体" w:hAnsi="宋体"/>
+<w:sz w:val="24"/>
+<w:spacing w:val="0"/>
+<w:b w:val="on"/>
+<w:i w:val="off"/>
+</w:rPr>
+<w:t>文档结束</w:t>
+</w:r>
+<w:bookmarkEnd w:id="1227"/>
+</w:p>
+<w:p>
+<w:pPr>
+<w:jc w:val="left"/>
+</w:pPr>
+<w:r>
+<w:rPr/>
+<w:t>(AI生成)</w:t>
+</w:r>
+</w:p>
+<w:sectPr>
+<w:footerReference r:id="rId4"/>
+<w:headerReference r:id="rId5" w:type="default"/>
+<w:pgSz w:h="15840" w:w="11900"/>
+<w:pgMar w:bottom="1440" w:footer="720" w:header="720" w:left="1800" w:right="1800" w:top="1440"/>
+<w:cols w:num="1"/>
+</w:sectPr>
+</w:body>
+</w:document>

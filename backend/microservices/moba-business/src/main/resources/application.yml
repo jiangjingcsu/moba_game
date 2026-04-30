@@ -1,0 +1,86 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: moba-business
+  config:
+    import: "optional:nacos:moba-business.yml?group=MOBA_GROUP&refreshEnabled=false"
+  cloud:
+    nacos:
+      discovery:
+        enabled: true
+        server-addr: 192.168.1.45:8848
+        namespace: public
+        group: MOBA_GROUP
+        register-enabled: true
+        metadata:
+          dubbo.port: 20881
+          dubbo.protocol: dubbo
+      config:
+        server-addr: 192.168.1.45:8848
+        namespace: public
+        group: MOBA_GROUP
+        import-check:
+          enabled: false
+  datasource:
+    url: jdbc:mysql://192.168.1.45:3306/moba_business?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true
+    username: root
+    password: jiangjing
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  data:
+    redis:
+      host: 192.168.1.45
+      port: 6379
+      password: jiangjing
+      database: 0
+      timeout: 5000
+
+dubbo:
+  qos:
+    enable: false
+  registry:
+    address: nacos://192.168.1.45:8848
+    parameters:
+      namespace: public
+    register-mode: all
+  protocol:
+    name: dubbo
+    port: 20881
+    serialization: hessian2
+  provider:
+    prefer-serialization: hessian2
+  consumer:
+    prefer-serialization: hessian2
+
+sentinel:
+  enabled: false
+
+jwt:
+  secret: moba-game-jwt-secret-key-2024-must-be-at-least-256-bits
+  expiration: 86400000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+logging:
+  level:
+    root: INFO
+    com.moba.business: DEBUG

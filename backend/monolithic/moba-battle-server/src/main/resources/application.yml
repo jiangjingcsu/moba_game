@@ -1,0 +1,98 @@
+server:
+  port: 8888
+  battlePort: 9999
+  host: 0.0.0.0
+
+spring:
+  application:
+    name: moba-battle-server
+  datasource:
+    url: jdbc:mysql://192.168.1.45:3306/moba_battle?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+
+battle:
+  tick-interval-ms: 66
+  input-delay-frames: 3
+  spectator-buffer-seconds: 30
+  max-rooms: 100
+  reconnect-timeout-seconds: 30
+  hash-check-interval-frames: 10
+  ai:
+    enabled: true
+    tick-interval-frames: 2
+    default-level: 5
+
+matchmaking:
+  team-count: 3
+  3v3v3:
+    min-players: 3
+    max-players: 9
+    ai-fill-enabled: true
+  5v5:
+    min-players: 5
+    max-players: 10
+    ai-fill-enabled: true
+
+map:
+  3v3v3:
+    width: 12000
+    height: 12000
+    grid-size: 200
+  5v5:
+    width: 16000
+    height: 16000
+    grid-size: 200
+
+redis:
+  host: 192.168.1.45
+  port: 6379
+  password:
+  database: 0
+  timeout: 5000
+  lettuce:
+    pool:
+      max-active: 20
+      max-idle: 10
+      min-idle: 5
+      max-wait: 3000
+
+rocketmq:
+  namesrv-addr: 192.168.1.45:9876
+  producer:
+    group: moba-battle-producer
+
+logging:
+  level:
+    root: INFO
+    com.moba.battleserver: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/moba-battle-server.log
+    max-size: 100MB
+    max-history: 30
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always

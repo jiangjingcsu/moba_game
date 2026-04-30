@@ -1,0 +1,97 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: moba-gateway
+  config:
+    import: "optional:nacos:moba-gateway.yml?group=MOBA_GROUP&refreshEnabled=false"
+  cloud:
+    nacos:
+      discovery:
+        enabled: true
+        server-addr: 192.168.1.45:8848
+        namespace: public
+        group: MOBA_GROUP
+        register-enabled: true
+      config:
+        server-addr: 192.168.1.45:8848
+        namespace: public
+        group: MOBA_GROUP
+        import-check:
+          enabled: false
+    gateway:
+      routes:
+        - id: auth-service
+          uri: lb://moba-business
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - StripPrefix=1
+        - id: match-service
+          uri: lb://moba-business
+          predicates:
+            - Path=/api/match/**
+          filters:
+            - StripPrefix=1
+        - id: business-service
+          uri: lb://moba-business
+          predicates:
+            - Path=/api/business/**
+          filters:
+            - StripPrefix=1
+        - id: battle-service
+          uri: lb://moba-battle
+          predicates:
+            - Path=/api/battle/**
+          filters:
+            - StripPrefix=1
+        - id: battle-websocket
+          uri: lb:ws://moba-battle
+          predicates:
+            - Path=/ws/battle/**
+          filters:
+            - StripPrefix=1
+        - id: data-service
+          uri: lb://moba-data
+          predicates:
+            - Path=/api/data/**
+          filters:
+            - StripPrefix=1
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "http://localhost:8080"
+              - "http://127.0.0.1:3000"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders: "*"
+  data:
+    redis:
+      host: 192.168.1.45
+      port: 6379
+      password: jiangjing
+      database: 0
+      timeout: 5000
+
+jwt:
+  secret: moba-game-jwt-secret-key-2024-must-be-at-least-256-bits
+  expiration: 86400000
+
+sentinel:
+  enabled: false
+
+rate-limit:
+  enabled: true
+  default-limit: 1000
+  window-seconds: 60
+
+logging:
+  level:
+    root: INFO
+    com.moba.gateway: DEBUG

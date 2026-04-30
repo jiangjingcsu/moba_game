@@ -1,0 +1,82 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: moba-battle
+  autoconfigure:
+    exclude:
+      - org.apache.rocketmq.spring.autoconfigure.RocketMQAutoConfiguration
+  config:
+    import: "optional:nacos:moba-battle.yml?group=MOBA_GROUP&refreshEnabled=false"
+  cloud:
+    nacos:
+      discovery:
+        enabled: true
+        server-addr: 192.168.1.45:8848
+        namespace: public
+        group: MOBA_GROUP
+        register-enabled: true
+        metadata:
+          dubbo.port: 20883
+          dubbo.protocol: dubbo
+          dubbo.service.interfaces: com.moba.common.service.BattleService
+      config:
+        server-addr: 192.168.1.45:8848
+        namespace: public
+        group: MOBA_GROUP
+        import-check:
+          enabled: false
+  data:
+    redis:
+      host: 192.168.1.45
+      port: 6379
+      password: jiangjing
+      database: 2
+      timeout: 5000
+
+dubbo:
+  qos:
+    enable: false
+  registry:
+    address: nacos://192.168.1.45:8848
+    parameters:
+      namespace: public
+    register-mode: all
+  protocol:
+    name: dubbo
+    port: 20883
+    serialization: hessian2
+  provider:
+    prefer-serialization: hessian2
+
+rocketmq:
+  name-server: ${ROCKETMQ_NAMESRV:}
+  producer:
+    group: moba-battle-producer
+    send-message-timeout: 3000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+battle:
+  tick-interval-ms: 66
+  input-delay-frames: 3
+  max-rooms: 100
+  reconnect-timeout-seconds: 30
+  hash-check-interval-frames: 10
+
+logging:
+  level:
+    root: INFO
+    com.moba.battle: DEBUG
