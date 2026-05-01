@@ -1,0 +1,25 @@
+package com.moba.business.entity.quest;
+
+public enum QuestCategory {
+    BATTLE_WIN,
+    BATTLE_PLAY,
+    KILL_COUNT,
+    ASSIST_COUNT,
+    DEATH_LIMIT,
+    TOWER_DESTROY,
+    GOLD_EARN,
+    DAMAGE_DEAL,
+    HEALING_DONE,
+    MVP_EARN,
+    HERO_PLAY,
+    HERO_PLAY_DIFFERENT,
+    LEVEL_REACH,
+    RANK_REACH,
+    TRIPLE_KILL,
+    PENTA_KILL,
+    GAME_MODE_PLAY,
+    FRIEND_PLAY,
+    FIRST_BLOOD,
+    BARRACKS_DESTROY,
+    BATTLE_DURATION
+}

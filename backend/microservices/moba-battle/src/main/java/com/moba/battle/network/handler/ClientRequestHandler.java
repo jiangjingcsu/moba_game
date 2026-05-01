@@ -1,7 +1,7 @@
 package com.moba.battle.network.handler;
 
 import com.moba.battle.manager.PlayerManager;
-import com.moba.battle.network.codec.GameMessage;
+import com.moba.battle.protocol.core.GamePacket;
 import com.moba.battle.service.MessageDispatchService;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ChannelHandler.Sharable
-public class ClientRequestHandler extends SimpleChannelInboundHandler<GameMessage> {
+public class ClientRequestHandler extends SimpleChannelInboundHandler<GamePacket> {
     private final MessageDispatchService dispatchService;
 
     public ClientRequestHandler() {
@@ -19,11 +19,12 @@ public class ClientRequestHandler extends SimpleChannelInboundHandler<GameMessag
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, GameMessage msg) {
+    protected void channelRead0(ChannelHandlerContext ctx, GamePacket packet) {
         try {
-            dispatchService.dispatch(ctx, msg);
+            dispatchService.dispatch(ctx, packet);
         } catch (Exception e) {
-            log.error("Error processing message from channel: {}", ctx.channel().id().asShortText(), e);
+            log.error("Error processing packet: {} from channel: {}",
+                    packet.getMessageType(), ctx.channel().id().asShortText(), e);
         }
     }
 

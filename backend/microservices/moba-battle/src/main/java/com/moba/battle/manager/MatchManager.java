@@ -1,11 +1,11 @@
 package com.moba.battle.manager;
 
 import com.moba.battle.config.SpringContextHolder;
-import com.moba.battle.protocol.MatchRequest;
+import com.moba.battle.protocol.request.MatchJoinRequest;
 import com.moba.battle.model.MatchmakingPool;
 import com.moba.battle.model.MatchmakingPool.MatchType;
 import com.moba.battle.model.Player;
-import com.moba.battle.protocol.MatchResponse;
+import com.moba.battle.protocol.response.MatchJoinResponse;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -47,10 +47,10 @@ public class MatchManager {
         return SpringContextHolder.getBean(MatchManager.class);
     }
 
-    public MatchResponse joinMatch(ChannelHandlerContext ctx, MatchRequest request) {
+    public MatchJoinResponse joinMatch(ChannelHandlerContext ctx, MatchJoinRequest request) {
         Optional<Player> playerOpt = PlayerManager.getInstance().getPlayerByChannel(ctx);
         if (playerOpt.isEmpty()) {
-            return MatchResponse.failure("Player not found");
+            return MatchJoinResponse.failure("Player not found");
         }
 
         Player player = playerOpt.get();

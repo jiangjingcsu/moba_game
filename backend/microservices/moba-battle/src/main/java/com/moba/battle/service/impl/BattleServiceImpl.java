@@ -1,5 +1,6 @@
 package com.moba.battle.service.impl;
 
+import com.moba.battle.config.ServerConfig;
 import com.moba.battle.manager.BattleManager;
 import com.moba.battle.manager.BattleRoom;
 import com.moba.common.dto.BattleResultDTO;
@@ -7,13 +8,52 @@ import com.moba.common.dto.CreateBattleRequest;
 import com.moba.common.dto.CreateBattleResponse;
 import com.moba.common.service.BattleService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboService;
+import org.apache.dubbo.config.ApplicationConfig;
+import org.apache.dubbo.config.ProtocolConfig;
+import org.apache.dubbo.config.RegistryConfig;
+import org.apache.dubbo.config.ServiceConfig;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Slf4j
-@DubboService(parameters = {"serialization", "hessian2"})
+@Component
 public class BattleServiceImpl implements BattleService {
+
+    private ServiceConfig<BattleService> serviceConfig;
+
+    public void startDubboService(ServerConfig serverConfig) {
+        ApplicationConfig applicationConfig = new ApplicationConfig();
+        applicationConfig.setName("moba-battle");
+
+        RegistryConfig registryConfig = new RegistryConfig();
+        registryConfig.setAddress("nacos://" + serverConfig.getNacosServerAddr());
+        registryConfig.setGroup(serverConfig.getNacosGroup());
+        registryConfig.setParameters(java.util.Map.of("namespace", serverConfig.getNacosNamespace()));
+
+        ProtocolConfig protocolConfig = new ProtocolConfig();
+        protocolConfig.setName("dubbo");
+        protocolConfig.setPort(serverConfig.getDubboPort());
+        protocolConfig.setSerialization("hessian2");
+
+        serviceConfig = new ServiceConfig<>();
+        serviceConfig.setApplication(applicationConfig);
+        serviceConfig.setRegistry(registryConfig);
+        serviceConfig.setProtocol(protocolConfig);
+        serviceConfig.setInterface(BattleService.class);
+        serviceConfig.setRef(this);
+        serviceConfig.setParameters(java.util.Map.of("serialization", "hessian2"));
+
+        serviceConfig.export();
+        log.info("Dubbo service exported on port {}", serverConfig.getDubboPort());
+    }
+
+    public void stopDubboService() {
+        if (serviceConfig != null) {
+            serviceConfig.unexport();
+            log.info("Dubbo service unexported");
+        }
+    }
 
     @Override
     public CreateBattleResponse createBattle(CreateBattleRequest request) {

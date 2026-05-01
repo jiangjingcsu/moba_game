@@ -10,25 +10,45 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Component
 public class RoomManager {
     private final Map<String, BattleRoom> rooms;
     private final Map<Long, String> playerToRoom;
+
+    private final int tickPoolSize;
+    private final ExecutorService tickPool;
     private final ScheduledExecutorService tickScheduler;
 
     private final int maxRoomsPerProcess;
     private final String serverId;
 
+    private static final int TICK_INTERVAL_MS = 66;
+
     public RoomManager() {
         this.rooms = new ConcurrentHashMap<>();
         this.playerToRoom = new ConcurrentHashMap<>();
-        this.tickScheduler = Executors.newScheduledThreadPool(1);
+
+        int cpus = Runtime.getRuntime().availableProcessors();
+        this.tickPoolSize = Math.max(2, cpus);
+        this.tickPool = Executors.newFixedThreadPool(tickPoolSize, new ThreadFactory() {
+            private final AtomicInteger counter = new AtomicInteger(0);
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread t = new Thread(r, "battle-tick-" + counter.incrementAndGet());
+                t.setDaemon(true);
+                return t;
+            }
+        });
+        this.tickScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r, "battle-tick-scheduler");
+            t.setDaemon(true);
+            return t;
+        });
+
         this.maxRoomsPerProcess = 100;
         this.serverId = "BATTLE_SERVER_" + System.currentTimeMillis();
 
@@ -42,23 +62,51 @@ public class RoomManager {
     private void startTickLoop() {
         tickScheduler.scheduleAtFixedRate(() -> {
             long tickStart = System.currentTimeMillis();
-            for (BattleRoom room : new ArrayList<>(rooms.values())) {
-                try {
-                    room.tick();
-                    if (room.isRunning()) {
-                        MapManager.getInstance().updateMap(room.getBattleId(), room.getEngine().getCurrentFrame());
-                    }
-                } catch (Exception e) {
-                    log.error("Error ticking room: {}", room.getBattleId(), e);
+            Collection<BattleRoom> runningRooms = new ArrayList<>();
+            for (BattleRoom room : rooms.values()) {
+                if (room.isRunning()) {
+                    runningRooms.add(room);
                 }
             }
+
+            if (runningRooms.isEmpty()) return;
+
+            CountDownLatch latch = new CountDownLatch(runningRooms.size());
+
+            for (BattleRoom room : runningRooms) {
+                tickPool.submit(() -> {
+                    try {
+                        room.tick();
+                        MapManager.getInstance().updateMap(room.getBattleId(), room.getEngine().getCurrentFrame());
+                    } catch (Exception e) {
+                        log.error("Error ticking room: {}", room.getBattleId(), e);
+                    } finally {
+                        latch.countDown();
+                    }
+                });
+            }
+
+            try {
+                boolean completed = latch.await(TICK_INTERVAL_MS, TimeUnit.MILLISECONDS);
+                if (!completed) {
+                    log.warn("Tick cycle did not complete within {}ms, some rooms may be lagging", TICK_INTERVAL_MS);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
             long tickDuration = System.currentTimeMillis() - tickStart;
 
             ServerMonitor monitor = ServerMonitor.getInstance();
             monitor.recordTick(tickDuration);
             monitor.updateRoomCount(rooms.size());
             monitor.updatePlayerCount(playerToRoom.size());
-        }, 0, 66, TimeUnit.MILLISECONDS);
+
+            if (tickDuration > TICK_INTERVAL_MS) {
+                log.warn("Tick cycle took {}ms (budget={}ms), rooms={}, poolSize={}",
+                        tickDuration, TICK_INTERVAL_MS, runningRooms.size(), tickPoolSize);
+            }
+        }, 0, TICK_INTERVAL_MS, TimeUnit.MILLISECONDS);
     }
 
     public BattleRoom createRoom(String battleId, List<Long> playerIds, int teamCount) {
@@ -160,5 +208,17 @@ public class RoomManager {
     public Collection<BattleRoom> getAllRooms() {
         return Collections.unmodifiableCollection(rooms.values());
     }
-}
 
+    public void shutdown() {
+        tickScheduler.shutdown();
+        tickPool.shutdown();
+        try {
+            if (!tickPool.awaitTermination(5, TimeUnit.SECONDS)) {
+                tickPool.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            tickPool.shutdownNow();
+        }
+        log.info("RoomManager shutdown complete");
+    }
+}

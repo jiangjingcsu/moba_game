@@ -8,11 +8,17 @@ import com.moba.battle.config.SpringContextHolder;
 import com.moba.battle.event.BattleEventProducer;
 import com.moba.battle.model.*;
 import com.moba.battle.model.MOBAMap.GameMode;
-import com.moba.battle.protocol.*;
+import com.moba.battle.protocol.request.BattleEnterRequest;
+import com.moba.battle.protocol.request.ReconnectRequest;
+import com.moba.battle.protocol.response.BattleEnterResponse;
+import com.moba.battle.protocol.response.ReconnectResponse;
+import com.moba.battle.protocol.core.GamePacket;
+import com.moba.battle.protocol.core.MessageType;
+import com.moba.battle.protocol.core.SerializeType;
+import com.moba.battle.protocol.serialize.SerializerFactory;
 import com.moba.battle.replay.ReplaySystem;
 import com.moba.battle.storage.BattleLogStorage;
 import com.moba.battle.monitor.ServerMonitor;
-import com.moba.battle.network.codec.GameMessage;
 import com.moba.common.dto.BattleResultDTO;
 import com.moba.common.event.BattleEndEvent;
 import io.netty.channel.ChannelHandlerContext;
@@ -66,10 +72,17 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
 
         room.getEngine().setEventListener(this);
 
+        for (Long playerId : playerIds) {
+            room.registerHumanPlayer(playerId);
+        }
+
         if (neededBots > 0) {
             AIController aiController = AIController.getInstance();
-            aiController.createBotsForBattle(battleId, room.getSession(),
+            List<Long> botIds = aiController.createBotsForBattle(battleId, room.getSession(),
                     playerIds.size() / teamCount, neededBots, aiLevel);
+            for (Long botId : botIds) {
+                room.registerBotPlayer(botId);
+            }
             room.getEngine().enableAI(aiController, aiLevel);
             log.info("AI bots created for battle {}, count={}, level={}", battleId, neededBots, aiLevel);
         }
@@ -82,54 +95,139 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
             });
         }
 
-        scheduler.schedule(() -> {
-            room.setState(BattleRoom.RoomState.LOADING);
-            room.getSession().setState(BattleSession.BattleState.LOADING);
-            notifyPlayers(room);
+        room.transitionToLoading();
 
-            scheduler.schedule(() -> {
-                room.start();
-                room.getSession().start();
-                log.info("Battle {} started with {} players ({} bots), seed={}",
-                        battleId, playerIds.size(), neededBots, room.getEngine().getRandomSeed());
-            }, 3, TimeUnit.SECONDS);
-        }, 500, TimeUnit.MILLISECONDS);
+        scheduler.schedule(() -> {
+            if (room.getState() == BattleRoom.RoomState.LOADING && room.isLoadingTimeout()) {
+                log.warn("Loading timeout for room {}, unready players will be replaced by AI", battleId);
+                handleLoadingTimeout(room);
+            }
+        }, 60, TimeUnit.SECONDS);
 
         return room;
     }
 
+    private void handleLoadingTimeout(BattleRoom room) {
+        Set<Long> unreadyPlayers = room.getUnreadyPlayerIds();
+        if (unreadyPlayers.isEmpty()) return;
+
+        log.warn("Room {} loading timeout, {} players not ready: {}",
+                room.getBattleId(), unreadyPlayers.size(), unreadyPlayers);
+
+        AIController aiController = AIController.getInstance();
+        for (Long playerId : unreadyPlayers) {
+            log.info("Replacing unready player {} with AI bot in room {}", playerId, room.getBattleId());
+            room.registerBotPlayer(playerId);
+            room.humanPlayerIds.remove(playerId);
+            room.markPlayerReady(playerId);
+        }
+
+        if (!aiController.isInitializedForBattle(room.getBattleId())) {
+            aiController.createBotsForBattle(room.getBattleId(), room.getSession(),
+                    0, unreadyPlayers.size(), 3);
+            room.getEngine().enableAI(aiController, 3);
+        }
+
+        if (room.allHumanPlayersReady()) {
+            startCountdown(room);
+        }
+    }
+
+    public void startCountdown(BattleRoom room) {
+        room.transitionToCountdown();
+
+        broadcastCountdown(room, 3);
+        scheduler.schedule(() -> broadcastCountdown(room, 2), 1, TimeUnit.SECONDS);
+        scheduler.schedule(() -> broadcastCountdown(room, 1), 2, TimeUnit.SECONDS);
+        scheduler.schedule(() -> {
+            broadcastStart(room);
+            room.start();
+            room.getSession().start();
+            log.info("Battle {} started! {} human + {} bot players, seed={}",
+                    room.getBattleId(), room.getHumanPlayerIds().size(),
+                    room.getBotPlayerIds().size(), room.getEngine().getRandomSeed());
+        }, 3, TimeUnit.SECONDS);
+    }
+
+    private void broadcastCountdown(BattleRoom room, int seconds) {
+        try {
+            Map<String, Object> countdownData = new java.util.HashMap<>();
+            countdownData.put("seconds", seconds);
+            countdownData.put("roomId", room.getBattleId());
+            byte[] body = SerializerFactory.json().serialize(countdownData);
+
+            GamePacket packet = GamePacket.notify(MessageType.BATTLE_COUNTDOWN_NOTIFY, body);
+            broadcastToRoom(room, packet);
+        } catch (Exception e) {
+            log.error("Failed to broadcast countdown for room {}", room.getBattleId(), e);
+        }
+    }
+
+    private void broadcastStart(BattleRoom room) {
+        try {
+            Map<String, Object> startData = new java.util.HashMap<>();
+            startData.put("roomId", room.getBattleId());
+            startData.put("seed", room.getEngine().getRandomSeed());
+            startData.put("tickRate", room.getEngine().getTickRate());
+            byte[] body = SerializerFactory.json().serialize(startData);
+
+            GamePacket packet = GamePacket.notify(MessageType.BATTLE_START_NOTIFY, body);
+            broadcastToRoom(room, packet);
+        } catch (Exception e) {
+            log.error("Failed to broadcast start for room {}", room.getBattleId(), e);
+        }
+    }
+
+    private void broadcastToRoom(BattleRoom room, GamePacket packet) {
+        for (Long playerId : room.getSession().getBattlePlayers().keySet()) {
+            Player player = PlayerManager.getInstance().getPlayerById(playerId).orElse(null);
+            if (player != null && player.getCtx() != null && player.getCtx().channel().isActive()) {
+                player.getCtx().writeAndFlush(packet);
+            }
+        }
+    }
+
     public BattleEnterResponse enterBattle(ChannelHandlerContext ctx, BattleEnterRequest request) {
-        Optional<Player> playerOpt = PlayerManager.getInstance().getPlayerById(request.getPlayerId());
+        String roomId = request.getRoomId();
+
+        io.netty.util.AttributeKey<Object> playerIdKey = io.netty.util.AttributeKey.valueOf("playerId");
+        Object playerIdObj = ctx.channel().attr(playerIdKey).get();
+        if (!(playerIdObj instanceof Long)) {
+            return BattleEnterResponse.failure("UNAUTHORIZED", "未认证的连接");
+        }
+        long playerId = (Long) playerIdObj;
+
+        Optional<Player> playerOpt = PlayerManager.getInstance().getPlayerById(playerId);
         if (playerOpt.isEmpty()) {
-            return BattleEnterResponse.failure("Player not found");
+            return BattleEnterResponse.failure("PLAYER_NOT_FOUND", "玩家不存在");
         }
 
-        BattleRoom room = RoomManager.getInstance().getRoom(request.getBattleId());
+        BattleRoom room = RoomManager.getInstance().getRoom(roomId);
         if (room == null) {
-            return BattleEnterResponse.failure("Battle not found");
+            return BattleEnterResponse.failure("ROOM_NOT_FOUND", "房间不存在");
         }
 
-        BattlePlayer battlePlayer = room.getSession().getPlayer(request.getPlayerId());
+        BattlePlayer battlePlayer = room.getSession().getPlayer(playerId);
         if (battlePlayer == null) {
-            return BattleEnterResponse.failure("Not in this battle");
+            return BattleEnterResponse.failure("NOT_IN_ROOM", "你不在此房间中");
         }
 
         if (playerOpt.get().isReconnecting()) {
-            if (!ReconnectManager.getInstance().isReconnectValid(request.getPlayerId())) {
-                return BattleEnterResponse.failure("Reconnect timeout");
+            if (!ReconnectManager.getInstance().isReconnectValid(playerId)) {
+                return BattleEnterResponse.failure("RECONNECT_TIMEOUT", "重连超时");
             }
-            ReconnectManager.getInstance().cancelReconnectTimer(request.getPlayerId());
+            ReconnectManager.getInstance().cancelReconnectTimer(playerId);
         }
 
-        PlayerManager.getInstance().updatePlayerContext(ctx, request.getPlayerId());
+        PlayerManager.getInstance().updatePlayerContext(ctx, playerId);
 
-        MOBAMap mobaMap = MapManager.getInstance().getMap(request.getBattleId());
+        MOBAMap mobaMap = MapManager.getInstance().getMap(roomId);
         String mapConfigJson;
         int mapId;
 
         if (mobaMap != null) {
             mapId = mobaMap.getMapId();
-            mapConfigJson = MapManager.getInstance().getMapStateJson(request.getBattleId());
+            mapConfigJson = MapManager.getInstance().getMapStateJson(roomId);
         } else {
             mapId = defaultMapConfig.getMapId();
             mapConfigJson = "{\"mapId\":" + defaultMapConfig.getMapId() +
@@ -139,7 +237,7 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
         }
 
         return BattleEnterResponse.success(
-                request.getBattleId(),
+                roomId,
                 mapId,
                 mapConfigJson
         );
@@ -244,27 +342,6 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
         return ReconnectResponse.success(stateJson);
     }
 
-    private void notifyPlayers(BattleRoom room) {
-        String battleId = room.getBattleId();
-        long randomSeed = room.getEngine().getRandomSeed();
-        int playerCount = room.getPlayerCount();
-
-        String notifyData = "NOTIFY|LOADING|" + battleId + "|seed=" + randomSeed + "|players=" + playerCount;
-        byte[] body = notifyData.getBytes(java.nio.charset.StandardCharsets.UTF_8);
-
-        for (Long playerId : room.getSession().getBattlePlayers().keySet()) {
-            Player player = PlayerManager.getInstance().getPlayerById(playerId).orElse(null);
-            if (player != null && player.getCtx() != null && player.getCtx().channel().isActive()) {
-                GameMessage msg = new GameMessage();
-                msg.setMessageId(GameMessage.BATTLE_ENTER_RESPONSE);
-                msg.setBody(body);
-                player.getCtx().writeAndFlush(msg);
-            }
-        }
-
-        BattleLogStorage.getInstance().submitBattleEvent(battleId, "LOADING_START", notifyData);
-    }
-
     @Override
     public void onFrameUpdate(int frameNumber, FrameState state) {
         for (BattleRoom room : RoomManager.getInstance().getAllRooms()) {
@@ -362,7 +439,7 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
             event.setTimestamp(System.currentTimeMillis());
             event.setResult(resultDTO);
 
-            BattleEventProducer producer = SpringContextHolder.getApplicationContext().getBeanProvider(BattleEventProducer.class).getIfAvailable();
+            BattleEventProducer producer = SpringContextHolder.getBean(BattleEventProducer.class);
             if (producer != null) {
                 producer.publishBattleEnd(event);
             } else {
@@ -401,10 +478,8 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
         for (Long playerId : session.getBattlePlayers().keySet()) {
             Player player = PlayerManager.getInstance().getPlayerById(playerId).orElse(null);
             if (player != null && player.getCtx() != null && player.getCtx().channel().isActive()) {
-                GameMessage msg = new GameMessage();
-                msg.setMessageId(GameMessage.BATTLE_END_NOTIFY);
-                msg.setBody(body);
-                player.getCtx().writeAndFlush(msg);
+                GamePacket packet = GamePacket.notify(MessageType.BATTLE_END_NOTIFY, body);
+                player.getCtx().writeAndFlush(packet);
             }
         }
 
@@ -452,4 +527,3 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
         return RoomManager.getInstance().getTotalPlayers();
     }
 }
-

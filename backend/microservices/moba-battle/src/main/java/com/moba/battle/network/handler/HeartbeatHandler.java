@@ -1,7 +1,9 @@
 package com.moba.battle.network.handler;
 
 import com.moba.battle.config.ServerConfig;
-import com.moba.battle.network.codec.GameMessage;
+import com.moba.battle.config.SpringContextHolder;
+import com.moba.battle.protocol.core.GamePacket;
+import com.moba.battle.protocol.core.MessageType;
 import io.netty.channel.*;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -10,11 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ChannelHandler.Sharable
 public class HeartbeatHandler extends ChannelInboundHandlerAdapter {
-    private final int heartbeatInterval;
-
-    public HeartbeatHandler() {
-        this.heartbeatInterval = ServerConfig.defaultConfig().getHeartbeatIntervalSeconds();
-    }
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
@@ -36,10 +33,11 @@ public class HeartbeatHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void scheduleHeartbeat(ChannelHandlerContext ctx) {
+        ServerConfig config = SpringContextHolder.getBean(ServerConfig.class);
+        int heartbeatInterval = config != null ? config.getHeartbeatIntervalSeconds() : 30;
         ctx.executor().schedule(() -> {
             if (ctx.channel().isActive()) {
-                GameMessage heartbeat = new GameMessage();
-                heartbeat.setMessageId(GameMessage.HEARTBEAT_REQUEST);
+                GamePacket heartbeat = new GamePacket(MessageType.HEARTBEAT_REQ, 0);
                 heartbeat.setBody(new byte[0]);
                 ctx.writeAndFlush(heartbeat);
                 scheduleHeartbeat(ctx);

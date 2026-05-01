@@ -2,16 +2,14 @@ package com.moba.battle.manager;
 
 import com.moba.battle.config.SpringContextHolder;
 import com.moba.battle.model.Player;
-import com.moba.battle.protocol.LoginRequest;
-import com.moba.battle.protocol.LoginResponse;
+import com.moba.battle.protocol.request.LoginRequest;
+import com.moba.battle.protocol.response.LoginResponse;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.WebSocketSession;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -20,13 +18,11 @@ import java.util.concurrent.atomic.AtomicLong;
 public class PlayerManager {
     private final Map<Long, Player> playersById;
     private final Map<String, Player> playersByChannel;
-    private final Map<Long, Set<WebSocketSession>> webSocketSessions;
     private final AtomicLong playerIdGenerator;
 
     public PlayerManager() {
         this.playersById = new ConcurrentHashMap<>();
         this.playersByChannel = new ConcurrentHashMap<>();
-        this.webSocketSessions = new ConcurrentHashMap<>();
         this.playerIdGenerator = new AtomicLong(10000);
     }
 
@@ -146,26 +142,5 @@ public class PlayerManager {
         playersByChannel.put(channelId, player);
         log.info("Player registered from token: id={}, name={}, channel={}", playerId, username, channelId.substring(0, 8));
         return player;
-    }
-
-    public void addWebSocketSession(long playerId, WebSocketSession session) {
-        webSocketSessions.computeIfAbsent(playerId, k -> ConcurrentHashMap.newKeySet()).add(session);
-        getPlayerById(playerId).ifPresent(p -> p.setState(Player.PlayerState.ONLINE));
-        log.info("WebSocket session added for player {}: {}", playerId, session.getId());
-    }
-
-    public void removeWebSocketSession(long playerId, WebSocketSession session) {
-        Set<WebSocketSession> sessions = webSocketSessions.get(playerId);
-        if (sessions != null) {
-            sessions.remove(session);
-            if (sessions.isEmpty()) {
-                webSocketSessions.remove(playerId);
-            }
-        }
-        log.info("WebSocket session removed for player {}: {}", playerId, session.getId());
-    }
-
-    public Set<WebSocketSession> getWebSocketSessions(long playerId) {
-        return webSocketSessions.getOrDefault(playerId, Set.of());
     }
 }

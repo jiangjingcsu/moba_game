@@ -1,14 +1,6 @@
-server:
-  port: 8083
-
 spring:
   application:
     name: moba-battle
-  autoconfigure:
-    exclude:
-      - org.apache.rocketmq.spring.autoconfigure.RocketMQAutoConfiguration
-  config:
-    import: "optional:nacos:moba-battle.yml?group=MOBA_GROUP&refreshEnabled=false"
   cloud:
     nacos:
       discovery:
@@ -21,12 +13,6 @@ spring:
           dubbo.port: 20883
           dubbo.protocol: dubbo
           dubbo.service.interfaces: com.moba.common.service.BattleService
-      config:
-        server-addr: 192.168.1.45:8848
-        namespace: public
-        group: MOBA_GROUP
-        import-check:
-          enabled: false
   data:
     redis:
       host: 192.168.1.45
@@ -36,8 +22,6 @@ spring:
       timeout: 5000
 
 dubbo:
-  qos:
-    enable: false
   registry:
     address: nacos://192.168.1.45:8848
     parameters:
@@ -55,19 +39,6 @@ rocketmq:
   producer:
     group: moba-battle-producer
     send-message-timeout: 3000
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics,prometheus
-  endpoint:
-    health:
-      show-details: always
-  metrics:
-    export:
-      prometheus:
-        enabled: true
 
 battle:
   tick-interval-ms: 66

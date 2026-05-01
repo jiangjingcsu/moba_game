@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.moba.battle.network.codec.GameMessage;
+import com.moba.battle.protocol.core.GamePacket;
+import com.moba.battle.protocol.core.MessageType;
 
 @Slf4j
 @Component
@@ -156,10 +157,8 @@ public class SpectatorManager {
     private void sendToSpectator(Spectator spectator, String data) {
         Player spectatorPlayer = PlayerManager.getInstance().getPlayerById(spectator.getSpectatorId()).orElse(null);
         if (spectatorPlayer != null && spectatorPlayer.getCtx() != null && spectatorPlayer.getCtx().channel().isActive()) {
-            GameMessage msg = new GameMessage();
-            msg.setMessageId(GameMessage.BATTLE_STATE_UPDATE);
-            msg.setBody(data.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-            spectatorPlayer.getCtx().writeAndFlush(msg);
+            GamePacket packet = GamePacket.notify(MessageType.BATTLE_STATE_NOTIFY, data.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            spectatorPlayer.getCtx().writeAndFlush(packet);
         }
     }
 }
