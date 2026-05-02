@@ -3,6 +3,7 @@ package com.moba.battle.protocol.core;
 public enum MessageModule {
     SYSTEM(0x01),
     AUTH(0x02),
+    MATCH(0x03),
     BATTLE(0x04),
     ROOM(0x05),
     SOCIAL(0x06),

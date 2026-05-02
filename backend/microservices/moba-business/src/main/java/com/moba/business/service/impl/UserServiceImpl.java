@@ -52,16 +52,16 @@ public class UserServiceImpl implements UserService {
     public UserDTO login(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
         if (userOpt.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
+            throw new IllegalArgumentException("用户不存在");
         }
         User user = userOpt.get();
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("Invalid password");
+            throw new IllegalArgumentException("密码错误");
         }
         user.setState("ONLINE");
         userRepository.save(user);
         redisTemplate.delete(USER_CACHE_PREFIX + user.getId());
-        log.info("User logged in: {} (id={})", username, user.getId());
+        log.info("用户登录: {} (id={})", username, user.getId());
         return toDTO(user);
     }
 
@@ -69,10 +69,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDTO createUser(String username, String password, String nickname) {
         if (userRepository.existsByUsername(username)) {
-            throw new IllegalArgumentException("Username already exists");
+            throw new IllegalArgumentException("用户名已存在");
         }
         if (userRepository.existsByNickname(nickname)) {
-            throw new IllegalArgumentException("Nickname already exists");
+            throw new IllegalArgumentException("昵称已存在");
         }
 
         User user = new User();
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
         user.setState("OFFLINE");
 
         User saved = userRepository.save(user);
-        log.info("Created new user: {} (id={})", username, saved.getId());
+        log.info("创建新用户: {} (id={})", username, saved.getId());
         return toDTO(saved);
     }
 

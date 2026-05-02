@@ -48,9 +48,13 @@ public class Player {
         return state == PlayerState.MATCHING;
     }
 
-    public void sendToClient(byte[] data) {
+    public boolean isConnected() {
+        return ctx != null && ctx.channel().isActive();
+    }
+
+    public void sendToClient(Object msg) {
         if (ctx != null && ctx.channel().isActive()) {
-            ctx.writeAndFlush(data);
+            ctx.writeAndFlush(msg);
         }
     }
 }

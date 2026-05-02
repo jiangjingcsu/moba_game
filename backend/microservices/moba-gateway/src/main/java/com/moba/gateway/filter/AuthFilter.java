@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -34,16 +33,16 @@ public class AuthFilter implements GlobalFilter, Ordered {
             "/actuator/info"
     );
 
-    private static final List<String> PREFIX_WHITE_LIST = List.of(
-            "/ws/battle"
-    );
-
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
 
-        if (isWhiteListed(path)) {
+        if (path.startsWith("/ws/")) {
+            return chain.filter(exchange);
+        }
+
+        if (EXACT_WHITE_LIST.contains(path)) {
             return chain.filter(exchange);
         }
 
@@ -57,7 +56,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
         return tokenBlacklistService.isBlacklisted(token)
                 .flatMap(blacklisted -> {
                     if (blacklisted) {
-                        log.warn("Blacklisted token used");
+                        log.warn("已拉黑的令牌被使用");
                         return unauthorized(exchange.getResponse());
                     }
 
@@ -77,13 +76,6 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
                     return chain.filter(exchange.mutate().request(modifiedRequest).build());
                 });
-    }
-
-    private boolean isWhiteListed(String path) {
-        if (EXACT_WHITE_LIST.contains(path)) {
-            return true;
-        }
-        return PREFIX_WHITE_LIST.stream().anyMatch(path::startsWith);
     }
 
     private Mono<Void> unauthorized(ServerHttpResponse response) {

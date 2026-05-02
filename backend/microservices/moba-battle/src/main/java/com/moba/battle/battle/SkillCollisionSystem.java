@@ -81,7 +81,7 @@ public class SkillCollisionSystem {
 
             if (distance <= radius + player.getCollisionRadius()) {
                 hitPlayers.add(player.getPlayerId());
-                log.debug("Circle skill hit: skill={}, caster={}, target={}, distance={}, radius={}",
+                log.debug("圆形技能命中: skill={}, caster={}, target={}, distance={}, radius={}",
                         skillInfo.getSkillId(), skillInfo.getCasterId(), player.getPlayerId(), distance, radius);
             }
         }
@@ -177,7 +177,7 @@ public class SkillCollisionSystem {
 
             if (Math.abs(angleDiff) <= halfAngle) {
                 hitPlayers.add(player.getPlayerId());
-                log.debug("Fan skill hit: player={}, angleDiff={}, halfAngle={}",
+                log.debug("扇形技能命中: player={}, angleDiff={}, halfAngle={}",
                         player.getPlayerId(), angleDiff, halfAngle);
             }
         }

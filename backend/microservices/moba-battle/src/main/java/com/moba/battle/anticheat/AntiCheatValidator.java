@@ -39,7 +39,7 @@ public class AntiCheatValidator {
         record.lastValidPositionY = (int)targetY;
 
         if (!isValid) {
-            log.warn("Move speed validation failed: player={}, distance={}, max={}, pos=({}, {})",
+            log.warn("移动速度验证失败: player={}, distance={}, max={}, pos=({}, {})",
                     playerId, distance, maxDistance, targetX, targetY);
             record.violationCount++;
         }
@@ -57,14 +57,14 @@ public class AntiCheatValidator {
 
         long timeSinceLastCast = currentTime - skill.getLastCastTime();
         if (timeSinceLastCast < skill.getCooldown()) {
-            log.warn("Skill CD violation: player={}, skill={}, elapsed={}, cd={}",
+            log.warn("技能冷却违规: player={}, skill={}, elapsed={}, cd={}",
                     playerId, skillId, timeSinceLastCast, skill.getCooldown());
             record.violationCount++;
             return false;
         }
 
         if (player.getCurrentMp() < skill.getMpCost()) {
-            log.warn("Insufficient MP for skill: player={}, skill={}, mp={}, cost={}",
+            log.warn("技能魔法值不足: player={}, skill={}, mp={}, cost={}",
                     playerId, skillId, player.getCurrentMp(), skill.getMpCost());
             record.violationCount++;
             return false;
@@ -79,7 +79,7 @@ public class AntiCheatValidator {
         int expectedMaxDamage = Math.max(1, attacker.getAttackPower() - target.getDefense() / 10 + 10);
 
         if (damage < expectedMinDamage || damage > expectedMaxDamage) {
-            log.warn("Damage validation failed: attacker={}, target={}, damage={}, expected=[{}, {}]",
+            log.warn("伤害验证失败: attacker={}, target={}, damage={}, expected=[{}, {}]",
                     attackerId, targetId, damage, expectedMinDamage, expectedMaxDamage);
             return false;
         }
@@ -89,14 +89,14 @@ public class AntiCheatValidator {
     public boolean checkPlayerSuspicion(long playerId) {
         PlayerMoveRecord moveRecord = moveRecords.get(playerId);
         if (moveRecord != null && moveRecord.violationCount > 10) {
-            log.error("Player {} flagged for suspicious behavior: {} move violations",
+            log.error("玩家{}被标记为可疑行为: {}次移动违规",
                     playerId, moveRecord.violationCount);
             return true;
         }
 
         SkillCastRecord skillRecord = skillRecords.get(playerId);
         if (skillRecord != null && skillRecord.violationCount > 5) {
-            log.error("Player {} flagged for suspicious skill usage: {} CD violations",
+            log.error("玩家{}被标记为可疑技能使用: {}次冷却违规",
                     playerId, skillRecord.violationCount);
             return true;
         }

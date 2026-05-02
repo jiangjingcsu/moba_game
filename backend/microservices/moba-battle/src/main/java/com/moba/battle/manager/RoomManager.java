@@ -3,6 +3,7 @@ package com.moba.battle.manager;
 import com.moba.battle.battle.GridCollisionDetector;
 import com.moba.battle.battle.LockstepEngine;
 import com.moba.battle.battle.SkillCollisionSystem;
+import com.moba.battle.config.ServerConfig;
 import com.moba.battle.config.SpringContextHolder;
 import com.moba.battle.model.*;
 import com.moba.battle.monitor.ServerMonitor;
@@ -24,11 +25,11 @@ public class RoomManager {
     private final ScheduledExecutorService tickScheduler;
 
     private final int maxRoomsPerProcess;
+    private final int tickIntervalMs;
+    private final int defaultGridSize;
     private final String serverId;
 
-    private static final int TICK_INTERVAL_MS = 66;
-
-    public RoomManager() {
+    public RoomManager(ServerConfig serverConfig) {
         this.rooms = new ConcurrentHashMap<>();
         this.playerToRoom = new ConcurrentHashMap<>();
 
@@ -49,7 +50,9 @@ public class RoomManager {
             return t;
         });
 
-        this.maxRoomsPerProcess = 100;
+        this.maxRoomsPerProcess = serverConfig.getMaxRooms();
+        this.tickIntervalMs = serverConfig.getTickIntervalMs();
+        this.defaultGridSize = serverConfig.getDefaultGridSize();
         this.serverId = "BATTLE_SERVER_" + System.currentTimeMillis();
 
         startTickLoop();
@@ -79,7 +82,7 @@ public class RoomManager {
                         room.tick();
                         MapManager.getInstance().updateMap(room.getBattleId(), room.getEngine().getCurrentFrame());
                     } catch (Exception e) {
-                        log.error("Error ticking room: {}", room.getBattleId(), e);
+                        log.error("房间Tick异常: {}", room.getBattleId(), e);
                     } finally {
                         latch.countDown();
                     }
@@ -87,10 +90,10 @@ public class RoomManager {
             }
 
             try {
-                boolean completed = latch.await(TICK_INTERVAL_MS, TimeUnit.MILLISECONDS);
-                if (!completed) {
-                    log.warn("Tick cycle did not complete within {}ms, some rooms may be lagging", TICK_INTERVAL_MS);
-                }
+                boolean completed = latch.await(tickIntervalMs, TimeUnit.MILLISECONDS);
+            if (!completed) {
+                log.warn("Tick周期未在{}ms内完成, 部分房间可能存在延迟", tickIntervalMs);
+            }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -102,16 +105,16 @@ public class RoomManager {
             monitor.updateRoomCount(rooms.size());
             monitor.updatePlayerCount(playerToRoom.size());
 
-            if (tickDuration > TICK_INTERVAL_MS) {
-                log.warn("Tick cycle took {}ms (budget={}ms), rooms={}, poolSize={}",
-                        tickDuration, TICK_INTERVAL_MS, runningRooms.size(), tickPoolSize);
+            if (tickDuration > tickIntervalMs) {
+                log.warn("Tick周期耗时{}ms (预算={}ms), 房间数={}, 线程池大小={}",
+                        tickDuration, tickIntervalMs, runningRooms.size(), tickPoolSize);
             }
-        }, 0, TICK_INTERVAL_MS, TimeUnit.MILLISECONDS);
+        }, 0, tickIntervalMs, TimeUnit.MILLISECONDS);
     }
 
     public BattleRoom createRoom(String battleId, List<Long> playerIds, int teamCount) {
         if (rooms.size() >= maxRoomsPerProcess) {
-            log.error("Server at max capacity: {} rooms", maxRoomsPerProcess);
+            log.error("服务器已达最大容量: {}个房间", maxRoomsPerProcess);
             return null;
         }
 
@@ -137,7 +140,7 @@ public class RoomManager {
 
         LockstepEngine engine = new LockstepEngine(battleId, session);
 
-        GridCollisionDetector gridDetector = new GridCollisionDetector(16000, 16000, 200);
+        GridCollisionDetector gridDetector = new GridCollisionDetector(16000, 16000, defaultGridSize);
         SkillCollisionSystem collisionSystem = new SkillCollisionSystem(session, gridDetector);
         engine.setCollisionSystem(collisionSystem);
 
@@ -148,7 +151,7 @@ public class RoomManager {
             playerToRoom.put(playerId, battleId);
         }
 
-        log.info("Room created: {} on server {}, players: {}", battleId, serverId, playerIds.size());
+        log.info("房间已创建: {} 服务器={}, 玩家数: {}", battleId, serverId, playerIds.size());
         return room;
     }
 
@@ -181,7 +184,7 @@ public class RoomManager {
             for (Long playerId : room.getSession().getBattlePlayers().keySet()) {
                 playerToRoom.remove(playerId);
             }
-            log.info("Room removed: {}", battleId);
+            log.info("房间已移除: {}", battleId);
         }
     }
 
@@ -219,6 +222,6 @@ public class RoomManager {
         } catch (InterruptedException e) {
             tickPool.shutdownNow();
         }
-        log.info("RoomManager shutdown complete");
+        log.info("RoomManager关闭完成");
     }
 }

@@ -1,5 +1,6 @@
 package com.moba.battle.monitor;
 
+import com.moba.battle.config.ServerConfig;
 import com.moba.battle.config.SpringContextHolder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +30,9 @@ public class ServerMonitor {
     private final AtomicInteger memoryUsagePercent;
 
     private final Map<String, MetricHistory> metricHistory;
-    private static final int HISTORY_SIZE = 60;
+    private final int historySize;
 
-    public ServerMonitor() {
+    public ServerMonitor(ServerConfig serverConfig) {
         this.scheduler = Executors.newScheduledThreadPool(1);
         this.tickDelayMs = new AtomicInteger(0);
         this.roomCount = new AtomicInteger(0);
@@ -43,6 +44,7 @@ public class ServerMonitor {
         this.cpuUsagePercent = new AtomicInteger(0);
         this.memoryUsagePercent = new AtomicInteger(0);
         this.metricHistory = new ConcurrentHashMap<>();
+        this.historySize = serverConfig.getMetricHistorySize();
 
         startAlertCheck();
     }
@@ -108,17 +110,17 @@ public class ServerMonitor {
         ServerMetrics metrics = getCurrentMetrics();
 
         if (metrics.getCpuUsagePercent() > 80) {
-            log.warn("ALERT: CPU usage high: {}%", metrics.getCpuUsagePercent());
+            log.warn("告警: CPU使用率过高: {}%", metrics.getCpuUsagePercent());
             recordAlert("CPU_HIGH", metrics.getCpuUsagePercent() + "%");
         }
 
         if (metrics.getMemoryUsagePercent() > 90) {
-            log.warn("ALERT: Memory usage high: {}%", metrics.getMemoryUsagePercent());
+            log.warn("告警: 内存使用率过高: {}%", metrics.getMemoryUsagePercent());
             recordAlert("MEMORY_HIGH", metrics.getMemoryUsagePercent() + "%");
         }
 
         if (metrics.getTickDelayMs() > 100) {
-            log.warn("ALERT: Tick delay exceeded 100ms: {}ms", metrics.getTickDelayMs());
+            log.warn("告警: Tick延迟超过100ms: {}ms", metrics.getTickDelayMs());
             recordAlert("TICK_DELAY_HIGH", metrics.getTickDelayMs() + "ms");
         }
 
@@ -126,14 +128,14 @@ public class ServerMonitor {
         if (totalTicks > 0) {
             float desyncRate = (float) metrics.getDesyncCount() / totalTicks;
             if (desyncRate > 0.001f) {
-                log.error("ALERT: Desync rate exceeded 0.1%: {}%", desyncRate * 100);
+                log.error("告警: 不同步率超过0.1%: {}%", desyncRate * 100);
                 recordAlert("DESYNC_RATE_HIGH", String.format("%.3f%%", desyncRate * 100));
             }
         }
     }
 
     private void recordAlert(String type, String value) {
-        MetricHistory history = metricHistory.computeIfAbsent(type, k -> new MetricHistory());
+        MetricHistory history = metricHistory.computeIfAbsent(type, k -> new MetricHistory(historySize));
         history.addRecord(System.currentTimeMillis(), value);
     }
 
@@ -165,14 +167,16 @@ public class ServerMonitor {
     @Data
     public static class MetricHistory {
         private final List<MetricRecord> records;
+        private final int maxSize;
 
-        public MetricHistory() {
+        public MetricHistory(int maxSize) {
             this.records = Collections.synchronizedList(new ArrayList<>());
+            this.maxSize = maxSize;
         }
 
         public void addRecord(long timestamp, String value) {
             records.add(new MetricRecord(timestamp, value));
-            if (records.size() > HISTORY_SIZE) {
+            if (records.size() > maxSize) {
                 records.remove(0);
             }
         }

@@ -12,7 +12,7 @@ import { lockstepManager } from '@/engine/LockstepManager'
 import { useGameStore } from '@/stores/game'
 import { HeroRole } from '@/types/game'
 import { heroDefinitions } from '@/data/heroes'
-import { connectToBattleServer, sendMatchRequest, enterBattle, isConnected, battlePlayerId, disconnect as disconnectBattle } from '@/network'
+import { connectToGateway, sendMatchRequest, enterBattle, isConnected, battlePlayerId, disconnect as disconnectBattle } from '@/network'
 import type { Hero, Vector2D, Skill } from '@/types/game'
 import { Container, Graphics, Texture } from 'pixi.js'
 
@@ -417,9 +417,9 @@ async function initTestHeroes(container: Container) {
 
 async function tryConnectBattleServer(): Promise<boolean> {
   try {
-    const connected = await connectToBattleServer()
+    const connected = await connectToGateway()
     if (!connected) {
-      console.warn('Failed to connect to battle server, using offline mode')
+      console.warn('Failed to connect to gateway, using offline mode')
       return false
     }
 

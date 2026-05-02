@@ -1,4 +1,5 @@
 package com.moba.battle.manager;
+import com.moba.battle.config.ServerConfig;
 import com.moba.battle.config.SpringContextHolder;
 import com.moba.battle.model.FrameInput;
 import com.moba.battle.model.BattlePlayer;
@@ -19,11 +20,12 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class ReconnectManager {
     private final Map<Long, Long> reconnectTimers;
-    private static final long RECONNECT_TIMEOUT_MS = 30000;
+    private final long reconnectTimeoutMs;
     private final ScheduledExecutorService scheduler;
 
-    public ReconnectManager() {
+    public ReconnectManager(ServerConfig serverConfig) {
         this.reconnectTimers = new ConcurrentHashMap<>();
+        this.reconnectTimeoutMs = serverConfig.getReconnectTimeoutSeconds() * 1000L;
         this.scheduler = Executors.newScheduledThreadPool(1);
 
         scheduler.scheduleAtFixedRate(this::checkTimeouts, 5, 5, TimeUnit.SECONDS);
@@ -35,7 +37,7 @@ public class ReconnectManager {
 
     public void startReconnectTimer(long playerId) {
         reconnectTimers.put(playerId, System.currentTimeMillis());
-        log.info("Reconnect timer started for player {}, timeout={}s", playerId, RECONNECT_TIMEOUT_MS / 1000);
+        log.info("玩家{}重连计时器已启动, 超时={}秒", playerId, reconnectTimeoutMs / 1000);
     }
 
     public void cancelReconnectTimer(long playerId) {
@@ -44,20 +46,20 @@ public class ReconnectManager {
         if (player != null) {
             player.setReconnecting(false);
         }
-        log.info("Reconnect timer cancelled for player {}", playerId);
+        log.info("玩家{}重连计时器已取消", playerId);
     }
 
     public boolean isReconnectValid(long playerId) {
         Long startTime = reconnectTimers.get(playerId);
         if (startTime == null) return false;
-        return System.currentTimeMillis() - startTime < RECONNECT_TIMEOUT_MS;
+        return System.currentTimeMillis() - startTime < reconnectTimeoutMs;
     }
 
     public long getRemainingTime(long playerId) {
         Long startTime = reconnectTimers.get(playerId);
         if (startTime == null) return 0;
         long elapsed = System.currentTimeMillis() - startTime;
-        return Math.max(0, RECONNECT_TIMEOUT_MS - elapsed);
+        return Math.max(0, reconnectTimeoutMs - elapsed);
     }
 
     private void checkTimeouts() {
@@ -66,7 +68,7 @@ public class ReconnectManager {
             long playerId = entry.getKey();
             long startTime = entry.getValue();
 
-            if (now - startTime >= RECONNECT_TIMEOUT_MS) {
+            if (now - startTime >= reconnectTimeoutMs) {
                 reconnectTimers.remove(playerId);
                 handleReconnectTimeout(playerId);
             }
@@ -80,7 +82,7 @@ public class ReconnectManager {
         player.setReconnecting(false);
         BattleRoom room = RoomManager.getInstance().getPlayerRoom(playerId);
         if (room != null) {
-            log.warn("Player {} reconnect timeout, leaving battle {}", playerId, room.getBattleId());
+            log.warn("玩家{}重连超时, 离开战斗{}", playerId, room.getBattleId());
 
             BattleSession session = room.getSession();
             BattlePlayer battlePlayer = session.getPlayer(playerId);

@@ -1,30 +1,34 @@
-server:
+﻿﻿server:
   port: 8081
 
 spring:
   application:
     name: moba-business
   config:
-    import: "optional:nacos:moba-business.yml?group=MOBA_GROUP&refreshEnabled=false"
+    import: "optional:nacos:moba-business.yml?group=DEFAULT_GROUP&refreshEnabled=false"
   cloud:
     nacos:
       discovery:
         enabled: true
-        server-addr: 192.168.1.45:8848
+        server-addr: 192.168.0.102:8848
         namespace: public
-        group: MOBA_GROUP
+        group: DEFAULT_GROUP
+        username: nacos
+        password: nacos
         register-enabled: true
         metadata:
           dubbo.port: 20881
           dubbo.protocol: dubbo
       config:
-        server-addr: 192.168.1.45:8848
+        server-addr: 192.168.0.102:8848
         namespace: public
-        group: MOBA_GROUP
+        group: DEFAULT_GROUP
+        username: nacos
+        password: nacos
         import-check:
           enabled: false
   datasource:
-    url: jdbc:mysql://192.168.1.45:3306/moba_business?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true
+    url: jdbc:mysql://192.168.0.102:3306/moba_business?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true
     username: root
     password: jiangjing
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -37,7 +41,7 @@ spring:
     show-sql: false
   data:
     redis:
-      host: 192.168.1.45
+      host: 192.168.0.102
       port: 6379
       password: jiangjing
       database: 0
@@ -47,7 +51,9 @@ dubbo:
   qos:
     enable: false
   registry:
-    address: nacos://192.168.1.45:8848
+    address: nacos://192.168.0.102:8848
+    username: nacos
+    password: nacos
     parameters:
       namespace: public
     register-mode: all

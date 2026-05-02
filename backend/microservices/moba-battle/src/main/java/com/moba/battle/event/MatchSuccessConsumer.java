@@ -16,49 +16,49 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class MatchSuccessConsumer {
 
-    private final DefaultMQPushConsumer consumer;
+    private DefaultMQPushConsumer consumer;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public MatchSuccessConsumer(ServerConfig serverConfig) {
         String nameServer = serverConfig.getRocketmqNameServer();
         if (nameServer != null && !nameServer.isEmpty()) {
             try {
-                consumer = new DefaultMQPushConsumer("moba-battle-consumer");
-                consumer.setNamesrvAddr(nameServer);
-                consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET);
-                consumer.subscribe(EventTopics.MATCH_SUCCESS, "*");
-                consumer.registerMessageListener((MessageListenerConcurrently) (msgs, context) -> {
+                this.consumer = new DefaultMQPushConsumer(serverConfig.getRocketmqConsumerGroup());
+                this.consumer.setNamesrvAddr(nameServer);
+                this.consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET);
+                this.consumer.subscribe(EventTopics.MATCH_SUCCESS, "*");
+                this.consumer.registerMessageListener((MessageListenerConcurrently) (msgs, context) -> {
                     for (org.apache.rocketmq.common.message.MessageExt msg : msgs) {
                         try {
                             MatchSuccessEvent event = objectMapper.readValue(msg.getBody(), MatchSuccessEvent.class);
                             onMessage(event);
                         } catch (Exception e) {
-                            log.error("Failed to process match success message", e);
+                            log.error("处理匹配成功消息失败", e);
                         }
                     }
                     return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
                 });
-                consumer.start();
-                log.info("RocketMQ consumer started, nameServer={}", nameServer);
+                this.consumer.start();
+                log.info("RocketMQ消费者已启动, nameServer={}", nameServer);
             } catch (Exception e) {
-                log.warn("RocketMQ consumer start failed: {}", e.getMessage());
-                throw new RuntimeException("Failed to start RocketMQ consumer", e);
+                log.warn("RocketMQ消费者启动失败, 匹配事件消费已禁用: {}", e.getMessage());
+                this.consumer = null;
             }
         } else {
-            consumer = null;
-            log.info("RocketMQ nameServer not configured, match event consuming disabled");
+            this.consumer = null;
+            log.info("RocketMQ nameServer未配置, 匹配事件消费已禁用");
         }
     }
 
     public void onMessage(MatchSuccessEvent event) {
-        log.info("Received match success event: matchId={}, players={}", event.getMatchId(), event.getPlayerIds().size());
-        log.info("Battle already created via Dubbo RPC, skipping duplicate creation for matchId={}", event.getMatchId());
+        log.info("收到匹配成功事件: matchId={}, players={}", event.getMatchId(), event.getPlayerIds().size());
+        log.info("战斗已通过Dubbo RPC创建, 跳过重复创建 matchId={}", event.getMatchId());
     }
 
     public void shutdown() {
         if (consumer != null) {
             consumer.shutdown();
-            log.info("RocketMQ consumer shutdown");
+            log.info("RocketMQ消费者已关闭");
         }
     }
 }

@@ -88,10 +88,10 @@ public class BattleSession {
                 if (team.getTowerCount() > 0) {
                     team.setTowerCount(team.getTowerCount() - 1);
                     team.setBaseHp(Math.max(0, team.getBaseHp() - damage));
-                    log.info("Tower destroyed! Team {} lost a tower, baseHp={}", team.getTeamId(), team.getBaseHp());
+                    log.info("防御塔被摧毁! 队伍{}失去一座防御塔, 基地生命值={}", team.getTeamId(), team.getBaseHp());
                 } else {
                     team.setBaseHp(Math.max(0, team.getBaseHp() - damage * 2));
-                    log.info("Base damaged! Team {} baseHp={}", team.getTeamId(), team.getBaseHp());
+                    log.info("基地受损! 队伍{} 基地生命值={}", team.getTeamId(), team.getBaseHp());
                 }
             }
         }
@@ -101,7 +101,7 @@ public class BattleSession {
         Team team = teams.get(defendingTeamId);
         if (team != null) {
             team.setBaseHp(Math.max(0, team.getBaseHp() - damage));
-            log.info("Base damaged directly! Team {} baseHp={}", defendingTeamId, team.getBaseHp());
+            log.info("基地直接受损! 队伍{} 基地生命值={}", defendingTeamId, team.getBaseHp());
         }
     }
 

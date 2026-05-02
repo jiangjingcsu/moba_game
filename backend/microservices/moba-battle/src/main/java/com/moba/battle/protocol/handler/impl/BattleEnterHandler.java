@@ -34,7 +34,7 @@ public class BattleEnterHandler implements MessageHandler<BattleEnterRequest> {
         RoomValidator.RoomValidationResult validation = roomValidator.validate(playerId, request.getRoomId());
 
         if (!validation.isValid()) {
-            log.warn("Room validation failed: player={}, room={}, error={}", playerId, request.getRoomId(), validation.getErrorMessage());
+            log.warn("房间验证失败: player={}, room={}, error={}", playerId, request.getRoomId(), validation.getErrorMessage());
             return buildError(packet, validation.getErrorCode(), validation.getErrorMessage());
         }
 
@@ -46,7 +46,7 @@ public class BattleEnterHandler implements MessageHandler<BattleEnterRequest> {
         BattleEnterResponse response = BattleManager.getInstance().enterBattle(ctx, request);
         byte[] body = SerializerFactory.getSerializer(SerializeType.JSON).serialize(response);
 
-        log.info("Player {} entered battle room {}", playerId, request.getRoomId());
+        log.info("玩家{}进入战斗房间{}", playerId, request.getRoomId());
         return GamePacket.response(MessageType.BATTLE_ENTER_REQ, packet.getSequenceId(), body);
     }
 

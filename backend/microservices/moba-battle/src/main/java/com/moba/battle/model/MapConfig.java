@@ -28,7 +28,7 @@ public class MapConfig {
     }
 
     public static MapConfig create3v3v3Map() {
-        MapConfig config = new MapConfig(1, "Triangular Arena", new MapSize(10000, 10000), 3);
+        MapConfig config = new MapConfig(1, "三角竞技场", new MapSize(10000, 10000), 3);
         return config;
     }
 

@@ -23,7 +23,7 @@ public class MessageHandlerRegistry {
 
     public void register(MessageType type, MessageHandler<?> handler) {
         handlers.put(type, handler);
-        log.info("Registered message handler: {} -> {}", type.name(), handler.getClass().getSimpleName());
+        log.info("已注册消息处理器: {} -> {}", type.name(), handler.getClass().getSimpleName());
     }
 
     public void dispatch(ChannelHandlerContext ctx, GamePacket packet) {
@@ -31,7 +31,7 @@ public class MessageHandlerRegistry {
         MessageHandler<?> handler = handlers.get(type);
 
         if (handler == null) {
-            log.warn("No handler for message type: {} (0x{}) from channel: {}",
+            log.warn("消息类型无处理器: {} (0x{}) 来自通道: {}",
                     type, Integer.toHexString(packet.getCommandCode()), ctx.channel().id().asShortText());
             return;
         }
@@ -53,7 +53,7 @@ public class MessageHandlerRegistry {
                 ctx.writeAndFlush(response);
             }
         } catch (Exception e) {
-            log.error("Error handling message: {} from channel: {}",
+            log.error("处理消息异常: {} 来自通道: {}",
                     type, ctx.channel().id().asShortText(), e);
         }
     }

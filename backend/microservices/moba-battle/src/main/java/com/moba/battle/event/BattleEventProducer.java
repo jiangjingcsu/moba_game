@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class BattleEventProducer {
 
-    private final DefaultMQProducer producer;
+    private DefaultMQProducer producer;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private volatile boolean available = false;
 
@@ -22,25 +22,26 @@ public class BattleEventProducer {
         String nameServer = serverConfig.getRocketmqNameServer();
         if (nameServer != null && !nameServer.isEmpty()) {
             try {
-                producer = new DefaultMQProducer(serverConfig.getRocketmqProducerGroup());
-                producer.setNamesrvAddr(nameServer);
-                producer.setSendMsgTimeout(3000);
-                producer.start();
-                available = true;
-                log.info("RocketMQ producer started, nameServer={}", nameServer);
+                DefaultMQProducer p = new DefaultMQProducer(serverConfig.getRocketmqProducerGroup());
+                p.setNamesrvAddr(nameServer);
+                p.setSendMsgTimeout(serverConfig.getRocketmqSendMsgTimeout());
+                p.start();
+                this.producer = p;
+                this.available = true;
+                log.info("RocketMQ生产者已启动, nameServer={}", nameServer);
             } catch (Exception e) {
-                log.warn("RocketMQ producer start failed, event publishing disabled: {}", e.getMessage());
-                producer = null;
+                log.warn("RocketMQ生产者启动失败, 事件发布已禁用: {}", e.getMessage());
+                this.producer = null;
             }
         } else {
-            producer = null;
-            log.info("RocketMQ nameServer not configured, event publishing disabled");
+            this.producer = null;
+            log.info("RocketMQ nameServer未配置, 事件发布已禁用");
         }
     }
 
     public void publishBattleEnd(BattleEndEvent event) {
         if (!available || producer == null) {
-            log.warn("RocketMQ producer not available, skipping battle end event publish");
+            log.warn("RocketMQ生产者不可用, 跳过战斗结束事件发布");
             return;
         }
 
@@ -49,17 +50,17 @@ public class BattleEventProducer {
             Message msg = new Message(EventTopics.BATTLE_END, body);
             producer.send(msg);
             String battleId = event.getResult() != null ? event.getResult().getBattleId() : "unknown";
-            log.info("Battle end event published: battleId={}", battleId);
+            log.info("战斗结束事件已发布: battleId={}", battleId);
         } catch (Exception e) {
             String battleId = event.getResult() != null ? event.getResult().getBattleId() : "unknown";
-            log.error("Failed to publish battle end event: battleId={}", battleId, e);
+            log.error("发布战斗结束事件失败: battleId={}", battleId, e);
         }
     }
 
     public void shutdown() {
         if (producer != null) {
             producer.shutdown();
-            log.info("RocketMQ producer shutdown");
+            log.info("RocketMQ生产者已关闭");
         }
     }
 }

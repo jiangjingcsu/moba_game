@@ -9,11 +9,13 @@ import com.moba.common.dto.CreateBattleResponse;
 import com.moba.common.service.BattleService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.ApplicationConfig;
+import org.apache.dubbo.config.MetadataReportConfig;
 import org.apache.dubbo.config.ProtocolConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.config.ServiceConfig;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -23,35 +25,48 @@ public class BattleServiceImpl implements BattleService {
     private ServiceConfig<BattleService> serviceConfig;
 
     public void startDubboService(ServerConfig serverConfig) {
-        ApplicationConfig applicationConfig = new ApplicationConfig();
-        applicationConfig.setName("moba-battle");
+        try {
+            ApplicationConfig applicationConfig = new ApplicationConfig();
+            applicationConfig.setName(serverConfig.getDubboServiceName());
+            applicationConfig.setMetadataType("local");
+            applicationConfig.setQosEnable(false);
 
-        RegistryConfig registryConfig = new RegistryConfig();
-        registryConfig.setAddress("nacos://" + serverConfig.getNacosServerAddr());
-        registryConfig.setGroup(serverConfig.getNacosGroup());
-        registryConfig.setParameters(java.util.Map.of("namespace", serverConfig.getNacosNamespace()));
+            RegistryConfig registryConfig = new RegistryConfig();
+            registryConfig.setAddress("nacos://" + serverConfig.getNacosServerAddr());
+            registryConfig.setGroup(serverConfig.getNacosGroup());
+            registryConfig.setParameters(java.util.Map.of(
+                    "namespace", serverConfig.getNacosNamespace(),
+                    "username", serverConfig.getNacosUsername(),
+                    "password", serverConfig.getNacosPassword()
+            ));
+            registryConfig.setTimeout(serverConfig.getDubboRegistryTimeout());
+            registryConfig.setRegisterMode("instance");
 
-        ProtocolConfig protocolConfig = new ProtocolConfig();
-        protocolConfig.setName("dubbo");
-        protocolConfig.setPort(serverConfig.getDubboPort());
-        protocolConfig.setSerialization("hessian2");
+            ProtocolConfig protocolConfig = new ProtocolConfig();
+            protocolConfig.setName("dubbo");
+            protocolConfig.setPort(serverConfig.getDubboPort());
+            protocolConfig.setSerialization("hessian2");
 
-        serviceConfig = new ServiceConfig<>();
-        serviceConfig.setApplication(applicationConfig);
-        serviceConfig.setRegistry(registryConfig);
-        serviceConfig.setProtocol(protocolConfig);
-        serviceConfig.setInterface(BattleService.class);
-        serviceConfig.setRef(this);
-        serviceConfig.setParameters(java.util.Map.of("serialization", "hessian2"));
+            serviceConfig = new ServiceConfig<>();
+            serviceConfig.setApplication(applicationConfig);
+            serviceConfig.setRegistry(registryConfig);
+            serviceConfig.setProtocol(protocolConfig);
+            serviceConfig.setInterface(BattleService.class);
+            serviceConfig.setRef(this);
+            serviceConfig.setParameters(Map.of("serialization", "hessian2"));
 
-        serviceConfig.export();
-        log.info("Dubbo service exported on port {}", serverConfig.getDubboPort());
+            serviceConfig.export();
+            log.info("Dubbo服务已导出, 端口={}, 注册模式=instance", serverConfig.getDubboPort());
+        } catch (Exception e) {
+            log.warn("Dubbo服务导出失败, 服务将继续运行但无法通过RPC调用: {}", e.getMessage());
+            serviceConfig = null;
+        }
     }
 
     public void stopDubboService() {
         if (serviceConfig != null) {
             serviceConfig.unexport();
-            log.info("Dubbo service unexported");
+            log.info("Dubbo服务已取消导出");
         }
     }
 
@@ -72,13 +87,13 @@ public class BattleServiceImpl implements BattleService {
             );
 
             if (room != null) {
-                log.info("Battle created via Dubbo: {}, players: {}", battleId, request.getPlayerIds().size());
+                log.info("通过Dubbo创建战斗: {}, 玩家: {}", battleId, request.getPlayerIds().size());
                 return CreateBattleResponse.ok(battleId);
             } else {
-                return CreateBattleResponse.fail("Failed to create battle room");
+                return CreateBattleResponse.fail("创建战斗房间失败");
             }
         } catch (Exception e) {
-            log.error("Error creating battle", e);
+            log.error("创建战斗异常", e);
             return CreateBattleResponse.fail(e.getMessage());
         }
     }

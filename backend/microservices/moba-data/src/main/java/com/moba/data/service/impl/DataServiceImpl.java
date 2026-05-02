@@ -34,7 +34,7 @@ public class DataServiceImpl implements DataService {
     public BattleLogDTO saveBattleLog(BattleLogDTO dto) {
         BattleLog battleLog = toEntity(dto);
         battleLog = battleLogRepository.save(battleLog);
-        DataServiceImpl.log.info("Saved battle log: {}", battleLog.getBattleId());
+        DataServiceImpl.log.info("战斗日志已保存: {}", battleLog.getBattleId());
         return toDTO(battleLog);
     }
 
@@ -54,7 +54,7 @@ public class DataServiceImpl implements DataService {
     public ReplayDTO saveReplay(ReplayDTO dto) {
         Replay replay = toEntity(dto);
         Replay saved = replayRepository.save(replay);
-        log.info("Replay saved: {}, frames: {}", saved.getBattleId(), saved.getFrameCount());
+        log.info("回放已保存: {}, 帧数: {}", saved.getBattleId(), saved.getFrameCount());
         return toDTO(saved);
     }
 

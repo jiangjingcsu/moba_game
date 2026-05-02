@@ -46,7 +46,7 @@ public class AuthController {
         user.setState("ONLINE");
         userRepository.save(user);
         String token = JwtUtil.generateToken(user.getId(), user.getUsername(), jwtSecret, jwtExpiration);
-        log.info("User logged in: {} (id={})", username, user.getId());
+        log.info("用户登录: {} (id={})", username, user.getId());
         return ApiResponse.success(Map.of(
                 "token", token,
                 "playerId", user.getId(),
@@ -83,7 +83,7 @@ public class AuthController {
         user.setState("ONLINE");
         User saved = userRepository.save(user);
         String token = JwtUtil.generateToken(saved.getId(), saved.getUsername(), jwtSecret, jwtExpiration);
-        log.info("User registered: {} (id={})", username, saved.getId());
+        log.info("用户注册: {} (id={})", username, saved.getId());
         return ApiResponse.success(Map.of(
                 "token", token,
                 "playerId", saved.getId(),

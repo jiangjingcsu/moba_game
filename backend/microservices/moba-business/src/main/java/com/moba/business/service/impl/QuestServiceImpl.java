@@ -71,7 +71,7 @@ public class QuestServiceImpl implements QuestService {
         PlayerQuest saved = playerQuestRepository.save(playerQuest);
 
         invalidateQuestCache(playerId);
-        log.info("Player {} claimed reward for quest {} ({})", playerId, playerQuest.getQuestCode(), playerQuest.getRewardType());
+        log.info("玩家{}领取任务{}奖励({})", playerId, playerQuest.getQuestCode(), playerQuest.getRewardType());
 
         return saved;
     }
@@ -106,7 +106,7 @@ public class QuestServiceImpl implements QuestService {
         }
 
         invalidateQuestCache(playerId);
-        log.info("Refreshed daily quests for player {}", playerId);
+        log.info("已刷新玩家{}的每日任务", playerId);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class QuestServiceImpl implements QuestService {
         }
 
         invalidateQuestCache(playerId);
-        log.info("Refreshed weekly quests for player {}", playerId);
+        log.info("已刷新玩家{}的每周任务", playerId);
     }
 
     @Override
@@ -160,7 +160,7 @@ public class QuestServiceImpl implements QuestService {
         }
 
         invalidateQuestCache(playerId);
-        log.info("Initialized novice quests for player {}", playerId);
+        log.info("已初始化玩家{}的新手任务", playerId);
     }
 
     @Override
@@ -183,7 +183,7 @@ public class QuestServiceImpl implements QuestService {
         }
 
         invalidateQuestCache(playerId);
-        log.info("Initialized season quests for player {}", playerId);
+        log.info("已初始化玩家{}的赛季任务", playerId);
     }
 
     @Override
@@ -201,7 +201,7 @@ public class QuestServiceImpl implements QuestService {
                 if (quest.getCurrentValue() >= quest.getTargetValue()) {
                     quest.setState(QuestState.COMPLETED);
                     quest.setCompletedAt(LocalDateTime.now());
-                    log.info("Player {} completed quest {} ({})", playerId, quest.getQuestCode(), quest.getCategory());
+                    log.info("玩家{}完成任务{}({})", playerId, quest.getQuestCode(), quest.getCategory());
                 }
                 playerQuestRepository.save(quest);
                 updated = true;
@@ -225,7 +225,7 @@ public class QuestServiceImpl implements QuestService {
                 quest.setState(QuestState.COMPLETED);
                 quest.setCompletedAt(LocalDateTime.now());
                 playerQuestRepository.save(quest);
-                log.info("Player {} completed level quest {} at level {}", playerId, quest.getQuestCode(), newLevel);
+                log.info("玩家{}完成等级任务{}, 等级={}", playerId, quest.getQuestCode(), newLevel);
             }
         }
 
@@ -245,7 +245,7 @@ public class QuestServiceImpl implements QuestService {
                 quest.setState(QuestState.COMPLETED);
                 quest.setCompletedAt(LocalDateTime.now());
                 playerQuestRepository.save(quest);
-                log.info("Player {} completed rank quest {} at score {}", playerId, quest.getQuestCode(), newRankScore);
+                log.info("玩家{}完成段位任务{}, 积分={}", playerId, quest.getQuestCode(), newRankScore);
             }
         }
 
@@ -358,7 +358,7 @@ public class QuestServiceImpl implements QuestService {
                 boolean exists = playerQuestRepository.existsByPlayerIdAndQuestCode(playerId, template.getQuestCode());
                 if (!exists) {
                     createPlayerQuest(playerId, template, null);
-                    log.info("Unlocked novice quest {} for player {} at level {}", template.getQuestCode(), playerId, currentLevel);
+                    log.info("为玩家{}在等级{}解锁新手任务{}", playerId, currentLevel, template.getQuestCode());
                 }
             }
         }

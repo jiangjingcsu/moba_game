@@ -1,75 +1,79 @@
-server:
-  port: 8082
-
-spring:
-  application:
-    name: moba-match
-  autoconfigure:
-    exclude:
-      - org.apache.rocketmq.spring.autoconfigure.RocketMQAutoConfiguration
+﻿﻿nacos:
+  server-addr: 192.168.0.102:8848
+  username: nacos
+  password: nacos
+  namespace: public
+  group: DEFAULT_GROUP
   config:
-    import: "optional:nacos:moba-match.yml?group=MOBA_GROUP&refreshEnabled=false"
-  cloud:
-    nacos:
-      discovery:
-        enabled: true
-        server-addr: 192.168.1.45:8848
-        namespace: public
-        group: MOBA_GROUP
-        register-enabled: true
-        metadata:
-          dubbo.port: 20882
-          dubbo.protocol: dubbo
-          dubbo.service.interfaces: com.moba.common.service.MatchService
-      config:
-        server-addr: 192.168.1.45:8848
-        namespace: public
-        group: MOBA_GROUP
-        import-check:
-          enabled: false
-  data:
-    redis:
-      host: 192.168.1.45
-      port: 6379
-      password: jiangjing
-      database: 1
-      timeout: 5000
+    dataId: moba-match.yml
+    timeoutMs: 5000
+  find:
+    battle:
+      service:
+        group: DEFAULT_GROUP
+        name: moba-battle
+  service-name: moba-match
+  rankTier: bronze
+  register:
+    enabled: true
+
+match:
+  websocket:
+    port: 9998
+    idleTimeoutSeconds: 120
+    path: /ws/match
+  rank:
+    initialTolerance: 200
+    maxTolerance: 800
+    toleranceExpandIntervalSeconds: 10
+    toleranceExpandStep: 50
+  modes:
+    3v3v3:
+      team-count: 3
+      team-size: 3
+      max-party-size: 3
+    5v5:
+      team-count: 2
+      team-size: 5
+      max-party-size: 5
+  cleanupIntervalMs: 30000
+  toleranceExpandIntervalMs: 5000
+  redisKeyExpireMinutes: 5
+  defaultRankScore: 1000
+
+redis:
+  host: 192.168.0.102
+  port: 6379
+  password: jiangjing
+  database: 1
+  timeout: 5000
 
 dubbo:
-  qos:
-    enable: false
+  application:
+    name: dubbo-moba-match
+    qos-enable: false
   registry:
-    address: nacos://192.168.1.45:8848
+    address: nacos://192.168.0.102:8848
+    username: nacos
+    password: nacos
     parameters:
       namespace: public
-    register-mode: all
+    register-mode: instance
   protocol:
     name: dubbo
-    port: 20882
+    port: 20782
     serialization: hessian2
   provider:
     prefer-serialization: hessian2
   consumer:
     prefer-serialization: hessian2
+    timeout: 3000
+    retries: 0
 
 rocketmq:
-  name-server: ${ROCKETMQ_NAMESRV:}
-  producer:
-    group: moba-match-producer
-    send-message-timeout: 3000
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics,prometheus
-  endpoint:
-    health:
-      show-details: always
-  metrics:
-    export:
-      prometheus:
-        enabled: true
+  name-server: 192.168.0.102:9876
+  producer-group: moba-match-producer
+  send-timeout-ms: 3000
 
 logging:
   level:

@@ -22,6 +22,6 @@ public class HandlerRegistrar {
         registry.register(MessageType.BATTLE_SKILL_CAST_REQ, new SkillCastHandler());
         registry.register(MessageType.RECONNECT_REQ, new ReconnectHandler());
 
-        log.info("All message handlers registered");
+        log.info("所有消息处理器已注册");
     }
 }

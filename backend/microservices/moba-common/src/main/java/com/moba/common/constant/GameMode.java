@@ -10,7 +10,7 @@ public class GameMode {
     public static String getModeName(int mode) {
         if (mode == MODE_3V3V3) return MODE_NAME_3V3V3;
         if (mode == MODE_5V5) return MODE_NAME_5V5;
-        return "unknown";
+        return "未知";
     }
 
     public static int getTeamCount(int mode) {

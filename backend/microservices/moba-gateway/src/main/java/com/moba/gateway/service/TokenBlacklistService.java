@@ -21,7 +21,7 @@ public class TokenBlacklistService {
     public Mono<Void> addToBlacklist(String token, long remainingSeconds) {
         String key = BLACKLIST_PREFIX + token;
         return reactiveRedisTemplate.opsForValue().set(key, "revoked", Duration.ofSeconds(remainingSeconds))
-                .doOnSuccess(v -> log.info("Token added to blacklist, expires in {}s", remainingSeconds))
+                .doOnSuccess(v -> log.info("令牌已加入黑名单, {}秒后过期", remainingSeconds))
                 .then();
     }
 

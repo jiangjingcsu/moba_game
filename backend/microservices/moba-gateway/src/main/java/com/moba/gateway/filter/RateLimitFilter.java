@@ -54,7 +54,7 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
                         response.setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
                         response.getHeaders().add("X-RateLimit-Limit", String.valueOf(DEFAULT_LIMIT));
                         response.getHeaders().add("X-RateLimit-Remaining", "0");
-                        log.warn("Rate limit exceeded for IP: {}", clientIp);
+                        log.warn("IP请求频率超限: {}", clientIp);
                         return response.setComplete();
                     }
                     long remaining = DEFAULT_LIMIT - (count != null ? count : 0);
@@ -62,7 +62,7 @@ public class RateLimitFilter implements GlobalFilter, Ordered {
                     return chain.filter(exchange);
                 })
                 .onErrorResume(e -> {
-                    log.error("Rate limit check failed", e);
+                    log.error("频率限制检查失败", e);
                     return chain.filter(exchange);
                 });
     }

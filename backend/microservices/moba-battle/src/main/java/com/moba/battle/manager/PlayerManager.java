@@ -46,7 +46,7 @@ public class PlayerManager {
         playersById.put(playerId, player);
         playersByChannel.put(channelId, player);
 
-        log.info("Player created: id={}, name={}, channel={}", playerId, playerName, channelId.substring(0, 8));
+        log.info("玩家已创建: id={}, 名称={}, 通道={}", playerId, playerName, channelId.substring(0, 8));
         return player;
     }
 
@@ -70,7 +70,7 @@ public class PlayerManager {
             playersByChannel.remove(oldChannelId);
             playersByChannel.put(newChannelId, player);
 
-            log.info("Player context updated: id={}, new channel={}", playerId, newChannelId.substring(0, 8));
+            log.info("玩家上下文已更新: id={}, 新通道={}", playerId, newChannelId.substring(0, 8));
         }
     }
 
@@ -78,10 +78,10 @@ public class PlayerManager {
         String channelId = ctx.channel().id().asLongText();
         Player player = playersByChannel.remove(channelId);
         if (player != null) {
-            log.info("Player disconnected: id={}, name={}", player.getPlayerId(), player.getPlayerName());
+            log.info("玩家断开连接: id={}, 名称={}", player.getPlayerId(), player.getPlayerName());
             if (player.getState() == Player.PlayerState.IN_BATTLE) {
                 player.setReconnecting(true);
-                log.info("Player in battle disconnected, waiting for reconnect: id={}", player.getPlayerId());
+                log.info("战斗中玩家断开连接, 等待重连: id={}", player.getPlayerId());
             } else {
                 player.setState(Player.PlayerState.OFFLINE);
                 playersById.remove(player.getPlayerId());
@@ -123,7 +123,7 @@ public class PlayerManager {
                 playersByChannel.remove(oldChannelId);
             }
             playersByChannel.put(newChannelId, player);
-            log.info("Player reconnected from token: id={}, name={}", playerId, username);
+            log.info("玩家通过令牌重连: id={}, 名称={}", playerId, username);
             return player;
         }
 
@@ -140,7 +140,7 @@ public class PlayerManager {
         String channelId = ctx.channel().id().asLongText();
         playersById.put(playerId, player);
         playersByChannel.put(channelId, player);
-        log.info("Player registered from token: id={}, name={}, channel={}", playerId, username, channelId.substring(0, 8));
+        log.info("玩家通过令牌注册: id={}, 名称={}, 通道={}", playerId, username, channelId.substring(0, 8));
         return player;
     }
 }

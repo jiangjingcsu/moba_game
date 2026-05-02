@@ -1,6 +1,8 @@
 package com.moba.battle.manager;
 
 import com.moba.battle.battle.LockstepEngine;
+import com.moba.battle.config.ServerConfig;
+import com.moba.battle.config.SpringContextHolder;
 import com.moba.battle.model.BattlePlayer;
 import com.moba.battle.model.BattleSession;
 import com.moba.battle.model.MOBAMap;
@@ -62,14 +64,14 @@ public class BattleRoom {
         startTime = System.currentTimeMillis();
         session.start();
         engine.start();
-        log.info("Room {} started with {} human players, {} bots",
+        log.info("房间{}已开始, {}名真人玩家, {}名机器人",
                 battleId, humanPlayerIds.size(), botPlayerIds.size());
     }
 
     public void stop() {
         state = RoomState.DESTROYED;
         engine.stop();
-        log.info("Room {} stopped", battleId);
+        log.info("房间{}已停止", battleId);
     }
 
     public void addSpectator() {
@@ -94,22 +96,22 @@ public class BattleRoom {
 
     public void registerHumanPlayer(long playerId) {
         humanPlayerIds.add(playerId);
-        log.debug("Human player registered: {} in room {}", playerId, battleId);
+        log.debug("真人玩家已注册: {} 在房间{}", playerId, battleId);
     }
 
     public void registerBotPlayer(long playerId) {
         botPlayerIds.add(playerId);
-        log.debug("Bot player registered: {} in room {}", playerId, battleId);
+        log.debug("机器人玩家已注册: {} 在房间{}", playerId, battleId);
     }
 
     public boolean markPlayerReady(long playerId) {
         if (!humanPlayerIds.contains(playerId)) {
-            log.warn("Non-human player tried to ready: {} in room {}", playerId, battleId);
+            log.warn("非真人玩家尝试准备: {} 在房间{}", playerId, battleId);
             return false;
         }
         boolean added = readyPlayerIds.add(playerId);
         if (added) {
-            log.info("Player {} ready in room {} ({}/{})",
+            log.info("玩家{}在房间{}已准备（{}/{}）",
                     playerId, battleId, readyPlayerIds.size(), humanPlayerIds.size());
         }
         return added;
@@ -150,15 +152,16 @@ public class BattleRoom {
     public void transitionToLoading() {
         state = RoomState.LOADING;
         session.setState(BattleSession.BattleState.LOADING);
-        long loadingTimeoutSeconds = 60;
-        setLoadingDeadline(System.currentTimeMillis() + loadingTimeoutSeconds * 1000);
-        log.info("Room {} transitioned to LOADING, {} human players expected, timeout={}s",
+        ServerConfig config = SpringContextHolder.getBean(ServerConfig.class);
+        int loadingTimeoutSeconds = config.getLoadingTimeoutSeconds();
+        setLoadingDeadline(System.currentTimeMillis() + loadingTimeoutSeconds * 1000L);
+        log.info("房间{}转入加载状态, 预期{}名真人玩家, 超时={}秒",
                 battleId, humanPlayerIds.size(), loadingTimeoutSeconds);
     }
 
     public void transitionToCountdown() {
         state = RoomState.COUNTDOWN;
-        log.info("Room {} transitioned to COUNTDOWN, all {} human players ready",
+        log.info("房间{}转入倒计时状态, 所有{}名真人玩家已准备",
                 battleId, humanPlayerIds.size());
     }
 }

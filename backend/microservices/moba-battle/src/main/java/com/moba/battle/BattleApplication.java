@@ -16,7 +16,7 @@ public class BattleApplication {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
-        log.info("MOBA Battle Server starting...");
+        log.info("MOBA战斗服务器启动中...");
 
         try {
             AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
@@ -28,62 +28,68 @@ public class BattleApplication {
             NettyServer nettyServer = ctx.getBean(NettyServer.class);
 
             BattleServiceImpl battleService = ctx.getBean(BattleServiceImpl.class);
-            battleService.startDubboService(serverConfig);
+            new Thread(() -> {
+                try {
+                    battleService.startDubboService(serverConfig);
+                } catch (Exception e) {
+                    log.warn("Dubbo服务启动失败, 服务将继续运行但无法通过RPC调用: {}", e.getMessage());
+                }
+            }, "dubbo-service-starter").start();
 
             new Thread(() -> {
                 try {
                     nettyServer.start();
-                    log.info("Netty server started successfully");
+                    log.info("Netty服务器启动成功");
                 } catch (Exception e) {
-                    log.error("Netty server start failed", e);
+                    log.error("Netty服务器启动失败", e);
                     shutdown();
                 }
             }, "netty-server-starter").start();
 
             long elapsed = System.currentTimeMillis() - startTime;
-            log.info("MOBA Battle Server started in {}ms", elapsed);
-            log.info("  Client WebSocket port: {}", serverConfig.getPort());
-            log.info("  Battle TCP port: {}", serverConfig.getBattleServerPort());
-            log.info("  Dubbo RPC port: {}", serverConfig.getDubboPort());
+            log.info("MOBA战斗服务器启动完成, 耗时{}ms", elapsed);
+            log.info("  客户端WebSocket端口: {}", serverConfig.getPort());
+            log.info("  战斗TCP端口: {}", serverConfig.getBattleServerPort());
+            log.info("  Dubbo RPC端口: {}", serverConfig.getDubboPort());
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                log.info("Shutting down MOBA Battle Server...");
+                log.info("MOBA战斗服务器关闭中...");
                 shutdown();
 
                 try {
                     battleService.stopDubboService();
                 } catch (Exception e) {
-                    log.error("Error stopping Dubbo service", e);
+                    log.error("停止Dubbo服务异常", e);
                 }
 
                 try {
                     BattleEventProducer eventProducer = ctx.getBean(BattleEventProducer.class);
                     eventProducer.shutdown();
                 } catch (Exception e) {
-                    log.error("Error stopping event producer", e);
+                    log.error("停止事件生产者异常", e);
                 }
 
                 try {
                     MatchSuccessConsumer matchConsumer = ctx.getBean(MatchSuccessConsumer.class);
                     matchConsumer.shutdown();
                 } catch (Exception e) {
-                    log.error("Error stopping match consumer", e);
+                    log.error("停止匹配消费者异常", e);
                 }
 
                 try {
                     nettyServer.stop();
                 } catch (Exception e) {
-                    log.error("Error stopping Netty server", e);
+                    log.error("停止Netty服务器异常", e);
                 }
 
                 ctx.close();
-                log.info("MOBA Battle Server stopped");
+                log.info("MOBA战斗服务器已停止");
             }));
 
             nettyServer.blockUntilShutdown();
 
         } catch (Exception e) {
-            log.error("Failed to start MOBA Battle Server", e);
+            log.error("MOBA战斗服务器启动失败", e);
             System.exit(1);
         }
     }

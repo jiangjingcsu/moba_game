@@ -37,11 +37,11 @@ public class BattleEndConsumer implements RocketMQListener<BattleEndEvent> {
     public void onMessage(BattleEndEvent event) {
         BattleResultDTO result = event.getResult();
         if (result == null) {
-            log.warn("Received battle end event with null result, skipping");
+            log.warn("收到结果为空的战斗结束事件, 跳过处理");
             return;
         }
 
-        log.info("Received battle end event: battleId={}", result.getBattleId());
+        log.info("收到战斗结束事件: battleId={}", result.getBattleId());
 
         try {
             BattleLog battleLog = new BattleLog();
@@ -91,7 +91,7 @@ public class BattleEndConsumer implements RocketMQListener<BattleEndEvent> {
             }
 
             battleLogRepository.save(battleLog);
-            log.info("Battle log saved from event: battleId={}", result.getBattleId());
+            log.info("事件战斗日志已保存: battleId={}", result.getBattleId());
 
             if (event.getReplayFrameData() != null) {
                 Replay replay = new Replay();
@@ -104,10 +104,10 @@ public class BattleEndConsumer implements RocketMQListener<BattleEndEvent> {
                 replay.setSnapshotData(event.getReplaySnapshotData());
 
                 replayRepository.save(replay);
-                log.info("Replay saved from event: battleId={}", result.getBattleId());
+                log.info("事件回放已保存: battleId={}", result.getBattleId());
             }
         } catch (Exception e) {
-            log.error("Error processing battle end event: battleId={}", result.getBattleId(), e);
+            log.error("处理战斗结束事件异常: battleId={}", result.getBattleId(), e);
             throw e;
         }
     }

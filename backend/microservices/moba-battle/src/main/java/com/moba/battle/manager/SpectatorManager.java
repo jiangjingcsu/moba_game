@@ -31,12 +31,12 @@ public class SpectatorManager {
     public Spectator addSpectator(String battleId, long spectatorId, boolean isFriendSpectate) {
         BattleRoom room = RoomManager.getInstance().getRoom(battleId);
         if (room == null) {
-            log.warn("Battle room not found: {}", battleId);
+            log.warn("战斗房间未找到: {}", battleId);
             return null;
         }
 
         if (!room.isRunning() && room.getState() != BattleRoom.RoomState.LOADING) {
-            log.warn("Battle not available for spectating: {}", battleId);
+            log.warn("战斗不可观战: {}", battleId);
             return null;
         }
 
@@ -47,7 +47,7 @@ public class SpectatorManager {
         roomSpectators.computeIfAbsent(battleId, k -> new ArrayList<>()).add(spectator);
         room.addSpectator();
 
-        log.info("Spectator {} joined battle {} (friend={})", spectatorId, battleId, isFriendSpectate);
+        log.info("观战者{}加入战斗{} (好友={})", spectatorId, battleId, isFriendSpectate);
         return spectator;
     }
 

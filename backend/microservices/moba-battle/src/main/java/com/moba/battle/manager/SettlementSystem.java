@@ -68,7 +68,7 @@ public class SettlementSystem {
 
             result.getPlayerResults().add(playerResult);
 
-            log.info("Settlement for player {}: win={}, KDA={}/{}/ {}, rankChange={:+}, goldReward={}, expReward={}",
+            log.info("玩家{}结算: 胜利={}, KDA={}/{}/{}, 积分变化={:+}, 金币奖励={}, 经验奖励={}",
                     playerId, isWinning, bp.getKillCount(), bp.getDeathCount(), bp.getAssistCount(),
                     rankScoreChange, goldReward, expReward);
 

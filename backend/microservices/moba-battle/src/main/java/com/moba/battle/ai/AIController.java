@@ -1,5 +1,6 @@
 package com.moba.battle.ai;
 
+import com.moba.battle.config.ServerConfig;
 import com.moba.battle.config.SpringContextHolder;
 import com.moba.battle.model.BattlePlayer;
 import com.moba.battle.model.BattleSession;
@@ -18,14 +19,19 @@ public class AIController {
     private final Map<Long, AIDecisionMaker> decisionMakers;
     private final Map<Long, Long> botLastTickFrame;
 
-    private static final int MIN_BOT_LEVEL = 1;
-    private static final int MAX_BOT_LEVEL = 10;
-    private static final int DEFAULT_BOT_COUNT_PER_TEAM = 2;
+    private final int minBotLevel;
+    private final int maxBotLevel;
+    private final int defaultBotCountPerTeam;
+    private final int aiTickIntervalFrames;
 
-    public AIController() {
+    public AIController(ServerConfig serverConfig) {
         this.roomBots = new ConcurrentHashMap<>();
         this.decisionMakers = new ConcurrentHashMap<>();
         this.botLastTickFrame = new ConcurrentHashMap<>();
+        this.minBotLevel = serverConfig.getMinBotLevel();
+        this.maxBotLevel = serverConfig.getMaxBotLevel();
+        this.defaultBotCountPerTeam = serverConfig.getDefaultBotCountPerTeam();
+        this.aiTickIntervalFrames = serverConfig.getAiTickIntervalFrames();
     }
 
     public static AIController getInstance() {
@@ -58,7 +64,7 @@ public class AIController {
             botLastTickFrame.put(botId, 0L);
 
             bots.add(bot);
-            log.info("Created AI bot {} for battle {} (team={}, hero={}, level={})",
+            log.info("为战斗{}创建AI机器人{} (队伍={}, 英雄={}, 等级={})",
                     botId, battleId, teamId, heroId, botLevel);
         }
 
@@ -128,7 +134,7 @@ public class AIController {
             }
 
             Long lastTick = botLastTickFrame.get(bot.getBotId());
-            if (lastTick != null && currentFrame - lastTick < 2) {
+            if (lastTick != null && currentFrame - lastTick < aiTickIntervalFrames) {
                 continue;
             }
             botLastTickFrame.put(bot.getBotId(), currentFrame);
@@ -330,13 +336,18 @@ public class AIController {
                 decisionMakers.remove(bot.getBotId());
                 botLastTickFrame.remove(bot.getBotId());
             }
-            log.info("Removed {} bots from battle {}", bots.size(), battleId);
+            log.info("从战斗{}移除{}个机器人", battleId, bots.size());
         }
     }
 
     public int getBotCount(String battleId) {
         Map<Long, AIBot> bots = roomBots.get(battleId);
         return bots != null ? bots.size() : 0;
+    }
+
+    public boolean isInitializedForBattle(String battleId) {
+        Map<Long, AIBot> bots = roomBots.get(battleId);
+        return bots != null && !bots.isEmpty();
     }
 
     public List<AIBot> getBots(String battleId) {

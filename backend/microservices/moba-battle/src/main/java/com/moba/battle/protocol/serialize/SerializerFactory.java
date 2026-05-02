@@ -17,13 +17,13 @@ public class SerializerFactory {
 
     public static void register(SerializeType type, MessageSerializer serializer) {
         serializers.put(type, serializer);
-        log.info("Registered serializer: {} -> {}", type, serializer.getClass().getSimpleName());
+        log.info("已注册序列化器: {} -> {}", type, serializer.getClass().getSimpleName());
     }
 
     public static MessageSerializer getSerializer(SerializeType type) {
         MessageSerializer serializer = serializers.get(type);
         if (serializer == null) {
-            log.warn("No serializer for type: {}, falling back to JSON", type);
+            log.warn("类型无序列化器: {}, 回退到JSON", type);
             serializer = serializers.get(SerializeType.JSON);
         }
         return serializer;

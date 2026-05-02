@@ -1,32 +1,33 @@
+﻿﻿nacos:
+  server-addr: 192.168.0.102:8848
+  namespace: public
+  group: DEFAULT_GROUP
+  username: nacos
+  password: nacos
+  config:
+    data-id: moba-battle.yml
+    timeout-ms: 5000
+
 spring:
-  application:
-    name: moba-battle
-  cloud:
-    nacos:
-      discovery:
-        enabled: true
-        server-addr: 192.168.1.45:8848
-        namespace: public
-        group: MOBA_GROUP
-        register-enabled: true
-        metadata:
-          dubbo.port: 20883
-          dubbo.protocol: dubbo
-          dubbo.service.interfaces: com.moba.common.service.BattleService
   data:
     redis:
-      host: 192.168.1.45
+      host: 192.168.0.102
       port: 6379
       password: jiangjing
       database: 2
-      timeout: 5000
+      timeout: 3000
+      pool:
+        max-total: 50
+        max-idle: 10
+        min-idle: 5
 
 dubbo:
   registry:
-    address: nacos://192.168.1.45:8848
+    address: nacos://192.168.0.102:8848
+    timeout: 5000
     parameters:
       namespace: public
-    register-mode: all
+    register-mode: instance
   protocol:
     name: dubbo
     port: 20883
@@ -35,17 +36,57 @@ dubbo:
     prefer-serialization: hessian2
 
 rocketmq:
-  name-server: ${ROCKETMQ_NAMESRV:}
+  name-server: 192.168.0.102:9876
   producer:
     group: moba-battle-producer
     send-message-timeout: 3000
+  consumer:
+    group: moba-battle-consumer
 
 battle:
+  host: 0.0.0.0
+  register-ip: 192.168.0.103
+  port: 8888
+  battle-server-port: 8889
+  boss-thread-count: 1
+  worker-thread-count: 4
+  max-connections: 10000
+  idle-timeout-seconds: 120
+  max-frame-length: 10240
+  heartbeat-interval-seconds: 30
   tick-interval-ms: 66
   input-delay-frames: 3
   max-rooms: 100
   reconnect-timeout-seconds: 30
   hash-check-interval-frames: 10
+  loading-timeout-seconds: 60
+  room-cleanup-delay-seconds: 30
+  so-backlog: 1024
+  ws-path: /ws/battle
+  ws-service-name: moba-battle
+  dubbo-service-name: dubbo-moba-battle
+  creep-spawn-interval-ms: 60000
+  rune-spawn-interval-ms: 90000
+  replay-snapshot-interval: 60
+  room-key-ttl-seconds: 3600
+  load-report-interval-seconds: 10
+  metric-history-size: 60
+  ai-tick-interval-frames: 2
+  default-ai-level: 5
+  min-bot-level: 1
+  max-bot-level: 10
+  default-bot-count-per-team: 2
+  aggro-range: 500
+  default-grid-size: 200
+  physics:
+    world-scale: 0.01
+    velocity-iterations: 6
+    position-iterations: 2
+    player-restitution: 0.0
+    player-friction: 0.5
+    creep-restitution: 0.0
+    creep-friction: 0.3
+    projectile-lifetime-frames: 120
 
 logging:
   level:

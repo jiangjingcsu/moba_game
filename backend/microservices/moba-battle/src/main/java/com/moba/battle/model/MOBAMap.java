@@ -47,7 +47,7 @@ public class MOBAMap {
     private static MOBAMap create3v3v3Map(int mapId) {
         MOBAMap map = new MOBAMap();
         map.setMapId(mapId);
-        map.setMapName("Triangular Arena");
+        map.setMapName("三角竞技场");
         map.setWidth(12000);
         map.setHeight(12000);
         map.setTeamCount(3);
@@ -170,14 +170,14 @@ public class MOBAMap {
         map.setJungleRegion(new MapRegion(4000, 4000, 4000, 4000, true));
         map.setRiverRegion(new MapRegion(5500, 5500, 1000, 1000, true));
 
-        log.info("Created 3v3v3 map: {} ({}x{})", map.getMapName(), map.getWidth(), map.getHeight());
+        log.info("已创建3v3v3地图: {} ({}x{})", map.getMapName(), map.getWidth(), map.getHeight());
         return map;
     }
 
     private static MOBAMap create5v5Map(int mapId) {
         MOBAMap map = new MOBAMap();
         map.setMapId(mapId);
-        map.setMapName("Standard Battleground");
+        map.setMapName("标准战场");
         map.setWidth(16000);
         map.setHeight(16000);
         map.setTeamCount(2);
@@ -249,7 +249,7 @@ public class MOBAMap {
         map.setJungleRegion(new MapRegion(3000, 3000, 10000, 10000, true));
         map.setRiverRegion(new MapRegion(7500, 7500, 1000, 1000, true));
 
-        log.info("Created 5v5 map: {} ({}x{})", map.getMapName(), map.getWidth(), map.getHeight());
+        log.info("已创建5v5地图: {} ({}x{})", map.getMapName(), map.getWidth(), map.getHeight());
         return map;
     }
 

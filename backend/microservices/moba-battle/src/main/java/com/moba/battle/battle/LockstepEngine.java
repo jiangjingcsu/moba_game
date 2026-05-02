@@ -1,6 +1,8 @@
 package com.moba.battle.battle;
 import com.moba.battle.storage.BattleLogStorage;
 
+import com.moba.battle.config.SpringContextHolder;
+import com.moba.battle.config.ServerConfig;
 import com.moba.battle.model.*;
 import com.moba.battle.ai.AIController;
 import com.moba.battle.ai.AIState;
@@ -14,15 +16,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 public class LockstepEngine {
-    private static final int TICK_RATE = 15;
-    private static final long TICK_INTERVAL_MS = 1000 / TICK_RATE;
-    private static final int INPUT_DELAY_FRAMES = 3;
+    private static final int MAX_FRAME_STATES = 3600;
+    private static final int MAX_FRAME_HASHES = 1000;
 
     private final String battleId;
     private final BattleSession session;
     private final int tickRate;
     private final long tickIntervalMs;
     private final int inputDelayFrames;
+    private final int hashCheckIntervalFrames;
 
     private volatile int currentFrame;
     private volatile boolean running;
@@ -31,9 +33,7 @@ public class LockstepEngine {
     private final ConcurrentLinkedQueue<FrameInput> pendingInputs;
 
     private final List<FrameState> frameStates;
-    private static final int MAX_FRAME_STATES = 3600;
     private final Map<Integer, Long> frameHashes;
-    private static final int MAX_FRAME_HASHES = 1000;
 
     private long lastTickTime;
     private final AtomicInteger syncErrorCount;
@@ -46,15 +46,13 @@ public class LockstepEngine {
     private boolean aiEnabled;
 
     public LockstepEngine(String battleId, BattleSession session) {
-        this(battleId, session, TICK_RATE, INPUT_DELAY_FRAMES);
-    }
-
-    public LockstepEngine(String battleId, BattleSession session, int tickRate, int inputDelayFrames) {
+        ServerConfig config = SpringContextHolder.getBean(ServerConfig.class);
         this.battleId = battleId;
         this.session = session;
-        this.tickRate = tickRate;
+        this.tickRate = config.getTickRate();
         this.tickIntervalMs = 1000 / tickRate;
-        this.inputDelayFrames = inputDelayFrames;
+        this.inputDelayFrames = config.getInputDelayFrames();
+        this.hashCheckIntervalFrames = config.getHashCheckIntervalFrames();
 
         this.currentFrame = 0;
         this.running = false;
@@ -71,7 +69,34 @@ public class LockstepEngine {
         this.randomGenerator = new Random(randomSeed);
         this.aiEnabled = false;
 
-        log.info("Lockstep engine created: battleId={}, tickRate={}Hz, inputDelay={} frames",
+        log.info("锁步引擎已创建: battleId={}, 帧率={}Hz, 输入延迟={}帧",
+                battleId, tickRate, inputDelayFrames);
+    }
+
+    public LockstepEngine(String battleId, BattleSession session, int tickRate, int inputDelayFrames, int hashCheckIntervalFrames) {
+        this.battleId = battleId;
+        this.session = session;
+        this.tickRate = tickRate;
+        this.tickIntervalMs = 1000 / tickRate;
+        this.inputDelayFrames = inputDelayFrames;
+        this.hashCheckIntervalFrames = hashCheckIntervalFrames;
+
+        this.currentFrame = 0;
+        this.running = false;
+
+        this.frameInputs = new ConcurrentHashMap<>();
+        this.pendingInputs = new ConcurrentLinkedQueue<>();
+        this.frameStates = Collections.synchronizedList(new ArrayList<>());
+        this.frameHashes = new ConcurrentHashMap<>();
+
+        this.lastTickTime = 0;
+        this.syncErrorCount = new AtomicInteger(0);
+
+        this.randomSeed = System.nanoTime();
+        this.randomGenerator = new Random(randomSeed);
+        this.aiEnabled = false;
+
+        log.info("锁步引擎已创建: battleId={}, 帧率={}Hz, 输入延迟={}帧",
                 battleId, tickRate, inputDelayFrames);
     }
 
@@ -82,12 +107,12 @@ public class LockstepEngine {
     public void enableAI(AIController controller, int botLevel) {
         this.aiController = controller;
         this.aiEnabled = true;
-        log.info("AI enabled for battle {}, botLevel={}", battleId, botLevel);
+        log.info("战斗{}启用AI, 机器人等级={}", battleId, botLevel);
     }
 
     public void disableAI() {
         this.aiEnabled = false;
-        log.info("AI disabled for battle {}", battleId);
+        log.info("战斗{}禁用AI", battleId);
     }
 
     public boolean isAIEnabled() {
@@ -97,12 +122,12 @@ public class LockstepEngine {
     public void start() {
         running = true;
         lastTickTime = System.currentTimeMillis();
-        log.info("Lockstep engine started: battleId={}, randomSeed={}", battleId, randomSeed);
+        log.info("锁步引擎已启动: battleId={}, 随机种子={}", battleId, randomSeed);
     }
 
     public void stop() {
         running = false;
-        log.info("Lockstep engine stopped: battleId={}, totalFrames={}", battleId, currentFrame);
+        log.info("锁步引擎已停止: battleId={}, 总帧数={}", battleId, currentFrame);
     }
 
     public void tick() {
@@ -130,14 +155,14 @@ public class LockstepEngine {
         }
         frameStates.add(state);
 
-        if (currentFrame % 10 == 0) {
+        if (currentFrame % hashCheckIntervalFrames == 0) {
             long hash = state.computeHash();
             if (frameHashes.size() >= MAX_FRAME_HASHES) {
                 int oldestFrame = frameHashes.keySet().stream().min(Integer::compareTo).orElse(0);
                 frameHashes.keySet().removeIf(f -> f <= oldestFrame + 100);
             }
             frameHashes.put(currentFrame, hash);
-            log.debug("Frame {} hash check: {}", currentFrame, Long.toHexString(hash));
+            log.debug("帧{}哈希校验: {}", currentFrame, Long.toHexString(hash));
         }
 
         if (eventListener != null) {
@@ -489,7 +514,7 @@ public class LockstepEngine {
     private SkillConfig createDefaultSkillConfig(int skillId) {
         SkillConfig config = new SkillConfig();
         config.setSkillId(skillId);
-        config.setSkillName("Default Skill");
+        config.setSkillName("默认技能");
         config.setType(SkillConfig.SkillType.CIRCLE_AREA);
         config.setCooldown(5000);
         config.setMpCost(100);
@@ -532,7 +557,7 @@ public class LockstepEngine {
         boolean match = actualHash.equals(expectedHash);
         if (!match) {
             syncErrorCount.incrementAndGet();
-            log.error("Hash mismatch at frame {}: expected={}, actual={}",
+            log.error("帧{}哈希不匹配: 期望={}, 实际={}",
                     frameNumber, Long.toHexString(expectedHash), Long.toHexString(actualHash));
         }
         return match;

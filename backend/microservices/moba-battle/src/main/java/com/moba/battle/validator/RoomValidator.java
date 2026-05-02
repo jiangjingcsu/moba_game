@@ -13,15 +13,18 @@ public class RoomValidator {
 
     private static final String ROOM_KEY_PREFIX = "moba:battle:room:";
     private static final String PLAYER_ROOM_KEY_PREFIX = "moba:battle:player_room:";
-    private static final int ROOM_KEY_TTL_SECONDS = 3600;
 
     private final JedisPool jedisPool;
+    private final ServerConfig serverConfig;
+    private final int roomKeyTtlSeconds;
 
     public RoomValidator(ServerConfig serverConfig) {
+        this.serverConfig = serverConfig;
+        this.roomKeyTtlSeconds = serverConfig.getRoomKeyTtlSeconds();
         JedisPoolConfig poolConfig = new JedisPoolConfig();
-        poolConfig.setMaxTotal(50);
-        poolConfig.setMaxIdle(10);
-        poolConfig.setMinIdle(5);
+        poolConfig.setMaxTotal(serverConfig.getRedisPoolMaxTotal());
+        poolConfig.setMaxIdle(serverConfig.getRedisPoolMaxIdle());
+        poolConfig.setMinIdle(serverConfig.getRedisPoolMinIdle());
         poolConfig.setTestOnBorrow(true);
         poolConfig.setTestOnReturn(true);
 
@@ -34,30 +37,30 @@ public class RoomValidator {
                 poolConfig,
                 serverConfig.getRedisHost(),
                 serverConfig.getRedisPort(),
-                3000,
+                serverConfig.getRedisTimeout(),
                 password,
                 serverConfig.getRedisDatabase()
         );
 
-        log.info("RoomValidator initialized, Redis: {}:{}/{}", serverConfig.getRedisHost(), serverConfig.getRedisPort(), serverConfig.getRedisDatabase());
+        log.info("RoomValidator已初始化, Redis: {}:{}/{}", serverConfig.getRedisHost(), serverConfig.getRedisPort(), serverConfig.getRedisDatabase());
     }
 
     public RoomValidationResult validate(long playerId, String roomId) {
         try (Jedis jedis = jedisPool.getResource()) {
             String assignedRoomId = jedis.get(PLAYER_ROOM_KEY_PREFIX + playerId);
             if (assignedRoomId == null) {
-                log.warn("No room assignment found for player: {}", playerId);
+                log.warn("未找到玩家房间分配: {}", playerId);
                 return RoomValidationResult.fail("NO_ROOM_ASSIGNMENT", "玩家未被分配到任何房间");
             }
 
             if (!assignedRoomId.equals(roomId)) {
-                log.warn("Room mismatch for player {}: expected={}, got={}", playerId, assignedRoomId, roomId);
+                log.warn("玩家{}房间不匹配: 期望={}, 实际={}", playerId, assignedRoomId, roomId);
                 return RoomValidationResult.fail("ROOM_MISMATCH", "房间号不匹配，分配的房间为: " + assignedRoomId);
             }
 
             String roomData = jedis.get(ROOM_KEY_PREFIX + roomId);
             if (roomData == null) {
-                log.warn("Room not found in Redis: {}", roomId);
+                log.warn("Redis中未找到房间: {}", roomId);
                 return RoomValidationResult.fail("ROOM_NOT_FOUND", "房间不存在或已过期");
             }
 
@@ -65,16 +68,16 @@ public class RoomValidator {
             if (battleServerAddr != null) {
                 String currentServer = serverConfig.getHost() + ":" + serverConfig.getPort();
                 if (!battleServerAddr.equals(currentServer)) {
-                    log.warn("Player {} connected to wrong server: expected={}, current={}", playerId, battleServerAddr, currentServer);
+                    log.warn("玩家{}连接到错误的服务器: 期望={}, 当前={}", playerId, battleServerAddr, currentServer);
                     return RoomValidationResult.fail("WRONG_SERVER", "请连接正确的战斗服务器: " + battleServerAddr);
                 }
             }
 
-            log.info("Room validation passed: player={}, room={}", playerId, roomId);
+            log.info("房间验证通过: player={}, room={}", playerId, roomId);
             return RoomValidationResult.success(roomId, roomData);
 
         } catch (Exception e) {
-            log.error("Redis error during room validation: player={}, room={}", playerId, roomId, e);
+            log.error("房间验证Redis异常: player={}, room={}", playerId, roomId, e);
             return RoomValidationResult.fail("REDIS_ERROR", "服务器内部错误，请稍后重试");
         }
     }
@@ -85,7 +88,7 @@ public class RoomValidator {
             jedis.sadd(ROOM_KEY_PREFIX + roomId + ":players", String.valueOf(playerId));
             return true;
         } catch (Exception e) {
-            log.error("Redis error marking player entered: player={}, room={}", playerId, roomId, e);
+            log.error("标记玩家进入Redis异常: player={}, room={}", playerId, roomId, e);
             return false;
         }
     }
@@ -94,7 +97,7 @@ public class RoomValidator {
         try (Jedis jedis = jedisPool.getResource()) {
             return jedis.sismember(ROOM_KEY_PREFIX + roomId + ":players", String.valueOf(playerId));
         } catch (Exception e) {
-            log.error("Redis error checking player in room", e);
+            log.error("检查玩家在房间中Redis异常", e);
             return false;
         }
     }

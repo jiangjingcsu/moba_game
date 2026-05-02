@@ -4,7 +4,9 @@ import com.moba.battle.anticheat.AntiCheatValidator;
 import com.moba.battle.battle.LockstepEngine;
 import com.moba.battle.battle.GridCollisionDetector;
 import com.moba.battle.ai.AIController;
+import com.moba.battle.ai.AIBot;
 import com.moba.battle.config.SpringContextHolder;
+import com.moba.battle.config.ServerConfig;
 import com.moba.battle.event.BattleEventProducer;
 import com.moba.battle.model.*;
 import com.moba.battle.model.MOBAMap.GameMode;
@@ -39,13 +41,19 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
     private final AntiCheatValidator antiCheatValidator;
     private final ReplaySystem replaySystem;
     private final GridCollisionDetector collisionDetector;
+    private final int loadingTimeoutSeconds;
+    private final int roomCleanupDelaySeconds;
+    private final int reconnectTimeoutSeconds;
 
-    public BattleManager() {
+    public BattleManager(ServerConfig serverConfig) {
         this.scheduler = Executors.newScheduledThreadPool(2);
         this.defaultMapConfig = MapConfig.create3v3v3Map();
         this.antiCheatValidator = AntiCheatValidator.getInstance();
-        this.replaySystem = new ReplaySystem();
-        this.collisionDetector = new GridCollisionDetector(16000, 16000, 200);
+        this.replaySystem = new ReplaySystem(serverConfig);
+        this.collisionDetector = new GridCollisionDetector(16000, 16000, serverConfig.getDefaultGridSize());
+        this.loadingTimeoutSeconds = serverConfig.getLoadingTimeoutSeconds();
+        this.roomCleanupDelaySeconds = serverConfig.getRoomCleanupDelaySeconds();
+        this.reconnectTimeoutSeconds = serverConfig.getReconnectTimeoutSeconds();
     }
 
     public static BattleManager getInstance() {
@@ -59,7 +67,7 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
     public BattleRoom createBattle(String battleId, List<Long> playerIds, int teamCount, int neededBots, int aiLevel) {
         BattleRoom room = RoomManager.getInstance().createRoom(battleId, playerIds, teamCount);
         if (room == null) {
-            log.error("Failed to create room: {}", battleId);
+            log.error("创建房间失败: {}", battleId);
             return null;
         }
 
@@ -78,13 +86,13 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
 
         if (neededBots > 0) {
             AIController aiController = AIController.getInstance();
-            List<Long> botIds = aiController.createBotsForBattle(battleId, room.getSession(),
+            List<AIBot> bots = aiController.createBotsForBattle(battleId, room.getSession(),
                     playerIds.size() / teamCount, neededBots, aiLevel);
-            for (Long botId : botIds) {
-                room.registerBotPlayer(botId);
+            for (AIBot bot : bots) {
+                room.registerBotPlayer(bot.getBotId());
             }
             room.getEngine().enableAI(aiController, aiLevel);
-            log.info("AI bots created for battle {}, count={}, level={}", battleId, neededBots, aiLevel);
+            log.info("战斗{}创建AI机器人, 数量={}, 等级={}", battleId, neededBots, aiLevel);
         }
 
         for (Long playerId : playerIds) {
@@ -99,10 +107,10 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
 
         scheduler.schedule(() -> {
             if (room.getState() == BattleRoom.RoomState.LOADING && room.isLoadingTimeout()) {
-                log.warn("Loading timeout for room {}, unready players will be replaced by AI", battleId);
+                log.warn("房间{}加载超时, 未准备的玩家将被AI替换", battleId);
                 handleLoadingTimeout(room);
             }
-        }, 60, TimeUnit.SECONDS);
+        }, loadingTimeoutSeconds, TimeUnit.SECONDS);
 
         return room;
     }
@@ -111,14 +119,14 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
         Set<Long> unreadyPlayers = room.getUnreadyPlayerIds();
         if (unreadyPlayers.isEmpty()) return;
 
-        log.warn("Room {} loading timeout, {} players not ready: {}",
+        log.warn("房间{}加载超时, {}名玩家未准备: {}",
                 room.getBattleId(), unreadyPlayers.size(), unreadyPlayers);
 
         AIController aiController = AIController.getInstance();
         for (Long playerId : unreadyPlayers) {
-            log.info("Replacing unready player {} with AI bot in room {}", playerId, room.getBattleId());
+            log.info("房间{}中未准备玩家{}被AI机器人替换", room.getBattleId(), playerId);
             room.registerBotPlayer(playerId);
-            room.humanPlayerIds.remove(playerId);
+            room.getHumanPlayerIds().remove(playerId);
             room.markPlayerReady(playerId);
         }
 
@@ -143,7 +151,7 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
             broadcastStart(room);
             room.start();
             room.getSession().start();
-            log.info("Battle {} started! {} human + {} bot players, seed={}",
+            log.info("战斗{}开始! {}名真人 + {}名机器人, 随机种子={}",
                     room.getBattleId(), room.getHumanPlayerIds().size(),
                     room.getBotPlayerIds().size(), room.getEngine().getRandomSeed());
         }, 3, TimeUnit.SECONDS);
@@ -159,7 +167,7 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
             GamePacket packet = GamePacket.notify(MessageType.BATTLE_COUNTDOWN_NOTIFY, body);
             broadcastToRoom(room, packet);
         } catch (Exception e) {
-            log.error("Failed to broadcast countdown for room {}", room.getBattleId(), e);
+            log.error("房间{}广播倒计时失败", room.getBattleId(), e);
         }
     }
 
@@ -174,7 +182,7 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
             GamePacket packet = GamePacket.notify(MessageType.BATTLE_START_NOTIFY, body);
             broadcastToRoom(room, packet);
         } catch (Exception e) {
-            log.error("Failed to broadcast start for room {}", room.getBattleId(), e);
+            log.error("房间{}广播开始信号失败", room.getBattleId(), e);
         }
     }
 
@@ -270,7 +278,7 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
                     float targetY = Float.parseFloat(parts[3]);
 
                     if (!antiCheatValidator.validateMove(playerId, battlePlayer, targetX, targetY, 100)) {
-                        log.warn("Move validation failed for player {}", playerId);
+                        log.warn("玩家{}移动验证失败", playerId);
                         return;
                     }
 
@@ -308,7 +316,7 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
         if (battlePlayer == null || battlePlayer.isDead()) return;
 
         if (!antiCheatValidator.validateSkillCast(playerId, battlePlayer, skillId)) {
-            log.warn("Skill cast validation failed for player {}", playerId);
+            log.warn("玩家{}技能释放验证失败", playerId);
             return;
         }
 
@@ -322,12 +330,12 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
     public ReconnectResponse handleReconnect(ChannelHandlerContext ctx, ReconnectRequest request) {
         Optional<Player> playerOpt = PlayerManager.getInstance().getPlayerById(request.getPlayerId());
         if (playerOpt.isEmpty()) {
-            return ReconnectResponse.failure("Player not found");
+            return ReconnectResponse.failure("玩家不存在");
         }
 
         BattleRoom room = RoomManager.getInstance().getRoom(request.getBattleId());
         if (room == null) {
-            return ReconnectResponse.failure("Battle not found");
+            return ReconnectResponse.failure("战斗不存在");
         }
 
         PlayerManager.getInstance().updatePlayerContext(ctx, request.getPlayerId());
@@ -337,7 +345,7 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
         BattlePlayer battlePlayer = room.getSession().getPlayer(request.getPlayerId());
         String stateJson = serializeBattleState(room, battlePlayer);
 
-        log.info("Player {} reconnected to battle {}, frame={}",
+        log.info("玩家{}重连到战斗{}, 当前帧={}",
                 request.getPlayerId(), request.getBattleId(), room.getEngine().getCurrentFrame());
         return ReconnectResponse.success(stateJson);
     }
@@ -385,12 +393,12 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
 
     @Override
     public void onPlayerKill(long killerId, long victimId) {
-        log.info("Player {} killed player {}", killerId, victimId);
+        log.info("玩家{}击杀了玩家{}", killerId, victimId);
     }
 
     @Override
     public void onPlayerRespawn(long playerId) {
-        log.info("Player {} respawned", playerId);
+        log.info("玩家{}已复活", playerId);
     }
 
     @Override
@@ -406,10 +414,10 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
         BattleRoom room = findFinishedRoom();
         if (room != null) {
             room.setState(BattleRoom.RoomState.FINISHED);
-            log.info("Battle {} ended, calculating settlement", room.getBattleId());
+            log.info("战斗{}结束, 计算结算", room.getBattleId());
 
             SettlementSystem.BattleSettlementResult settlement = SettlementSystem.getInstance().calculateSettlement(room);
-            log.info("Settlement result: {}", settlement.toJson());
+            log.info("结算结果: {}", settlement.toJson());
 
             replaySystem.recordReplay(room.getBattleId(), room.getSession());
 
@@ -419,8 +427,8 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
 
             scheduler.schedule(() -> {
                 RoomManager.getInstance().removeRoom(room.getBattleId());
-                log.info("Battle room {} cleaned up", room.getBattleId());
-            }, 30, TimeUnit.SECONDS);
+                log.info("战斗房间{}已清理", room.getBattleId());
+            }, roomCleanupDelaySeconds, TimeUnit.SECONDS);
         }
     }
 
@@ -443,10 +451,10 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
             if (producer != null) {
                 producer.publishBattleEnd(event);
             } else {
-                log.warn("BattleEventProducer not available (RocketMQ disabled), skipping event publish");
+                log.warn("BattleEventProducer不可用(RocketMQ未启用), 跳过事件发布");
             }
         } catch (Exception e) {
-            log.error("Failed to publish battle end event for battle: {}", room.getBattleId(), e);
+            log.error("发布战斗结束事件失败: {}", room.getBattleId(), e);
         }
     }
 
@@ -493,8 +501,8 @@ public class BattleManager implements LockstepEngine.BattleEventListener {
             if (room != null) {
                 player.setReconnecting(true);
                 ReconnectManager.getInstance().startReconnectTimer(player.getPlayerId());
-                log.info("Player {} disconnected from battle {}, waiting for reconnect (timeout={}s)",
-                        player.getPlayerId(), room.getBattleId(), 30);
+                log.info("玩家{}从战斗{}断开连接, 等待重连(超时={}秒)",
+                        player.getPlayerId(), room.getBattleId(), reconnectTimeoutSeconds);
             }
         });
     }

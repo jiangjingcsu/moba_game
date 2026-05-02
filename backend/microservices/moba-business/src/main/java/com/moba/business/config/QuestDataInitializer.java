@@ -22,11 +22,11 @@ public class QuestDataInitializer implements CommandLineRunner {
     public void run(String... args) {
         long count = questTemplateRepository.count();
         if (count > 0) {
-            log.info("Quest templates already initialized (count={}), skipping", count);
+            log.info("任务模板已初始化(数量={}), 跳过", count);
             return;
         }
 
-        log.info("Initializing MOBA quest templates...");
+        log.info("正在初始化MOBA任务模板...");
 
         initDailyQuests();
         initWeeklyQuests();
@@ -34,7 +34,7 @@ public class QuestDataInitializer implements CommandLineRunner {
         initAchievementQuests();
         initSeasonQuests();
 
-        log.info("Quest templates initialization completed. Total: {}", questTemplateRepository.count());
+        log.info("任务模板初始化完成, 总数: {}", questTemplateRepository.count());
     }
 
     private void initDailyQuests() {
@@ -52,7 +52,7 @@ public class QuestDataInitializer implements CommandLineRunner {
         );
 
         questTemplateRepository.saveAll(templates);
-        log.info("Initialized {} daily quest templates", templates.size());
+        log.info("已初始化{}个每日任务模板", templates.size());
     }
 
     private void initWeeklyQuests() {
@@ -72,7 +72,7 @@ public class QuestDataInitializer implements CommandLineRunner {
         );
 
         questTemplateRepository.saveAll(templates);
-        log.info("Initialized {} weekly quest templates", templates.size());
+        log.info("已初始化{}个每周任务模板", templates.size());
     }
 
     private void initNoviceQuests() {
@@ -95,7 +95,7 @@ public class QuestDataInitializer implements CommandLineRunner {
         );
 
         questTemplateRepository.saveAll(templates);
-        log.info("Initialized {} novice quest templates", templates.size());
+        log.info("已初始化{}个新手任务模板", templates.size());
     }
 
     private void initAchievementQuests() {
@@ -121,7 +121,7 @@ public class QuestDataInitializer implements CommandLineRunner {
         );
 
         questTemplateRepository.saveAll(templates);
-        log.info("Initialized {} achievement quest templates", templates.size());
+        log.info("已初始化{}个成就任务模板", templates.size());
     }
 
     private void initSeasonQuests() {
@@ -144,7 +144,7 @@ public class QuestDataInitializer implements CommandLineRunner {
         );
 
         questTemplateRepository.saveAll(templates);
-        log.info("Initialized {} season quest templates", templates.size());
+        log.info("已初始化{}个赛季任务模板", templates.size());
     }
 
     private QuestTemplate build(String questCode, String questName, String description,

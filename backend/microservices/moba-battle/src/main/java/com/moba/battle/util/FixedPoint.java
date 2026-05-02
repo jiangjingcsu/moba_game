@@ -51,7 +51,7 @@ public class FixedPoint {
 
     public FixedPoint div(FixedPoint other) {
         if (other.rawValue == 0) {
-            throw new ArithmeticException("Division by zero");
+            throw new ArithmeticException("除以零");
         }
         return new FixedPoint((this.rawValue << FRACTION_BITS) / other.rawValue);
     }
@@ -96,7 +96,7 @@ public class FixedPoint {
 
     public FixedPoint sqrt() {
         if (rawValue < 0) {
-            throw new ArithmeticException("Cannot compute sqrt of negative number");
+            throw new ArithmeticException("无法计算负数的平方根");
         }
         if (rawValue == 0) return new FixedPoint(0);
         

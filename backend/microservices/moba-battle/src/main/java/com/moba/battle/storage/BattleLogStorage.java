@@ -29,7 +29,7 @@ public class BattleLogStorage {
         try {
             Files.createDirectories(Paths.get(storageDir));
         } catch (IOException e) {
-            log.error("Failed to create storage directory", e);
+            log.error("创建存储目录失败", e);
         }
 
         startLogConsumer();
@@ -51,7 +51,7 @@ public class BattleLogStorage {
                     Thread.currentThread().interrupt();
                     break;
                 } catch (Exception e) {
-                    log.error("Error saving battle log", e);
+                    log.error("保存战斗日志异常", e);
                 }
             }
         });
@@ -98,7 +98,7 @@ public class BattleLogStorage {
                 bos.write((logLine + "\n").getBytes());
             }
         } catch (IOException e) {
-            log.error("Failed to save battle log: {}", entry.getBattleId(), e);
+            log.error("保存战斗日志失败: {}", entry.getBattleId(), e);
         }
     }
 
@@ -122,7 +122,7 @@ public class BattleLogStorage {
                 }
             }
         } catch (IOException e) {
-            log.error("Failed to load battle logs for {}: {}", battleId, dateStr, e);
+            log.error("加载战斗日志失败 {}: {}", battleId, dateStr, e);
         }
 
         return logs;
@@ -141,7 +141,7 @@ public class BattleLogStorage {
             entry.setData(parts[4]);
             return entry;
         } catch (Exception e) {
-            log.error("Failed to deserialize log entry: {}", line, e);
+            log.error("反序列化日志条目失败: {}", line, e);
             return null;
         }
     }

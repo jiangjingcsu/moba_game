@@ -1,6 +1,8 @@
 package com.moba.battle.replay;
 
 import com.moba.battle.model.*;
+import com.moba.battle.config.ServerConfig;
+import com.moba.battle.config.SpringContextHolder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,17 +17,18 @@ import java.util.zip.GZIPOutputStream;
 @Slf4j
 @Component
 public class ReplaySystem {
-    private static final int SNAPSHOT_INTERVAL = 60;
     private static final String REPLAY_DIR = "replays";
 
     private final String replayDir;
+    private final int snapshotInterval;
 
-    public ReplaySystem() {
+    public ReplaySystem(ServerConfig serverConfig) {
         this.replayDir = REPLAY_DIR;
+        this.snapshotInterval = serverConfig.getReplaySnapshotInterval();
         try {
             Files.createDirectories(Paths.get(replayDir));
         } catch (IOException e) {
-            log.error("Failed to create replay directory", e);
+            log.error("创建回放目录失败", e);
         }
     }
 
@@ -34,9 +37,9 @@ public class ReplaySystem {
             ReplayData replayData = buildReplayData(battleId, session);
             String filePath = getReplayFilePath(battleId);
             saveReplay(replayData, filePath);
-            log.info("Replay saved: {} ({} frames, {} events)", battleId, replayData.getTotalFrames(), replayData.getEvents().size());
+            log.info("回放已保存: {} ({}帧, {}事件)", battleId, replayData.getTotalFrames(), replayData.getEvents().size());
         } catch (Exception e) {
-            log.error("Failed to save replay for battle: {}", battleId, e);
+            log.error("保存回放失败: {}", battleId, e);
         }
     }
 
@@ -45,7 +48,7 @@ public class ReplaySystem {
             String filePath = getReplayFilePath(battleId);
             return loadReplayFile(filePath);
         } catch (Exception e) {
-            log.error("Failed to load replay for battle: {}", battleId, e);
+            log.error("加载回放失败: {}", battleId, e);
             return null;
         }
     }
@@ -58,7 +61,7 @@ public class ReplaySystem {
                     .forEach(p -> replays.add(p.getFileName().toString()));
             return replays;
         } catch (IOException e) {
-            log.error("Failed to list replays", e);
+            log.error("列出回放失败", e);
             return Collections.emptyList();
         }
     }

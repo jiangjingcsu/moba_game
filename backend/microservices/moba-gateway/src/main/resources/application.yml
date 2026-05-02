@@ -1,23 +1,27 @@
-server:
+﻿﻿server:
   port: 8080
 
 spring:
   application:
     name: moba-gateway
   config:
-    import: "optional:nacos:moba-gateway.yml?group=MOBA_GROUP&refreshEnabled=false"
+    import: "optional:nacos:moba-gateway.yml?group=DEFAULT_GROUP&refreshEnabled=false"
   cloud:
     nacos:
       discovery:
         enabled: true
-        server-addr: 192.168.1.45:8848
+        server-addr: 192.168.0.102:8848
         namespace: public
-        group: MOBA_GROUP
+        group: DEFAULT_GROUP
+        username: nacos
+        password: nacos
         register-enabled: true
       config:
-        server-addr: 192.168.1.45:8848
+        server-addr: 192.168.0.102:8848
         namespace: public
-        group: MOBA_GROUP
+        group: DEFAULT_GROUP
+        username: nacos
+        password: nacos
         import-check:
           enabled: false
     gateway:
@@ -40,24 +44,16 @@ spring:
             - Path=/api/business/**
           filters:
             - StripPrefix=1
-        - id: battle-service
-          uri: lb://moba-battle
-          predicates:
-            - Path=/api/battle/**
-          filters:
-            - StripPrefix=1
-        - id: battle-websocket
-          uri: lb:ws://moba-battle
-          predicates:
-            - Path=/ws/battle/**
-          filters:
-            - StripPrefix=1
         - id: data-service
           uri: lb://moba-data
           predicates:
             - Path=/api/data/**
           filters:
             - StripPrefix=1
+        - id: match-websocket
+          uri: lb:ws://moba-match
+          predicates:
+            - Path=/ws/match
       globalcors:
         cors-configurations:
           '[/**]':
@@ -73,11 +69,23 @@ spring:
             allowedHeaders: "*"
   data:
     redis:
-      host: 192.168.1.45
+      host: 192.168.0.102
       port: 6379
       password: jiangjing
       database: 0
       timeout: 5000
+
+nacos:
+  server-addr: 192.168.0.102:8848
+  namespace: public
+  group: DEFAULT_GROUP
+  username: nacos
+  password: nacos
+
+gateway:
+  match:
+    service-name: moba-match
+    refresh-interval-seconds: 5
 
 jwt:
   secret: moba-game-jwt-secret-key-2024-must-be-at-least-256-bits

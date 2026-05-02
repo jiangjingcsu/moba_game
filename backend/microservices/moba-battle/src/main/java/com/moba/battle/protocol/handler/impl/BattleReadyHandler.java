@@ -47,7 +47,7 @@ public class BattleReadyHandler implements MessageHandler<BattleReadyRequest> {
         boolean allReady = room.allHumanPlayersReady();
 
         if (allReady) {
-            log.info("All human players ready in room {}, starting countdown", roomId);
+            log.info("房间{}所有真人玩家已准备, 开始倒计时", roomId);
             BattleManager.getInstance().startCountdown(room);
         }
 

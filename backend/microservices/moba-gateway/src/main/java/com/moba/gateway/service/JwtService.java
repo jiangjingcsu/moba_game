@@ -65,10 +65,10 @@ public class JwtService {
                     .parseSignedClaims(token)
                     .getPayload();
         } catch (ExpiredJwtException e) {
-            log.warn("JWT token expired: {}", e.getMessage());
+            log.warn("JWT令牌已过期: {}", e.getMessage());
             return null;
         } catch (JwtException e) {
-            log.warn("Invalid JWT token: {}", e.getMessage());
+            log.warn("JWT令牌无效: {}", e.getMessage());
             return null;
         }
     }

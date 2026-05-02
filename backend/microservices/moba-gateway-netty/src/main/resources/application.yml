@@ -1,0 +1,56 @@
+nacos:
+  server-addr: 192.168.0.102:8848
+  namespace: public
+  group: DEFAULT_GROUP
+  username: nacos
+  password: nacos
+  config:
+    data-id: moba-gateway.yml
+    timeout-ms: 5000
+  match-service-name: moba-match
+  battle-service-name: moba-battle
+  refresh-interval-seconds: 30
+  enabled: true
+
+server:
+  host: 0.0.0.0
+  port: 9999
+  bossThreadCount: 1
+  workerThreadCount: 4
+  maxConnections: 10000
+  idleTimeoutSeconds: 120
+
+jwt:
+  secret: moba-game-jwt-secret-key-2024-must-be-at-least-256-bits
+
+gateway:
+  service-name: moba-gateway
+  ws-path: /ws/game
+  match-service-ws-path: /ws/match
+  battle-service-ws-path: /ws/battle
+  protocol: websocket
+  version: 1.0.0
+  http-max-content-length: 65536
+  backend-thread-count: 2
+
+rank-tier-ranges:
+  - tier-name: bronze
+    min-score: 0
+    max-score: 999
+  - tier-name: silver
+    min-score: 1000
+    max-score: 1499
+  - tier-name: gold
+    min-score: 1500
+    max-score: 1999
+  - tier-name: platinum
+    min-score: 2000
+    max-score: 2499
+  - tier-name: diamond
+    min-score: 2500
+    max-score: 9999
+
+logging:
+  level:
+    com.alibaba.nacos: WARN
+    com.alibaba.nacos.shaded: WARN

@@ -23,7 +23,7 @@ public class ClientRequestHandler extends SimpleChannelInboundHandler<GamePacket
         try {
             dispatchService.dispatch(ctx, packet);
         } catch (Exception e) {
-            log.error("Error processing packet: {} from channel: {}",
+            log.error("处理数据包异常: {} 来自通道: {}",
                     packet.getMessageType(), ctx.channel().id().asShortText(), e);
         }
     }
@@ -32,8 +32,8 @@ public class ClientRequestHandler extends SimpleChannelInboundHandler<GamePacket
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
 
-        AttributeKey<Object> playerIdKey = AttributeKey.valueOf(JwtAuthHandler.ATTR_PLAYER_ID);
-        AttributeKey<Object> usernameKey = AttributeKey.valueOf(JwtAuthHandler.ATTR_USERNAME);
+        AttributeKey<Object> playerIdKey = AttributeKey.valueOf(GatewayTrustHandler.ATTR_PLAYER_ID);
+        AttributeKey<Object> usernameKey = AttributeKey.valueOf(GatewayTrustHandler.ATTR_USERNAME);
 
         Object playerIdObj = ctx.channel().attr(playerIdKey).get();
         Object usernameObj = ctx.channel().attr(usernameKey).get();
@@ -42,22 +42,22 @@ public class ClientRequestHandler extends SimpleChannelInboundHandler<GamePacket
             long playerId = (Long) playerIdObj;
             String username = usernameObj != null ? (String) usernameObj : "player_" + playerId;
             PlayerManager.getInstance().registerPlayerFromToken(ctx, playerId, username);
-            log.info("Client authenticated and registered: playerId={}, channel={}", playerId, ctx.channel().id().asShortText());
+            log.info("客户端认证并注册: playerId={}, 通道={}", playerId, ctx.channel().id().asShortText());
         } else {
-            log.warn("Client connected without JWT auth: channel={}", ctx.channel().id().asShortText());
+            log.warn("客户端连接未携带JWT认证: 通道={}", ctx.channel().id().asShortText());
         }
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
-        log.info("Client disconnected: {}", ctx.channel().id().asShortText());
+        log.info("客户端断开连接: {}", ctx.channel().id().asShortText());
         dispatchService.handleDisconnect(ctx);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        log.error("Exception in client handler: {}", ctx.channel().id().asShortText(), cause);
+        log.error("客户端处理器异常: {}", ctx.channel().id().asShortText(), cause);
         ctx.close();
     }
 }

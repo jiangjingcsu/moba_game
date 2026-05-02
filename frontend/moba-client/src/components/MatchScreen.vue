@@ -4,24 +4,24 @@
     <div class="match-content">
       <div class="match-header">
         <button class="btn-cancel" @click="cancelMatch">✕ 取消匹配</button>
-        <h2>匹配中</h2>
+        <h2>{{ matchState === 'matched' ? '匹配成功!' : matchState === 'error' ? '匹配失败' : matchState === 'connecting' ? '连接中...' : '匹配中' }}</h2>
       </div>
 
       <div class="match-body">
-        <div class="match-ring">
+        <div class="match-ring" v-if="matchState !== 'error'">
           <div class="ring-outer"></div>
           <div class="ring-inner"></div>
           <div class="match-time">{{ formatTime(waitTime) }}</div>
         </div>
-        <p class="match-tip">正在寻找对手...</p>
-        <div class="match-info">
+        <p class="match-tip">{{ matchState === 'matched' ? '正在进入战斗...' : matchState === 'error' ? errorMessage : matchState === 'connecting' ? '正在连接服务器...' : '正在寻找对手...' }}</p>
+        <div class="match-info" v-if="matchState !== 'error'">
           <span>{{ currentMode?.icon }} {{ currentMode?.name }}</span>
           <span>{{ currentMode?.playerCount }}</span>
         </div>
       </div>
 
-      <div class="match-players">
-        <div class="team-slot" v-for="i in 9" :key="i" :class="{ filled: i <= filledSlots }">
+      <div class="match-players" v-if="matchState !== 'error'">
+        <div class="team-slot" v-for="i in neededPlayers" :key="i" :class="{ filled: i <= filledSlots }">
           <div class="slot-avatar">{{ i <= filledSlots ? '👤' : '?' }}</div>
           <div class="slot-name">{{ i <= filledSlots ? '玩家' + i : '等待中...' }}</div>
         </div>
@@ -33,36 +33,94 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useGameStore } from '@/stores/game'
+import { getMatchStatus, cancelMatch as wsCancelMatch, enterBattle, matchSuccessData, connectToGateway, joinMatch } from '@/network'
+import { MessageId } from '@/network/protocol'
+import { ws } from '@/network'
 
 const gameStore = useGameStore()
 const waitTime = ref(0)
 const filledSlots = ref(1)
+const matchState = ref<'connecting' | 'searching' | 'matched' | 'error'>('connecting')
+const errorMessage = ref('')
 let timer: number | null = null
+let matchCheckInterval: number | null = null
 
 const currentMode = computed(() => gameStore.gameModes.find(m => m.id === gameStore.selectedGameMode))
+const neededPlayers = computed(() => {
+  const mode = currentMode.value
+  if (!mode) return 9
+  return mode.playerCount === '3v3v3' ? 9 : 10
+})
 
-onMounted(() => {
+onMounted(async () => {
   timer = window.setInterval(() => {
     waitTime.value++
-    if (filledSlots.value < 9 && Math.random() < 0.3) {
-      filledSlots.value++
-    }
-    if (waitTime.value >= 5 && filledSlots.value >= 9) {
-      gameStore.setGameState('loading')
-      if (timer) clearInterval(timer)
-    }
-    if (waitTime.value >= 8) {
-      filledSlots.value = 9
-      setTimeout(() => {
-        gameStore.setGameState('loading')
-      }, 500)
-      if (timer) clearInterval(timer)
-    }
   }, 1000)
+
+  try {
+    const connected = await connectToGateway()
+    if (!connected) {
+      matchState.value = 'error'
+      errorMessage.value = '连接服务器失败'
+      return
+    }
+
+    const gameMode = gameStore.selectedGameMode || 1
+    const joinResult = await joinMatch(gameMode)
+    if (!joinResult.success) {
+      matchState.value = 'error'
+      errorMessage.value = joinResult.error || '加入匹配失败'
+      return
+    }
+
+    matchState.value = 'searching'
+  } catch (e) {
+    matchState.value = 'error'
+    errorMessage.value = '匹配请求异常'
+    return
+  }
+
+  matchCheckInterval = window.setInterval(async () => {
+    if (matchState.value === 'matched') return
+
+    try {
+      const status = await getMatchStatus()
+      if (status.matched && status.battleId) {
+        matchState.value = 'matched'
+        filledSlots.value = neededPlayers.value
+        if (matchCheckInterval) {
+          clearInterval(matchCheckInterval)
+          matchCheckInterval = null
+        }
+
+        const heroId = parseInt(gameStore.selectedHeroId) || 1
+        const battleResponse = await enterBattle(status.battleId, heroId, 0)
+
+        if (battleResponse.success) {
+          gameStore.setGameState('loading')
+          gameStore.setBattleInfo({
+            battleId: battleResponse.battleId,
+            mapId: battleResponse.mapId,
+            mapConfig: battleResponse.mapConfig,
+            heroId: heroId,
+            teamId: 0,
+          })
+        } else {
+          console.error('进入战斗失败:', battleResponse.errorMessage)
+          gameStore.setGameState('lobby')
+        }
+      } else if (status.matched) {
+        filledSlots.value = Math.min(filledSlots.value + 1, neededPlayers.value)
+      }
+    } catch (e) {
+      console.error('查询匹配状态失败:', e)
+    }
+  }, 2000)
 })
 
 onUnmounted(() => {
   if (timer) clearInterval(timer)
+  if (matchCheckInterval) clearInterval(matchCheckInterval)
 })
 
 function formatTime(seconds: number): string {
@@ -71,9 +129,13 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`
 }
 
-function cancelMatch() {
+async function cancelMatch() {
   if (timer) clearInterval(timer)
-  gameStore.setGameState('hero_select')
+  if (matchCheckInterval) clearInterval(matchCheckInterval)
+  if (matchState.value !== 'error') {
+    await wsCancelMatch()
+  }
+  gameStore.setGameState('lobby')
 }
 </script>
 

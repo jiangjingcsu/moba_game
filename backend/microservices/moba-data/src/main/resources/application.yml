@@ -1,4 +1,4 @@
-server:
+﻿﻿server:
   port: 8084
 
 spring:
@@ -10,28 +10,32 @@ spring:
       - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
       - org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoConfiguration
   config:
-    import: "optional:nacos:moba-data.yml?group=MOBA_GROUP&refreshEnabled=false"
+    import: "optional:nacos:moba-data.yml?group=DEFAULT_GROUP&refreshEnabled=false"
   cloud:
     nacos:
       discovery:
         enabled: true
-        server-addr: 192.168.1.45:8848
+        server-addr: 192.168.0.102:8848
         namespace: public
-        group: MOBA_GROUP
+        group: DEFAULT_GROUP
+        username: nacos
+        password: nacos
         register-enabled: true
       config:
-        server-addr: 192.168.1.45:8848
+        server-addr: 192.168.0.102:8848
         namespace: public
-        group: MOBA_GROUP
+        group: DEFAULT_GROUP
+        username: nacos
+        password: nacos
         import-check:
           enabled: false
   data:
     mongodb:
-      host: 192.168.1.45
+      host: 192.168.0.102
       port: 27017
       database: moba_data
     redis:
-      host: 192.168.1.45
+      host: 192.168.0.102
       port: 6379
       password: jiangjing
       database: 3
@@ -41,13 +45,15 @@ dubbo:
   qos:
     enable: false
   registry:
-    address: nacos://192.168.1.45:8848
-  protocol:
-    name: dubbo
-    port: 20884
+    address: nacos://192.168.0.102:8848
+    username: nacos
+    password: nacos
+    protocol:
+      name: dubbo
+      port: 20884
 
 rocketmq:
-  name-server: 192.168.1.45:9876
+  name-server: 192.168.0.102:9876
   consumer:
     group: moba-data-consumer
 

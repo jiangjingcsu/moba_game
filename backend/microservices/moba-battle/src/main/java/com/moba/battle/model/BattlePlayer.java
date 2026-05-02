@@ -27,6 +27,7 @@ public class BattlePlayer {
     private int collisionRadius;
     private Map<Integer, Skill> skills;
     private Map<Integer, Integer> items;
+    private boolean stealthed;
 
     public BattlePlayer(long playerId, int heroId, int teamId, HeroConfig heroConfig) {
         this.playerId = playerId;

@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<Void>> handleBusinessException(BusinessException e) {
-        log.warn("Business exception: code={}, message={}", e.getCode(), e.getMessage());
+        log.warn("业务异常: code={}, message={}", e.getCode(), e.getMessage());
         HttpStatus status = mapCodeToStatus(e.getCode());
         return ResponseEntity.status(status)
                 .body(ApiResponse.error(e.getCode(), e.getMessage()));
@@ -22,16 +22,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Void>> handleIllegalArgument(IllegalArgumentException e) {
-        log.warn("Illegal argument: {}", e.getMessage());
+        log.warn("非法参数: {}", e.getMessage());
         return ResponseEntity.badRequest()
                 .body(ApiResponse.badRequest(e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
-        log.error("Unexpected error", e);
+        log.error("未知异常", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.serverError("Internal server error"));
+                .body(ApiResponse.serverError("服务器内部错误"));
     }
 
     private HttpStatus mapCodeToStatus(int code) {

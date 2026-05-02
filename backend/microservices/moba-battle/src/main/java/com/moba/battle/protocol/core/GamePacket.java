@@ -30,7 +30,7 @@ public class GamePacket {
     public static GamePacket response(MessageType requestType, int sequenceId, byte[] body) {
         MessageType respType = requestType.correspondingResponse();
         if (respType == null) {
-            throw new IllegalArgumentException("No corresponding response for: " + requestType);
+            throw new IllegalArgumentException("无对应响应: " + requestType);
         }
         return new GamePacket(respType, sequenceId, body);
     }

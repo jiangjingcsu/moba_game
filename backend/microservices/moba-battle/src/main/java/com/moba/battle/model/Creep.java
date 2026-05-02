@@ -119,7 +119,7 @@ public class Creep {
         if (this.hp <= 0) {
             this.state = CreepState.DEAD;
             this.isAlive = false;
-            log.debug("Creep {} killed (type={}, level={})", creepId, creepType, level);
+            log.debug("野怪{}被击杀 (类型={}, 等级={})", creepId, creepType, level);
         }
     }
 

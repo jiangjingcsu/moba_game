@@ -1,0 +1,505 @@
+map:
+  id: 2
+  name: "经典战场"
+  width: 16000
+  height: 16000
+  team-count: 2
+  game-mode: MODE_5V5
+
+terrain:
+  obstacles:
+    - id: 1001
+      x: 3000
+      y: 3000
+      width: 600
+      height: 800
+    - id: 1002
+      x: 5000
+      y: 2000
+      width: 400
+      height: 400
+    - id: 1003
+      x: 7000
+      y: 3000
+      width: 800
+      height: 600
+    - id: 1004
+      x: 9000
+      y: 3000
+      width: 800
+      height: 600
+    - id: 1005
+      x: 11000
+      y: 2000
+      width: 400
+      height: 400
+    - id: 1006
+      x: 13000
+      y: 3000
+      width: 600
+      height: 800
+    - id: 1007
+      x: 3000
+      y: 12200
+      width: 600
+      height: 800
+    - id: 1008
+      x: 5000
+      y: 13600
+      width: 400
+      height: 400
+    - id: 1009
+      x: 7000
+      y: 12400
+      width: 800
+      height: 600
+    - id: 1010
+      x: 9000
+      y: 12400
+      width: 800
+      height: 600
+    - id: 1011
+      x: 11000
+      y: 13600
+      width: 400
+      height: 400
+    - id: 1012
+      x: 13000
+      y: 12200
+      width: 600
+      height: 800
+    - id: 1013
+      x: 7400
+      y: 7400
+      width: 1200
+      height: 1200
+
+  flyable-zones:
+    - id: 2001
+      x: 7200
+      y: 7200
+      width: 1600
+      height: 1600
+    - id: 2002
+      x: 2800
+      y: 2800
+      width: 800
+      height: 800
+    - id: 2003
+      x: 12400
+      y: 2800
+      width: 800
+      height: 800
+    - id: 2004
+      x: 2800
+      y: 12400
+      width: 800
+      height: 800
+    - id: 2005
+      x: 12400
+      y: 12400
+      width: 800
+      height: 800
+
+  bushes:
+    - id: 3001
+      x: 2000
+      y: 4500
+      width: 300
+      height: 400
+    - id: 3002
+      x: 4500
+      y: 2000
+      width: 400
+      height: 300
+    - id: 3003
+      x: 3500
+      y: 6000
+      width: 300
+      height: 300
+    - id: 3004
+      x: 6000
+      y: 3500
+      width: 300
+      height: 300
+    - id: 3005
+      x: 11500
+      y: 4500
+      width: 300
+      height: 400
+    - id: 3006
+      x: 9500
+      y: 2000
+      width: 400
+      height: 300
+    - id: 3007
+      x: 2000
+      y: 11100
+      width: 300
+      height: 400
+    - id: 3008
+      x: 4500
+      y: 13700
+      width: 400
+      height: 300
+    - id: 3009
+      x: 11500
+      y: 11100
+      width: 300
+      height: 400
+    - id: 3010
+      x: 9500
+      y: 13700
+      width: 400
+      height: 300
+    - id: 3011
+      x: 6000
+      y: 6000
+      width: 250
+      height: 250
+    - id: 3012
+      x: 9750
+      y: 6000
+      width: 250
+      height: 250
+    - id: 3013
+      x: 6000
+      y: 9750
+      width: 250
+      height: 250
+    - id: 3014
+      x: 9750
+      y: 9750
+      width: 250
+      height: 250
+
+  river:
+    - id: 4001
+      x: 0
+      y: 7400
+      width: 6800
+      height: 600
+      speed-factor: 0.7
+    - id: 4002
+      x: 7400
+      y: 8000
+      width: 8600
+      height: 600
+      speed-factor: 0.7
+    - id: 4003
+      x: 7400
+      y: 7400
+      width: 600
+      height: 600
+      speed-factor: 0.7
+
+  bases:
+    - id: 5001
+      team-id: 1
+      x: 200
+      y: 200
+      width: 1200
+      height: 1200
+      heal-rate: 50
+    - id: 5002
+      team-id: 2
+      x: 14600
+      y: 14600
+      width: 1200
+      height: 1200
+      heal-rate: 50
+
+towers:
+  - id: 101
+    team-id: 1
+    tier: 1
+    tower-type: OUTER
+    x: 1500
+    y: 2500
+    hp: 3000
+    damage: 150
+    attack-speed: 1000
+    range: 600
+  - id: 102
+    team-id: 1
+    tier: 1
+    tower-type: OUTER
+    x: 2500
+    y: 1500
+    hp: 3000
+    damage: 150
+    attack-speed: 1000
+    range: 600
+  - id: 103
+    team-id: 1
+    tier: 1
+    tower-type: OUTER
+    x: 4000
+    y: 4000
+    hp: 3000
+    damage: 150
+    attack-speed: 1000
+    range: 600
+  - id: 104
+    team-id: 1
+    tier: 2
+    tower-type: INNER
+    x: 1200
+    y: 1800
+    hp: 2500
+    damage: 200
+    attack-speed: 800
+    range: 650
+  - id: 105
+    team-id: 1
+    tier: 2
+    tower-type: INNER
+    x: 1800
+    y: 1200
+    hp: 2500
+    damage: 200
+    attack-speed: 800
+    range: 650
+  - id: 201
+    team-id: 2
+    tier: 1
+    tower-type: OUTER
+    x: 12000
+    y: 13500
+    hp: 3000
+    damage: 150
+    attack-speed: 1000
+    range: 600
+  - id: 202
+    team-id: 2
+    tier: 1
+    tower-type: OUTER
+    x: 13500
+    y: 12000
+    hp: 3000
+    damage: 150
+    attack-speed: 1000
+    range: 600
+  - id: 203
+    team-id: 2
+    tier: 1
+    tower-type: OUTER
+    x: 12000
+    y: 12000
+    hp: 3000
+    damage: 150
+    attack-speed: 1000
+    range: 600
+  - id: 204
+    team-id: 2
+    tier: 2
+    tower-type: INNER
+    x: 14200
+    y: 13800
+    hp: 2500
+    damage: 200
+    attack-speed: 800
+    range: 650
+  - id: 205
+    team-id: 2
+    tier: 2
+    tower-type: INNER
+    x: 13800
+    y: 14200
+    hp: 2500
+    damage: 200
+    attack-speed: 800
+    range: 650
+
+buildings:
+  - id: 501
+    team-id: 1
+    type: BASE
+    x: 800
+    y: 800
+    hp: 5000
+  - id: 502
+    team-id: 1
+    type: BARRACKS
+    x: 1200
+    y: 600
+    hp: 2000
+  - id: 503
+    team-id: 1
+    type: BARRACKS
+    x: 600
+    y: 1200
+    hp: 2000
+  - id: 601
+    team-id: 2
+    type: BASE
+    x: 15200
+    y: 15200
+    hp: 5000
+  - id: 602
+    team-id: 2
+    type: BARRACKS
+    x: 14800
+    y: 15400
+    hp: 2000
+  - id: 603
+    team-id: 2
+    type: BARRACKS
+    x: 15400
+    y: 14800
+    hp: 2000
+
+creep-camps:
+  - id: 801
+    x: 3500
+    y: 5500
+    type: SMALL
+    count: 3
+    level: 1
+    respawn: 60
+  - id: 802
+    x: 5500
+    y: 3500
+    type: SMALL
+    count: 3
+    level: 1
+    respawn: 60
+  - id: 803
+    x: 4500
+    y: 6500
+    type: LARGE
+    count: 4
+    level: 3
+    respawn: 120
+  - id: 804
+    x: 6500
+    y: 4500
+    type: LARGE
+    count: 4
+    level: 3
+    respawn: 120
+  - id: 805
+    x: 9500
+    y: 11500
+    type: SMALL
+    count: 3
+    level: 1
+    respawn: 60
+  - id: 806
+    x: 11500
+    y: 9500
+    type: SMALL
+    count: 3
+    level: 1
+    respawn: 60
+  - id: 807
+    x: 9500
+    y: 9500
+    type: LARGE
+    count: 4
+    level: 3
+    respawn: 120
+  - id: 808
+    x: 11500
+    y: 11500
+    type: ANCIENT
+    count: 5
+    level: 5
+    respawn: 180
+
+rune-spawns:
+  - id: 901
+    x: 4000
+    y: 4000
+    type: POWER
+    interval: 120
+  - id: 902
+    x: 12000
+    y: 12000
+    type: AGILITY
+    interval: 120
+  - id: 903
+    x: 8000
+    y: 8000
+    type: WISDOM
+    interval: 180
+  - id: 904
+    x: 3000
+    y: 8000
+    type: HEALTH
+    interval: 180
+  - id: 905
+    x: 8000
+    y: 3000
+    type: MANA
+    interval: 180
+
+roshan:
+  id: 1001
+  x: 8000
+  y: 7700
+  radius: 300
+  respawn: 600
+  hp: 10000
+  damage: 500
+
+spawn-points:
+  - team-id: 1
+    x: 800
+    y: 800
+    radius: 300
+  - team-id: 2
+    x: 15200
+    y: 15200
+    radius: 300
+
+lanes:
+  - id: 1
+    team-id: 1
+    index: 0
+    path:
+      - x: 800
+        y: 1200
+      - x: 2000
+        y: 3000
+      - x: 4000
+        y: 5000
+      - x: 6000
+        y: 7000
+      - x: 8000
+        y: 8000
+    width: 300
+  - id: 2
+    team-id: 1
+    index: 1
+    path:
+      - x: 1200
+        y: 800
+      - x: 3000
+        y: 2000
+      - x: 5000
+        y: 4000
+      - x: 7000
+        y: 6000
+      - x: 8000
+        y: 8000
+    width: 300
+  - id: 3
+    team-id: 1
+    index: 2
+    path:
+      - x: 800
+        y: 800
+      - x: 3000
+        y: 800
+      - x: 5000
+        y: 1000
+      - x: 7000
+        y: 2000
+      - x: 8000
+        y: 4000
+      - x: 8000
+        y: 6000
+      - x: 8000
+        y: 8000
+    width: 300

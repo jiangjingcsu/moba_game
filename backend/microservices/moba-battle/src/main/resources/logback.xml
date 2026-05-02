@@ -21,6 +21,8 @@
     <logger name="org.apache.dubbo" level="WARN"/>
     <logger name="org.apache.rocketmq" level="WARN"/>
     <logger name="io.netty" level="INFO"/>
+    <logger name="com.alibaba.nacos.client.naming" level="WARN"/>
+    <logger name="com.alibaba.nacos.common.remote.client" level="WARN"/>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>

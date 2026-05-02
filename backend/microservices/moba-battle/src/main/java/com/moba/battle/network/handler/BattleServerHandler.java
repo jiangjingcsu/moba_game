@@ -11,25 +11,25 @@ import lombok.extern.slf4j.Slf4j;
 public class BattleServerHandler extends SimpleChannelInboundHandler<GamePacket> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, GamePacket packet) {
-        log.info("Battle server packet: {} seq={} from channel: {}",
+        log.info("战斗服务器数据包: {} seq={} 来自通道: {}",
                 packet.getMessageType(), packet.getSequenceId(), ctx.channel().id().asShortText());
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        log.info("Battle server connected: {}", ctx.channel().id().asShortText());
+        log.info("战斗服务器连接建立: {}", ctx.channel().id().asShortText());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
-        log.info("Battle server disconnected: {}", ctx.channel().id().asShortText());
+        log.info("战斗服务器连接断开: {}", ctx.channel().id().asShortText());
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        log.error("Exception in battle server handler: {}", ctx.channel().id().asShortText(), cause);
+        log.error("战斗服务器处理器异常: {}", ctx.channel().id().asShortText(), cause);
         ctx.close();
     }
 }

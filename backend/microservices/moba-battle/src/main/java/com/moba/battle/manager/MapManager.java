@@ -1,5 +1,6 @@
 package com.moba.battle.manager;
 
+import com.moba.battle.config.ServerConfig;
 import com.moba.battle.config.SpringContextHolder;
 import com.moba.battle.model.BattlePlayer;
 import com.moba.battle.model.Creep;
@@ -26,15 +27,19 @@ public class MapManager {
     private final Map<String, Map<Integer, Building>> roomBuildings;
     private final Map<String, List<RuneSpawnPoint>> roomRunes;
 
-    private static final long CREEP_SPAWN_INTERVAL = 60000;
-    private static final long RUNE_SPAWN_INTERVAL = 90000;
+    private final long creepSpawnIntervalMs;
+    private final long runeSpawnIntervalMs;
+    private final int aggroRange;
 
-    public MapManager() {
+    public MapManager(ServerConfig serverConfig) {
         this.activeMaps = new ConcurrentHashMap<>();
         this.roomCreeps = new ConcurrentHashMap<>();
         this.roomTowers = new ConcurrentHashMap<>();
         this.roomBuildings = new ConcurrentHashMap<>();
         this.roomRunes = new ConcurrentHashMap<>();
+        this.creepSpawnIntervalMs = serverConfig.getCreepSpawnIntervalMs();
+        this.runeSpawnIntervalMs = serverConfig.getRuneSpawnIntervalMs();
+        this.aggroRange = serverConfig.getAggroRange();
     }
 
     public static MapManager getInstance() {
@@ -63,7 +68,7 @@ public class MapManager {
 
         spawnInitialCreeps(battleId, map);
 
-        log.info("Map created for battle {}: {} (mode={}, {} towers, {} buildings, {} creeps)",
+        log.info("为战斗{}创建地图: {}（模式={}, {}座防御塔, {}座建筑, {}个野怪）",
                 battleId, map.getMapName(), mode,
                 map.getTowers().size(), map.getBuildings().size(),
                 roomCreeps.getOrDefault(battleId, Collections.emptyList()).size());
@@ -168,7 +173,7 @@ public class MapManager {
                     target.takeDamage(tower.getDamage());
                     tower.attack(currentFrame);
 
-                    log.debug("Tower {} attacked player {} for {} damage (range={})",
+                    log.debug("防御塔{}攻击玩家{}, 伤害={}（范围={}）",
                             tower.getTowerId(), target.getPlayerId(), tower.getDamage(), tower.getRange());
                 }
             }
@@ -286,7 +291,6 @@ public class MapManager {
             int dy = player.getPosition().y - creep.getY();
             int dist = (int) Math.sqrt(dx * dx + dy * dy);
 
-            int aggroRange = 500;
             if (dist <= aggroRange && dist < nearestDist) {
                 if (creep.getTeamId() >= 0 && player.getTeamId() == creep.getTeamId()) continue;
                 nearestDist = dist;
@@ -306,7 +310,7 @@ public class MapManager {
         for (RuneSpawnPoint rune : runes) {
             if (!rune.isActive() && now - rune.getLastSpawnTime() >= rune.getSpawnInterval() * 1000) {
                 rune.setActive(true);
-                log.debug("Rune {} spawned at ({}, {})", rune.getRuneType(), rune.getX(), rune.getY());
+                log.debug("符文{}刷新在({}, {})", rune.getRuneType(), rune.getX(), rune.getY());
             }
         }
     }
@@ -325,7 +329,7 @@ public class MapManager {
                         int offsetX = (int) ((creep.getCreepId() % 3) * 30);
                         int offsetY = (int) ((creep.getCreepId() / 3) * 30);
                         creep.respawn(camp.getX() + offsetX, camp.getY() + offsetY);
-                        log.debug("Creep {} respawned at ({}, {})", creep.getCreepId(), camp.getX(), camp.getY());
+                        log.debug("野怪{}重生在({}, {})", creep.getCreepId(), camp.getX(), camp.getY());
                     }
                 }
             }
@@ -376,16 +380,16 @@ public class MapManager {
         roomTowers.remove(battleId);
         roomBuildings.remove(battleId);
         roomRunes.remove(battleId);
-        log.info("Map removed for battle {}", battleId);
+        log.info("战斗{}地图已移除", battleId);
     }
 
     public void applyTowerDamage(String battleId, int towerId, int damage) {
         Tower tower = getTower(battleId, towerId);
         if (tower != null) {
             tower.setHp(Math.max(0, tower.getHp() - damage));
-            log.info("Tower {} took {} damage, hp={}/{}", towerId, damage, tower.getHp(), tower.getMaxHp());
+            log.info("防御塔{}受到{}伤害, 生命值={}/{}", towerId, damage, tower.getHp(), tower.getMaxHp());
             if (tower.getHp() <= 0) {
-                log.info("Tower {} destroyed!", towerId);
+                log.info("防御塔{}已被摧毁!", towerId);
             }
         }
     }
@@ -394,9 +398,9 @@ public class MapManager {
         Building building = getBuilding(battleId, buildingId);
         if (building != null) {
             building.setHp(Math.max(0, building.getHp() - damage));
-            log.info("Building {} took {} damage, hp={}/{}", buildingId, damage, building.getHp(), building.getMaxHp());
+            log.info("建筑{}受到{}伤害, 生命值={}/{}", buildingId, damage, building.getHp(), building.getMaxHp());
             if (building.getHp() <= 0) {
-                log.info("Building {} destroyed!", buildingId);
+                log.info("建筑{}已被摧毁!", buildingId);
             }
         }
     }

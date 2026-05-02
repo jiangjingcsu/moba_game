@@ -30,8 +30,8 @@ public class QuestController {
         } catch (IllegalArgumentException e) {
             return ApiResponse.badRequest("无效的任务类型: " + questType);
         } catch (Exception e) {
-            log.error("Get player quests failed", e);
-            return ApiResponse.error("获取任务列表失败: " + e.getMessage());
+            log.error("获取玩家任务失败", e);
+            return ApiResponse.error("获取玩家任务失败: " + e.getMessage());
         }
     }
 
@@ -52,7 +52,7 @@ public class QuestController {
         } catch (IllegalArgumentException e) {
             return ApiResponse.badRequest("无效的任务类型: " + questType);
         } catch (Exception e) {
-            log.error("Get active quests failed", e);
+            log.error("获取活跃任务失败", e);
             return ApiResponse.error("获取活跃任务失败: " + e.getMessage());
         }
     }
@@ -72,7 +72,7 @@ public class QuestController {
                     "state", quest.getState().name()
             ));
         } catch (Exception e) {
-            log.error("Claim reward failed for quest {}", questId, e);
+            log.error("领取任务{}奖励失败", questId, e);
             return ApiResponse.error("领取奖励失败: " + e.getMessage());
         }
     }
@@ -85,7 +85,7 @@ public class QuestController {
             List<PlayerQuest> quests = questService.getPlayerActiveQuests(playerId, QuestType.DAILY);
             return ApiResponse.success(Map.of("message", "每日任务已刷新", "quests", quests));
         } catch (Exception e) {
-            log.error("Refresh daily quests failed", e);
+            log.error("刷新每日任务失败", e);
             return ApiResponse.error("刷新每日任务失败: " + e.getMessage());
         }
     }
@@ -98,7 +98,7 @@ public class QuestController {
             List<PlayerQuest> quests = questService.getPlayerActiveQuests(playerId, QuestType.WEEKLY);
             return ApiResponse.success(Map.of("message", "每周任务已刷新", "quests", quests));
         } catch (Exception e) {
-            log.error("Refresh weekly quests failed", e);
+            log.error("刷新每周任务失败", e);
             return ApiResponse.error("刷新每周任务失败: " + e.getMessage());
         }
     }
@@ -111,7 +111,7 @@ public class QuestController {
             List<PlayerQuest> quests = questService.getPlayerActiveQuests(playerId, QuestType.NOVICE);
             return ApiResponse.success(Map.of("message", "新手任务已初始化", "quests", quests));
         } catch (Exception e) {
-            log.error("Init novice quests failed", e);
+            log.error("初始化新手任务失败", e);
             return ApiResponse.error("初始化新手任务失败: " + e.getMessage());
         }
     }
@@ -124,7 +124,7 @@ public class QuestController {
             List<PlayerQuest> quests = questService.getPlayerActiveQuests(playerId, QuestType.SEASON);
             return ApiResponse.success(Map.of("message", "赛季任务已初始化", "quests", quests));
         } catch (Exception e) {
-            log.error("Init season quests failed", e);
+            log.error("初始化赛季任务失败", e);
             return ApiResponse.error("初始化赛季任务失败: " + e.getMessage());
         }
     }
@@ -170,7 +170,7 @@ public class QuestController {
                     "completedQuests", completedQuests
             ));
         } catch (Exception e) {
-            log.error("Report battle result failed", e);
+            log.error("上报战斗结果失败", e);
             return ApiResponse.error("上报战斗结果失败: " + e.getMessage());
         }
     }
@@ -182,7 +182,7 @@ public class QuestController {
             Map<String, Object> summary = questService.getQuestProgressSummary(playerId);
             return ApiResponse.success(summary);
         } catch (Exception e) {
-            log.error("Get quest summary failed", e);
+            log.error("获取任务概览失败", e);
             return ApiResponse.error("获取任务概览失败: " + e.getMessage());
         }
     }

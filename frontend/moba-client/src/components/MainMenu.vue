@@ -291,7 +291,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useGameStore } from '@/stores/game'
 import { heroDefinitions, roleIcons, roleNames } from '@/data/heroes'
 import { HeroRole } from '@/types/game'
-import { httpLogin, httpRegister, joinMatch, getMatchStatus, cancelMatch, connectToBattleServer, enterBattle, isConnected, ping } from '@/network'
+import { httpLogin, httpRegister, joinMatch, getMatchStatus, cancelMatch, connectToGateway, enterBattle, isConnected, ping } from '@/network'
 
 const emit = defineEmits<{
   (e: 'start-game'): void
@@ -411,6 +411,14 @@ const handleStartGame = async () => {
   gameStore.setGameState('matching')
 
   try {
+    const connected = await connectToGateway()
+    if (!connected) {
+      loginError.value = '连接网关失败'
+      isMatching.value = false
+      gameStore.setGameState('menu')
+      return
+    }
+
     const joinResult = await joinMatch(1)
     if (!joinResult.success) {
       loginError.value = joinResult.error || '加入匹配失败'
@@ -425,15 +433,6 @@ const handleStartGame = async () => {
         if (matchCheckInterval) {
           clearInterval(matchCheckInterval)
           matchCheckInterval = null
-        }
-
-        try {
-          await connectToBattleServer()
-        } catch (e) {
-          console.error('连接战斗服务器失败:', e)
-          isMatching.value = false
-          gameStore.setGameState('menu')
-          return
         }
 
         const heroIdNum = parseInt(selectedHero.value) || 1

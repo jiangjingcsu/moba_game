@@ -12,6 +12,13 @@ public enum MessageType {
     RECONNECT_REQ(MessageModule.AUTH, 2, MessageDirection.REQUEST),
     RECONNECT_RESP(MessageModule.AUTH, 2, MessageDirection.RESPONSE),
 
+    MATCH_JOIN_REQ(MessageModule.MATCH, 1, MessageDirection.REQUEST),
+    MATCH_JOIN_RESP(MessageModule.MATCH, 1, MessageDirection.RESPONSE),
+    MATCH_STATUS_REQ(MessageModule.MATCH, 2, MessageDirection.REQUEST),
+    MATCH_STATUS_RESP(MessageModule.MATCH, 2, MessageDirection.RESPONSE),
+    MATCH_CANCEL_REQ(MessageModule.MATCH, 3, MessageDirection.REQUEST),
+    MATCH_CANCEL_RESP(MessageModule.MATCH, 3, MessageDirection.RESPONSE),
+
     BATTLE_ENTER_REQ(MessageModule.BATTLE, 1, MessageDirection.REQUEST),
     BATTLE_ENTER_RESP(MessageModule.BATTLE, 1, MessageDirection.RESPONSE),
     BATTLE_READY_REQ(MessageModule.BATTLE, 2, MessageDirection.REQUEST),
@@ -23,6 +30,9 @@ public enum MessageType {
     BATTLE_FRAME_SYNC_NOTIFY(MessageModule.BATTLE, 7, MessageDirection.NOTIFY),
     BATTLE_COUNTDOWN_NOTIFY(MessageModule.BATTLE, 8, MessageDirection.NOTIFY),
     BATTLE_START_NOTIFY(MessageModule.BATTLE, 9, MessageDirection.NOTIFY),
+    BATTLE_EVENT_NOTIFY(MessageModule.BATTLE, 10, MessageDirection.NOTIFY),
+    BATTLE_HASH_CHECK_NOTIFY(MessageModule.BATTLE, 11, MessageDirection.NOTIFY),
+    BATTLE_STATE_CORRECTION_NOTIFY(MessageModule.BATTLE, 12, MessageDirection.NOTIFY),
 
     ROOM_CREATE_REQ(MessageModule.ROOM, 1, MessageDirection.REQUEST),
     ROOM_CREATE_RESP(MessageModule.ROOM, 1, MessageDirection.RESPONSE),

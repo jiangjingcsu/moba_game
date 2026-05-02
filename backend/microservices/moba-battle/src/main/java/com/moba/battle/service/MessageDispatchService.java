@@ -27,7 +27,7 @@ public class MessageDispatchService {
 
     public void dispatch(ChannelHandlerContext ctx, GamePacket packet) {
         if (packet.getMessageType() == null) {
-            log.warn("Unknown message type: 0x{} from channel: {}",
+            log.warn("未知消息类型: 0x{} 来自通道: {}",
                     Integer.toHexString(packet.getCommandCode()), ctx.channel().id().asShortText());
             return;
         }
@@ -40,7 +40,7 @@ public class MessageDispatchService {
         }
 
         if (type == MessageType.HEARTBEAT_RESP) {
-            log.debug("Received heartbeat response from: {}", ctx.channel().id().asShortText());
+            log.debug("收到心跳响应: {}", ctx.channel().id().asShortText());
             return;
         }
 
@@ -48,7 +48,7 @@ public class MessageDispatchService {
         if (registry.hasHandler(type)) {
             registry.dispatch(ctx, packet);
         } else {
-            log.warn("No handler for message type: {} from channel: {}",
+            log.warn("消息类型无处理器: {} 来自通道: {}",
                     type.name(), ctx.channel().id().asShortText());
         }
     }

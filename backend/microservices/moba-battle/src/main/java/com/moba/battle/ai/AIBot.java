@@ -1,6 +1,8 @@
 package com.moba.battle.ai;
 import com.moba.battle.model.HeroConfig;
 
+import com.moba.battle.config.ServerConfig;
+import com.moba.battle.config.SpringContextHolder;
 import com.moba.battle.model.BattlePlayer;
 import com.moba.battle.model.BattleSession;
 import lombok.Data;
@@ -31,9 +33,10 @@ public class AIBot {
 
     private Map<Long, Float> threatTable;
 
-    public static final int DEFAULT_AI_LEVEL = 5;
+    private final int tickIntervalMs;
 
     public AIBot(long botId, BattlePlayer battlePlayer, int aiLevel, BattleSession session) {
+        ServerConfig config = SpringContextHolder.getBean(ServerConfig.class);
         this.botId = botId;
         this.battlePlayer = battlePlayer;
         this.aiLevel = aiLevel;
@@ -49,6 +52,7 @@ public class AIBot {
         this.lastAttackFrame = 0;
         this.lastSkillCastFrame = 0;
         this.threatTable = new HashMap<>();
+        this.tickIntervalMs = config.getTickIntervalMs();
     }
 
     public void setState(AIState newState, long currentFrame) {
@@ -56,7 +60,7 @@ public class AIBot {
             this.previousState = this.currentState;
             this.currentState = newState;
             this.stateStartFrame = currentFrame;
-            log.debug("Bot {} state changed: {} -> {}", botId, previousState, newState);
+            log.debug("机器人{}状态变更: {} -> {}", botId, previousState, newState);
         }
     }
 
@@ -149,7 +153,7 @@ public class AIBot {
 
     public boolean canAttack(long currentFrame) {
         int attackSpeed = 1000 / Math.max(1, battlePlayer.getAttackPower() / 50);
-        return currentFrame - lastAttackFrame >= attackSpeed / 66;
+        return currentFrame - lastAttackFrame >= attackSpeed / tickIntervalMs;
     }
 
     public boolean canMove(long currentFrame) {
@@ -159,7 +163,7 @@ public class AIBot {
     public boolean canCastSkill(long currentFrame, int skillId) {
         BattlePlayer.Skill skill = battlePlayer.getSkills().get(skillId);
         if (skill == null) return false;
-        return currentFrame - lastSkillCastFrame >= skill.getCooldown() / 66;
+        return currentFrame - lastSkillCastFrame >= skill.getCooldown() / tickIntervalMs;
     }
 
     public void recordAttack(long currentFrame) {

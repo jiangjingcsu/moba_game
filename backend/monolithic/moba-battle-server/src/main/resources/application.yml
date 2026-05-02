@@ -1,4 +1,4 @@
-server:
+﻿server:
   port: 8888
   battlePort: 9999
   host: 0.0.0.0
@@ -7,7 +7,7 @@ spring:
   application:
     name: moba-battle-server
   datasource:
-    url: jdbc:mysql://192.168.1.45:3306/moba_battle?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.0.102:3306/moba_battle?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -60,7 +60,7 @@ map:
     grid-size: 200
 
 redis:
-  host: 192.168.1.45
+  host: 192.168.0.102
   port: 6379
   password:
   database: 0
@@ -73,7 +73,7 @@ redis:
       max-wait: 3000
 
 rocketmq:
-  namesrv-addr: 192.168.1.45:9876
+  namesrv-addr: 192.168.0.102:9876
   producer:
     group: moba-battle-producer
 

@@ -22,7 +22,7 @@ public class LoginHandler implements MessageHandler<LoginRequest> {
         byte[] body = SerializerFactory.getSerializer(SerializeType.JSON).serialize(response);
 
         GamePacket respPacket = GamePacket.response(MessageType.LOGIN_REQ, packet.getSequenceId(), body);
-        log.info("Login handled: playerName={}, success={}", request.getPlayerName(), response.isSuccess());
+        log.info("登录已处理: playerName={}, success={}", request.getPlayerName(), response.isSuccess());
         return respPacket;
     }
 
