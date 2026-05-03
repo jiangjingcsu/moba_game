@@ -15,7 +15,7 @@ public class Replay {
     private String id;
 
     @Indexed
-    private String battleId;
+    private long battleId;
 
     @Indexed
     private int gameMode;
@@ -34,7 +34,7 @@ public class Replay {
 
     @Data
     public static class PlayerInfo {
-        private long playerId;
+        private long userId;
         private String nickname;
         private int teamId;
         private int heroId;

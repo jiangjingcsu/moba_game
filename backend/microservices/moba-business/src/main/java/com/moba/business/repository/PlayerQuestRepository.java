@@ -17,27 +17,27 @@ import java.util.Optional;
 @Repository
 public interface PlayerQuestRepository extends JpaRepository<PlayerQuest, Long> {
 
-    List<PlayerQuest> findByPlayerIdAndQuestTypeOrderByCreateTimeAsc(Long playerId, QuestType questType);
+    List<PlayerQuest> findByUserIdAndQuestTypeOrderByCreateTimeAsc(long userId, QuestType questType);
 
-    List<PlayerQuest> findByPlayerIdAndStateOrderByCreateTimeAsc(Long playerId, QuestState state);
+    List<PlayerQuest> findByUserIdAndStateOrderByCreateTimeAsc(long userId, QuestState state);
 
-    List<PlayerQuest> findByPlayerIdAndQuestTypeAndStateOrderByCreateTimeAsc(Long playerId, QuestType questType, QuestState state);
+    List<PlayerQuest> findByUserIdAndQuestTypeAndStateOrderByCreateTimeAsc(long userId, QuestType questType, QuestState state);
 
-    Optional<PlayerQuest> findByPlayerIdAndQuestCode(Long playerId, String questCode);
+    Optional<PlayerQuest> findByUserIdAndQuestCode(long userId, String questCode);
 
-    List<PlayerQuest> findByPlayerIdAndQuestTypeAndStateIn(Long playerId, QuestType questType, List<QuestState> states);
+    List<PlayerQuest> findByUserIdAndQuestTypeAndStateIn(long userId, QuestType questType, List<QuestState> states);
 
-    @Query("SELECT pq FROM PlayerQuest pq WHERE pq.playerId = :playerId AND pq.questType = :questType AND pq.state = :state AND pq.expireAt IS NOT NULL AND pq.expireAt < :now")
-    List<PlayerQuest> findExpiredQuests(@Param("playerId") Long playerId, @Param("questType") QuestType questType, @Param("state") QuestState state, @Param("now") LocalDateTime now);
+    @Query("SELECT pq FROM PlayerQuest pq WHERE pq.userId = :userId AND pq.questType = :questType AND pq.state = :state AND pq.expireAt IS NOT NULL AND pq.expireAt < :now")
+    List<PlayerQuest> findExpiredQuests(@Param("userId") long userId, @Param("questType") QuestType questType, @Param("state") QuestState state, @Param("now") LocalDateTime now);
 
     @Modifying
-    @Query("UPDATE PlayerQuest pq SET pq.state = :expiredState WHERE pq.playerId = :playerId AND pq.questType IN :questTypes AND pq.state = :activeState AND pq.expireAt IS NOT NULL AND pq.expireAt < :now")
-    int expireQuests(@Param("playerId") Long playerId, @Param("questTypes") List<QuestType> questTypes, @Param("activeState") QuestState activeState, @Param("expiredState") QuestState expiredState, @Param("now") LocalDateTime now);
+    @Query("UPDATE PlayerQuest pq SET pq.state = :expiredState WHERE pq.userId = :userId AND pq.questType IN :questTypes AND pq.state = :activeState AND pq.expireAt IS NOT NULL AND pq.expireAt < :now")
+    int expireQuests(@Param("userId") long userId, @Param("questTypes") List<QuestType> questTypes, @Param("activeState") QuestState activeState, @Param("expiredState") QuestState expiredState, @Param("now") LocalDateTime now);
 
-    @Query("SELECT pq FROM PlayerQuest pq WHERE pq.playerId = :playerId AND pq.category = :category AND pq.state = :state")
-    List<PlayerQuest> findByPlayerIdAndCategoryAndState(@Param("playerId") Long playerId, @Param("category") QuestCategory category, @Param("state") QuestState state);
+    @Query("SELECT pq FROM PlayerQuest pq WHERE pq.userId = :userId AND pq.category = :category AND pq.state = :state")
+    List<PlayerQuest> findByUserIdAndCategoryAndState(@Param("userId") long userId, @Param("category") QuestCategory category, @Param("state") QuestState state);
 
-    boolean existsByPlayerIdAndQuestCode(Long playerId, String questCode);
+    boolean existsByUserIdAndQuestCode(long userId, String questCode);
 
-    void deleteByPlayerIdAndQuestTypeAndState(Long playerId, QuestType questType, QuestState state);
+    void deleteByUserIdAndQuestTypeAndState(long userId, QuestType questType, QuestState state);
 }

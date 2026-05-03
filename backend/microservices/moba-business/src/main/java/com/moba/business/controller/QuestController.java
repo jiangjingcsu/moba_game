@@ -2,6 +2,7 @@ package com.moba.business.controller;
 
 import com.moba.business.entity.quest.*;
 import com.moba.business.service.QuestService;
+import com.moba.common.constant.GameMode;
 import com.moba.common.protocol.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +21,12 @@ public class QuestController {
 
     @GetMapping("/list")
     public ApiResponse getPlayerQuests(
-            @RequestHeader("X-Player-Id") String playerIdStr,
+            @RequestHeader("X-User-Id") String userIdStr,
             @RequestParam(required = false) String questType) {
         try {
-            long playerId = Long.parseLong(playerIdStr);
+            long userId = Long.parseLong(userIdStr);
             QuestType type = questType != null ? QuestType.valueOf(questType.toUpperCase()) : null;
-            List<PlayerQuest> quests = questService.getPlayerQuests(playerId, type);
+            List<PlayerQuest> quests = questService.getPlayerQuests(userId, type);
             return ApiResponse.success(quests);
         } catch (IllegalArgumentException e) {
             return ApiResponse.badRequest("无效的任务类型: " + questType);
@@ -37,16 +38,16 @@ public class QuestController {
 
     @GetMapping("/active")
     public ApiResponse getActiveQuests(
-            @RequestHeader("X-Player-Id") String playerIdStr,
+            @RequestHeader("X-User-Id") String userIdStr,
             @RequestParam(required = false) String questType) {
         try {
-            long playerId = Long.parseLong(playerIdStr);
+            long userId = Long.parseLong(userIdStr);
             List<PlayerQuest> quests;
             if (questType != null) {
                 QuestType type = QuestType.valueOf(questType.toUpperCase());
-                quests = questService.getPlayerActiveQuests(playerId, type);
+                quests = questService.getPlayerActiveQuests(userId, type);
             } else {
-                quests = questService.getPlayerActiveQuests(playerId);
+                quests = questService.getPlayerActiveQuests(userId);
             }
             return ApiResponse.success(quests);
         } catch (IllegalArgumentException e) {
@@ -59,11 +60,11 @@ public class QuestController {
 
     @PostMapping("/claim/{questId}")
     public ApiResponse claimReward(
-            @RequestHeader("X-Player-Id") String playerIdStr,
+            @RequestHeader("X-User-Id") String userIdStr,
             @PathVariable Long questId) {
         try {
-            long playerId = Long.parseLong(playerIdStr);
-            PlayerQuest quest = questService.claimReward(playerId, questId);
+            long userId = Long.parseLong(userIdStr);
+            PlayerQuest quest = questService.claimReward(userId, questId);
             return ApiResponse.success(Map.of(
                     "questId", quest.getId(),
                     "questCode", quest.getQuestCode(),
@@ -78,11 +79,11 @@ public class QuestController {
     }
 
     @PostMapping("/refresh/daily")
-    public ApiResponse refreshDailyQuests(@RequestHeader("X-Player-Id") String playerIdStr) {
+    public ApiResponse refreshDailyQuests(@RequestHeader("X-User-Id") String userIdStr) {
         try {
-            long playerId = Long.parseLong(playerIdStr);
-            questService.refreshDailyQuests(playerId);
-            List<PlayerQuest> quests = questService.getPlayerActiveQuests(playerId, QuestType.DAILY);
+            long userId = Long.parseLong(userIdStr);
+            questService.refreshDailyQuests(userId);
+            List<PlayerQuest> quests = questService.getPlayerActiveQuests(userId, QuestType.DAILY);
             return ApiResponse.success(Map.of("message", "每日任务已刷新", "quests", quests));
         } catch (Exception e) {
             log.error("刷新每日任务失败", e);
@@ -91,11 +92,11 @@ public class QuestController {
     }
 
     @PostMapping("/refresh/weekly")
-    public ApiResponse refreshWeeklyQuests(@RequestHeader("X-Player-Id") String playerIdStr) {
+    public ApiResponse refreshWeeklyQuests(@RequestHeader("X-User-Id") String userIdStr) {
         try {
-            long playerId = Long.parseLong(playerIdStr);
-            questService.refreshWeeklyQuests(playerId);
-            List<PlayerQuest> quests = questService.getPlayerActiveQuests(playerId, QuestType.WEEKLY);
+            long userId = Long.parseLong(userIdStr);
+            questService.refreshWeeklyQuests(userId);
+            List<PlayerQuest> quests = questService.getPlayerActiveQuests(userId, QuestType.WEEKLY);
             return ApiResponse.success(Map.of("message", "每周任务已刷新", "quests", quests));
         } catch (Exception e) {
             log.error("刷新每周任务失败", e);
@@ -104,11 +105,11 @@ public class QuestController {
     }
 
     @PostMapping("/init/novice")
-    public ApiResponse initNoviceQuests(@RequestHeader("X-Player-Id") String playerIdStr) {
+    public ApiResponse initNoviceQuests(@RequestHeader("X-User-Id") String userIdStr) {
         try {
-            long playerId = Long.parseLong(playerIdStr);
-            questService.initNoviceQuests(playerId);
-            List<PlayerQuest> quests = questService.getPlayerActiveQuests(playerId, QuestType.NOVICE);
+            long userId = Long.parseLong(userIdStr);
+            questService.initNoviceQuests(userId);
+            List<PlayerQuest> quests = questService.getPlayerActiveQuests(userId, QuestType.NOVICE);
             return ApiResponse.success(Map.of("message", "新手任务已初始化", "quests", quests));
         } catch (Exception e) {
             log.error("初始化新手任务失败", e);
@@ -117,11 +118,11 @@ public class QuestController {
     }
 
     @PostMapping("/init/season")
-    public ApiResponse initSeasonQuests(@RequestHeader("X-Player-Id") String playerIdStr) {
+    public ApiResponse initSeasonQuests(@RequestHeader("X-User-Id") String userIdStr) {
         try {
-            long playerId = Long.parseLong(playerIdStr);
-            questService.initSeasonQuests(playerId);
-            List<PlayerQuest> quests = questService.getPlayerActiveQuests(playerId, QuestType.SEASON);
+            long userId = Long.parseLong(userIdStr);
+            questService.initSeasonQuests(userId);
+            List<PlayerQuest> quests = questService.getPlayerActiveQuests(userId, QuestType.SEASON);
             return ApiResponse.success(Map.of("message", "赛季任务已初始化", "quests", quests));
         } catch (Exception e) {
             log.error("初始化赛季任务失败", e);
@@ -131,14 +132,14 @@ public class QuestController {
 
     @PostMapping("/battle/report")
     public ApiResponse reportBattleResult(
-            @RequestHeader("X-Player-Id") String playerIdStr,
+            @RequestHeader("X-User-Id") String userIdStr,
             @RequestBody Map<String, Object> battleResult) {
         try {
-            long playerId = Long.parseLong(playerIdStr);
+            long userId = Long.parseLong(userIdStr);
 
             QuestService.BattleQuestContext context = new QuestService.BattleQuestContext(
                     Boolean.TRUE.equals(battleResult.get("isWin")),
-                    battleResult.containsKey("gameMode") ? ((Number) battleResult.get("gameMode")).intValue() : 0,
+                    battleResult.containsKey("gameMode") ? GameMode.fromCodeOrNull(((Number) battleResult.get("gameMode")).intValue()) : null,
                     battleResult.containsKey("heroId") ? ((Number) battleResult.get("heroId")).intValue() : 0,
                     battleResult.containsKey("killCount") ? ((Number) battleResult.get("killCount")).intValue() : 0,
                     battleResult.containsKey("deathCount") ? ((Number) battleResult.get("deathCount")).intValue() : 0,
@@ -157,10 +158,10 @@ public class QuestController {
                     Boolean.TRUE.equals(battleResult.get("hasFriendInTeam"))
             );
 
-            questService.onBattleEnd(playerId, context);
+            questService.onBattleEnd(userId, context);
 
-            List<PlayerQuest> activeQuests = questService.getPlayerActiveQuests(playerId);
-            List<PlayerQuest> completedQuests = questService.getPlayerQuests(playerId, null).stream()
+            List<PlayerQuest> activeQuests = questService.getPlayerActiveQuests(userId);
+            List<PlayerQuest> completedQuests = questService.getPlayerQuests(userId, null).stream()
                     .filter(q -> q.getState() == QuestState.COMPLETED)
                     .toList();
 
@@ -176,10 +177,10 @@ public class QuestController {
     }
 
     @GetMapping("/summary")
-    public ApiResponse getQuestSummary(@RequestHeader("X-Player-Id") String playerIdStr) {
+    public ApiResponse getQuestSummary(@RequestHeader("X-User-Id") String userIdStr) {
         try {
-            long playerId = Long.parseLong(playerIdStr);
-            Map<String, Object> summary = questService.getQuestProgressSummary(playerId);
+            long userId = Long.parseLong(userIdStr);
+            Map<String, Object> summary = questService.getQuestProgressSummary(userId);
             return ApiResponse.success(summary);
         } catch (Exception e) {
             log.error("获取任务概览失败", e);

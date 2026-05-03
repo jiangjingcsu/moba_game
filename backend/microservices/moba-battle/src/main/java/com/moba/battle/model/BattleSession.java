@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Data
 public class BattleSession {
-    private final String battleId;
+    private final long battleId;
     private final int teamCount;
     private final int mapId;
     private int mapWidth;
@@ -28,7 +28,7 @@ public class BattleSession {
         FINISHED
     }
 
-    public BattleSession(String battleId, int teamCount, int mapId) {
+    public BattleSession(long battleId, int teamCount, int mapId) {
         this.battleId = battleId;
         this.teamCount = teamCount;
         this.mapId = mapId;
@@ -45,16 +45,16 @@ public class BattleSession {
         }
     }
 
-    public void addPlayer(long playerId, BattlePlayer player) {
-        battlePlayers.put(playerId, player);
+    public void addPlayer(long userId, BattlePlayer player) {
+        battlePlayers.put(userId, player);
         Team team = teams.get(player.getTeamId());
         if (team != null) {
-            team.addPlayer(playerId);
+            team.addPlayer(userId);
         }
     }
 
-    public BattlePlayer getPlayer(long playerId) {
-        return battlePlayers.get(playerId);
+    public BattlePlayer getPlayer(long userId) {
+        return battlePlayers.get(userId);
     }
 
     public void start() {
@@ -108,19 +108,19 @@ public class BattleSession {
     @Data
     public static class Team {
         private final int teamId;
-        private final List<Long> playerIds;
+        private final List<Long> userIds;
         private int towerCount;
         private int baseHp;
 
         public Team(int teamId) {
             this.teamId = teamId;
-            this.playerIds = Collections.synchronizedList(new ArrayList<>());
+            this.userIds = Collections.synchronizedList(new ArrayList<>());
             this.towerCount = 3;
             this.baseHp = 10000;
         }
 
-        public void addPlayer(Long playerId) {
-            playerIds.add(playerId);
+        public void addPlayer(Long userId) {
+            userIds.add(userId);
         }
 
         public boolean isDefeated() {
@@ -132,7 +132,7 @@ public class BattleSession {
     public static class BattleEvent {
         private long timestamp;
         private EventType type;
-        private long playerId;
+        private long userId;
         private String data;
 
         public enum EventType {

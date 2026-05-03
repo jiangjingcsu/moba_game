@@ -1,190 +1,132 @@
 package com.moba.battle.manager;
 
-import com.moba.battle.battle.GridCollisionDetector;
 import com.moba.battle.battle.LockstepEngine;
-import com.moba.battle.battle.SkillCollisionSystem;
 import com.moba.battle.config.ServerConfig;
-import com.moba.battle.config.SpringContextHolder;
-import com.moba.battle.model.*;
+import com.moba.battle.model.BattlePlayer;
+import com.moba.battle.manager.BattleRoom;
+import com.moba.battle.model.BattleSession;
+import com.moba.battle.model.FrameInput;
+import com.moba.battle.model.HeroConfig;
+import com.moba.battle.model.MOBAMap;
+import com.moba.battle.model.Player;
 import com.moba.battle.monitor.ServerMonitor;
+import com.moba.battle.storage.BattleLogStorage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
-public class RoomManager {
-    private final Map<String, BattleRoom> rooms;
-    private final Map<Long, String> playerToRoom;
-
-    private final int tickPoolSize;
-    private final ExecutorService tickPool;
-    private final ScheduledExecutorService tickScheduler;
-
-    private final int maxRoomsPerProcess;
-    private final int tickIntervalMs;
+public class RoomManager implements DisposableBean {
+    private final Map<Long, BattleRoom> rooms;
+    private final Map<Long, Long> userToRoom;
+    private final ScheduledExecutorService scheduler;
+    private final int tickRate;
+    private final int maxRooms;
+    private final int maxPlayersPerRoom;
     private final int defaultGridSize;
     private final String serverId;
+    private final int loadingTimeoutSeconds;
 
-    public RoomManager(ServerConfig serverConfig) {
+    private final MapManager mapManager;
+    private final ServerMonitor serverMonitor;
+
+    public RoomManager(ServerConfig serverConfig,
+                       @Lazy MapManager mapManager,
+                       ServerMonitor serverMonitor) {
         this.rooms = new ConcurrentHashMap<>();
-        this.playerToRoom = new ConcurrentHashMap<>();
-
-        int cpus = Runtime.getRuntime().availableProcessors();
-        this.tickPoolSize = Math.max(2, cpus);
-        this.tickPool = Executors.newFixedThreadPool(tickPoolSize, new ThreadFactory() {
-            private final AtomicInteger counter = new AtomicInteger(0);
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread t = new Thread(r, "battle-tick-" + counter.incrementAndGet());
-                t.setDaemon(true);
-                return t;
-            }
-        });
-        this.tickScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
-            Thread t = new Thread(r, "battle-tick-scheduler");
-            t.setDaemon(true);
-            return t;
-        });
-
-        this.maxRoomsPerProcess = serverConfig.getMaxRooms();
-        this.tickIntervalMs = serverConfig.getTickIntervalMs();
+        this.userToRoom = new ConcurrentHashMap<>();
+        this.scheduler = Executors.newScheduledThreadPool(2);
+        this.tickRate = serverConfig.getTickRate();
+        this.maxRooms = serverConfig.getMaxRooms();
+        this.maxPlayersPerRoom = serverConfig.getMaxPlayersPerRoom();
         this.defaultGridSize = serverConfig.getDefaultGridSize();
-        this.serverId = "BATTLE_SERVER_" + System.currentTimeMillis();
+        this.serverId = "BATTLE_SERVER_" + serverConfig.getPort();
+        this.loadingTimeoutSeconds = serverConfig.getLoadingTimeoutSeconds();
 
-        startTickLoop();
+        this.mapManager = mapManager;
+        this.serverMonitor = serverMonitor;
+
+        scheduler.scheduleAtFixedRate(this::tickAllRooms, 0, 1000 / tickRate, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(this::updateMaps, 0, 200, TimeUnit.MILLISECONDS);
+        log.info("RoomManager初始化完成: tickRate={}, maxRooms={}, maxPlayers={}", tickRate, maxRooms, maxPlayersPerRoom);
     }
 
-    public static RoomManager getInstance() {
-        return SpringContextHolder.getBean(RoomManager.class);
+    @Override
+    public void destroy() {
+        scheduler.shutdown();
+        try {
+            if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                scheduler.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            scheduler.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 
-    private void startTickLoop() {
-        tickScheduler.scheduleAtFixedRate(() -> {
-            long tickStart = System.currentTimeMillis();
-            Collection<BattleRoom> runningRooms = new ArrayList<>();
-            for (BattleRoom room : rooms.values()) {
-                if (room.isRunning()) {
-                    runningRooms.add(room);
-                }
-            }
-
-            if (runningRooms.isEmpty()) return;
-
-            CountDownLatch latch = new CountDownLatch(runningRooms.size());
-
-            for (BattleRoom room : runningRooms) {
-                tickPool.submit(() -> {
-                    try {
-                        room.tick();
-                        MapManager.getInstance().updateMap(room.getBattleId(), room.getEngine().getCurrentFrame());
-                    } catch (Exception e) {
-                        log.error("房间Tick异常: {}", room.getBattleId(), e);
-                    } finally {
-                        latch.countDown();
-                    }
-                });
-            }
-
-            try {
-                boolean completed = latch.await(tickIntervalMs, TimeUnit.MILLISECONDS);
-            if (!completed) {
-                log.warn("Tick周期未在{}ms内完成, 部分房间可能存在延迟", tickIntervalMs);
-            }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-
-            long tickDuration = System.currentTimeMillis() - tickStart;
-
-            ServerMonitor monitor = ServerMonitor.getInstance();
-            monitor.recordTick(tickDuration);
-            monitor.updateRoomCount(rooms.size());
-            monitor.updatePlayerCount(playerToRoom.size());
-
-            if (tickDuration > tickIntervalMs) {
-                log.warn("Tick周期耗时{}ms (预算={}ms), 房间数={}, 线程池大小={}",
-                        tickDuration, tickIntervalMs, runningRooms.size(), tickPoolSize);
-            }
-        }, 0, tickIntervalMs, TimeUnit.MILLISECONDS);
-    }
-
-    public BattleRoom createRoom(String battleId, List<Long> playerIds, int teamCount) {
-        if (rooms.size() >= maxRoomsPerProcess) {
-            log.error("服务器已达最大容量: {}个房间", maxRoomsPerProcess);
+    public BattleRoom createRoom(long battleId, List<Long> userIds, int teamCount) {
+        if (rooms.size() >= maxRooms) {
+            log.warn("房间数已达上限({}), 无法创建新房间", maxRooms);
             return null;
         }
 
-        BattleSession session = new BattleSession(battleId, teamCount, 1);
-
-        int playersPerTeam = playerIds.size() / teamCount;
-        int heroId = 1;
-
-        for (int i = 0; i < playerIds.size(); i++) {
-            Long playerId = playerIds.get(i);
-            int teamId = i / playersPerTeam;
-            HeroConfig heroConfig = HeroConfig.getHeroConfig(heroId);
-            BattlePlayer battlePlayer = new BattlePlayer(playerId, heroId, teamId, heroConfig);
-            session.addPlayer(playerId, battlePlayer);
-
-            HeroConfig nextHero = HeroConfig.getHeroConfig((heroId % 6) + 1);
-            battlePlayer.getSkills().put(1, createDefaultSkill(1, nextHero));
-            battlePlayer.getSkills().put(2, createDefaultSkill(2, nextHero));
-            battlePlayer.getSkills().put(3, createDefaultSkill(3, nextHero));
-
-            heroId = (heroId % 6) + 1;
-        }
-
-        LockstepEngine engine = new LockstepEngine(battleId, session);
-
-        GridCollisionDetector gridDetector = new GridCollisionDetector(16000, 16000, defaultGridSize);
-        SkillCollisionSystem collisionSystem = new SkillCollisionSystem(session, gridDetector);
-        engine.setCollisionSystem(collisionSystem);
-
-        BattleRoom room = new BattleRoom(battleId, session, engine, serverId);
-
+        BattleRoom room = new BattleRoom(battleId, teamCount, maxPlayersPerRoom, serverId, loadingTimeoutSeconds);
         rooms.put(battleId, room);
-        for (Long playerId : playerIds) {
-            playerToRoom.put(playerId, battleId);
+
+        for (Long userId : userIds) {
+            userToRoom.put(userId, battleId);
         }
 
-        log.info("房间已创建: {} 服务器={}, 玩家数: {}", battleId, serverId, playerIds.size());
+        BattleSession session = room.getSession();
+        int playersPerTeam = teamCount > 0 ? Math.max(1, userIds.size() / teamCount) : 1;
+        for (int i = 0; i < userIds.size(); i++) {
+            long userId = userIds.get(i);
+            int teamId = playersPerTeam > 0 ? i / playersPerTeam : 0;
+            if (teamId >= teamCount) teamId = teamCount - 1;
+
+            HeroConfig heroConfig = HeroConfig.getHeroConfig(1);
+            BattlePlayer bp = new BattlePlayer(userId, 1, teamId, heroConfig);
+            session.addPlayer(userId, bp);
+        }
+
+        log.info("创建战斗房间: battleId={}, 玩家数={}, 队伍数={}", battleId, userIds.size(), teamCount);
         return room;
     }
 
-    private BattlePlayer.Skill createDefaultSkill(int skillId, HeroConfig heroConfig) {
-        BattlePlayer.Skill skill = new BattlePlayer.Skill();
-        skill.setSkillId(skillId);
-        skill.setLevel(1);
-        skill.setCooldown(3000 + skillId * 2000);
-        skill.setMpCost(50 + skillId * 50);
-        return skill;
-    }
-
-    public BattleRoom getRoom(String battleId) {
+    public BattleRoom getRoom(long battleId) {
         return rooms.get(battleId);
     }
 
-    public BattleRoom getPlayerRoom(long playerId) {
-        String battleId = playerToRoom.get(playerId);
-        if (battleId != null) {
-            return rooms.get(battleId);
-        }
-        return null;
+    public BattleRoom getPlayerRoom(long userId) {
+        Long battleId = userToRoom.get(userId);
+        return battleId != null ? rooms.get(battleId) : null;
     }
 
-    public void removeRoom(String battleId) {
+    public Collection<BattleRoom> getAllRooms() {
+        return Collections.unmodifiableCollection(rooms.values());
+    }
+
+    public void removeRoom(long battleId) {
         BattleRoom room = rooms.remove(battleId);
         if (room != null) {
-            room.stop();
-            MapManager.getInstance().removeMap(battleId);
-            for (Long playerId : room.getSession().getBattlePlayers().keySet()) {
-                playerToRoom.remove(playerId);
+            for (Long userId : room.getSession().getBattlePlayers().keySet()) {
+                userToRoom.remove(userId);
             }
-            log.info("房间已移除: {}", battleId);
+            mapManager.removeMap(battleId);
+            log.info("移除战斗房间: {}", battleId);
         }
     }
 
@@ -193,35 +135,37 @@ public class RoomManager {
     }
 
     public int getTotalPlayers() {
-        return playerToRoom.size();
+        return userToRoom.size();
     }
 
-    public String getServerId() {
-        return serverId;
-    }
+    private void tickAllRooms() {
+        long startTime = System.nanoTime();
+        int tickedRooms = 0;
 
-    public boolean hasCapacity() {
-        return rooms.size() < maxRoomsPerProcess;
-    }
-
-    public double getCpuUsage() {
-        return (double) rooms.size() / maxRoomsPerProcess;
-    }
-
-    public Collection<BattleRoom> getAllRooms() {
-        return Collections.unmodifiableCollection(rooms.values());
-    }
-
-    public void shutdown() {
-        tickScheduler.shutdown();
-        tickPool.shutdown();
-        try {
-            if (!tickPool.awaitTermination(5, TimeUnit.SECONDS)) {
-                tickPool.shutdownNow();
+        for (BattleRoom room : rooms.values()) {
+            if (room.isRunning()) {
+                try {
+                    room.getEngine().tick();
+                    tickedRooms++;
+                } catch (Exception e) {
+                    log.error("房间{}tick异常", room.getBattleId(), e);
+                }
             }
-        } catch (InterruptedException e) {
-            tickPool.shutdownNow();
         }
-        log.info("RoomManager关闭完成");
+
+        long elapsed = System.nanoTime() - startTime;
+        serverMonitor.recordTick((long)(elapsed / 1_000_000.0));
+    }
+
+    private void updateMaps() {
+        for (BattleRoom room : rooms.values()) {
+            if (room.isRunning()) {
+                try {
+                    mapManager.updateMap(room.getBattleId(), room.getEngine().getCurrentFrame());
+                } catch (Exception e) {
+                    log.error("房间{}地图更新异常", room.getBattleId(), e);
+                }
+            }
+        }
     }
 }

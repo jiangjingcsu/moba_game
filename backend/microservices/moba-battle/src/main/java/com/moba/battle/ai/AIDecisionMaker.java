@@ -59,21 +59,21 @@ public class AIDecisionMaker {
         int distanceToEnemy = bot.distanceTo(nearestEnemy);
 
         if (shouldCastSkill(nearestEnemy, distanceToEnemy)) {
-            bot.setTarget(nearestEnemy.getPlayerId());
+            bot.setTarget(nearestEnemy.getUserId());
             bot.setState(AIState.CAST_SKILL, currentFrame);
             return AIState.CAST_SKILL;
         }
 
         if (distanceToEnemy <= ATTACK_RANGE) {
             if (bot.canAttack(currentFrame)) {
-                bot.setTarget(nearestEnemy.getPlayerId());
+                bot.setTarget(nearestEnemy.getUserId());
                 bot.setState(AIState.ATTACK, currentFrame);
                 return AIState.ATTACK;
             }
         }
 
         if (distanceToEnemy <= CHASE_RANGE && shouldChase(nearestEnemy)) {
-            bot.setTarget(nearestEnemy.getPlayerId());
+            bot.setTarget(nearestEnemy.getUserId());
             bot.setState(AIState.CHASE, currentFrame);
             return AIState.CHASE;
         }

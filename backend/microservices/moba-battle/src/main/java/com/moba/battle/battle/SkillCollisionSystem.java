@@ -62,7 +62,7 @@ public class SkillCollisionSystem {
                 skillInfo.getCasterId(), radius + 500);
 
         for (BattlePlayer player : nearbyPlayers) {
-            if (player.getPlayerId() == skillInfo.getCasterId()) {
+            if (player.getUserId() == skillInfo.getCasterId()) {
                 if (!skillInfo.isCanHitSelf()) continue;
             }
 
@@ -80,9 +80,9 @@ public class SkillCollisionSystem {
             int distance = (int) Math.sqrt(dx * dx + dy * dy);
 
             if (distance <= radius + player.getCollisionRadius()) {
-                hitPlayers.add(player.getPlayerId());
+                hitPlayers.add(player.getUserId());
                 log.debug("圆形技能命中: skill={}, caster={}, target={}, distance={}, radius={}",
-                        skillInfo.getSkillId(), skillInfo.getCasterId(), player.getPlayerId(), distance, radius);
+                        skillInfo.getSkillId(), skillInfo.getCasterId(), player.getUserId(), distance, radius);
             }
         }
 
@@ -107,7 +107,7 @@ public class SkillCollisionSystem {
                 skillInfo.getCasterId(), rectWidth, rectHeight);
 
         for (BattlePlayer player : nearbyPlayers) {
-            if (player.getPlayerId() == skillInfo.getCasterId() && !skillInfo.isCanHitSelf()) {
+            if (player.getUserId() == skillInfo.getCasterId() && !skillInfo.isCanHitSelf()) {
                 continue;
             }
 
@@ -130,7 +130,7 @@ public class SkillCollisionSystem {
 
             if (Math.abs(localX) <= halfW + collisionRadius &&
                 Math.abs(localY) <= halfH + collisionRadius) {
-                hitPlayers.add(player.getPlayerId());
+                hitPlayers.add(player.getUserId());
             }
         }
 
@@ -151,7 +151,7 @@ public class SkillCollisionSystem {
         int halfAngle = angle / 2;
 
         for (BattlePlayer player : nearbyPlayers) {
-            if (player.getPlayerId() == skillInfo.getCasterId() && !skillInfo.isCanHitSelf()) {
+            if (player.getUserId() == skillInfo.getCasterId() && !skillInfo.isCanHitSelf()) {
                 continue;
             }
 
@@ -176,9 +176,9 @@ public class SkillCollisionSystem {
             int angleDiff = normalizeAngle(targetAngle - facing);
 
             if (Math.abs(angleDiff) <= halfAngle) {
-                hitPlayers.add(player.getPlayerId());
+                hitPlayers.add(player.getUserId());
                 log.debug("扇形技能命中: player={}, angleDiff={}, halfAngle={}",
-                        player.getPlayerId(), angleDiff, halfAngle);
+                        player.getUserId(), angleDiff, halfAngle);
             }
         }
 
@@ -210,7 +210,7 @@ public class SkillCollisionSystem {
                 skillInfo.getCasterId(), width, lineLength + 1000);
 
         for (BattlePlayer player : nearbyPlayers) {
-            if (player.getPlayerId() == skillInfo.getCasterId() && !skillInfo.isCanHitSelf()) {
+            if (player.getUserId() == skillInfo.getCasterId() && !skillInfo.isCanHitSelf()) {
                 continue;
             }
 
@@ -238,7 +238,7 @@ public class SkillCollisionSystem {
 
             if (distToLine <= halfWidth + player.getCollisionRadius() &&
                 projLen >= -500 && projLen <= lineLength + 500) {
-                hitPlayers.add(player.getPlayerId());
+                hitPlayers.add(player.getUserId());
             }
         }
 
@@ -251,7 +251,7 @@ public class SkillCollisionSystem {
         BattlePlayer target = session.getPlayer(skillInfo.getTargetId());
         if (target == null || target.isDead()) return hitPlayers;
 
-        if (skillInfo.getCasterId() == target.getPlayerId() && !skillInfo.isCanHitSelf()) {
+        if (skillInfo.getCasterId() == target.getUserId() && !skillInfo.isCanHitSelf()) {
             return hitPlayers;
         }
 
@@ -267,7 +267,7 @@ public class SkillCollisionSystem {
         int distance = (int) Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= skillInfo.getRadius() + target.getCollisionRadius()) {
-            hitPlayers.add(target.getPlayerId());
+            hitPlayers.add(target.getUserId());
         }
 
         return hitPlayers;
@@ -295,7 +295,7 @@ public class SkillCollisionSystem {
             List<BattlePlayer> nearby = gridDetector.getPlayersInRadius(segX, segY, trailWidth);
             for (BattlePlayer player : nearby) {
                 if (player.isDead()) continue;
-                if (!hitPlayers.contains(player.getPlayerId())) {
+                if (!hitPlayers.contains(player.getUserId())) {
                     if (player.getTeamId() == skillInfo.getCasterTeamId() && !skillInfo.isCanHitAlly()) {
                         continue;
                     }
@@ -308,7 +308,7 @@ public class SkillCollisionSystem {
                     int dist = (int) Math.sqrt(pdx * pdx + pdy * pdy);
 
                     if (dist <= trailWidth / 2 + player.getCollisionRadius()) {
-                        hitPlayers.add(player.getPlayerId());
+                        hitPlayers.add(player.getUserId());
                     }
                 }
             }

@@ -4,6 +4,5 @@ import lombok.Data;
 
 @Data
 public class ReconnectRequest {
-    private long playerId;
-    private String battleId;
+    private long battleId;
 }

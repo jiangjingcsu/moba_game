@@ -1,23 +1,28 @@
 package com.moba.battle.manager;
-import com.moba.battle.config.SpringContextHolder;
-import com.moba.battle.storage.BattleLogStorage;
 
-import com.moba.battle.model.*;
+import com.moba.battle.model.BattlePlayer;
+import com.moba.battle.manager.BattleRoom;
+import com.moba.battle.model.BattleSession;
+import com.moba.battle.model.Player;
+import com.moba.battle.storage.BattleLogStorage;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Component
 public class SettlementSystem {
 
-    public SettlementSystem() {
-    }
+    private final BattleLogStorage battleLogStorage;
 
-    public static SettlementSystem getInstance() {
-        return SpringContextHolder.getBean(SettlementSystem.class);
+    public SettlementSystem(BattleLogStorage battleLogStorage) {
+        this.battleLogStorage = battleLogStorage;
     }
 
     public BattleSettlementResult calculateSettlement(BattleRoom room) {
@@ -42,10 +47,10 @@ public class SettlementSystem {
         result.setLosingTeams(losingTeams);
 
         for (Map.Entry<Long, BattlePlayer> entry : session.getBattlePlayers().entrySet()) {
-            long playerId = entry.getKey();
+            long userId = entry.getKey();
             BattlePlayer bp = entry.getValue();
             PlayerSettlement playerResult = new PlayerSettlement();
-            playerResult.setPlayerId(playerId);
+            playerResult.setUserId(userId);
             playerResult.setHeroId(bp.getHeroId());
             playerResult.setTeamId(bp.getTeamId());
             playerResult.setLevel(bp.getLevel());
@@ -69,13 +74,13 @@ public class SettlementSystem {
             result.getPlayerResults().add(playerResult);
 
             log.info("玩家{}结算: 胜利={}, KDA={}/{}/{}, 积分变化={:+}, 金币奖励={}, 经验奖励={}",
-                    playerId, isWinning, bp.getKillCount(), bp.getDeathCount(), bp.getAssistCount(),
+                    userId, isWinning, bp.getKillCount(), bp.getDeathCount(), bp.getAssistCount(),
                     rankScoreChange, goldReward, expReward);
 
-            BattleLogStorage.getInstance().submitBattleEvent(
+            battleLogStorage.submitBattleEvent(
                     room.getBattleId(),
                     "SETTLEMENT",
-                    "player=" + playerId + "|win=" + isWinning + "|k=" + bp.getKillCount() +
+                    "player=" + userId + "|win=" + isWinning + "|k=" + bp.getKillCount() +
                             "|d=" + bp.getDeathCount() + "|a=" + bp.getAssistCount() +
                             "|rankChange=" + rankScoreChange + "|goldReward=" + goldReward
             );
@@ -106,7 +111,7 @@ public class SettlementSystem {
 
     @Data
     public static class BattleSettlementResult {
-        private String battleId;
+        private long battleId;
         private int mapId;
         private long duration;
         private List<Integer> winningTeams;
@@ -119,35 +124,42 @@ public class SettlementSystem {
             this.playerResults = new ArrayList<>();
         }
 
+        private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
         public String toJson() {
-            StringBuilder sb = new StringBuilder();
-            sb.append("{").append("\"battleId\":\"").append(battleId).append("\"");
-            sb.append(",\"mapId\":").append(mapId);
-            sb.append(",\"duration\":").append(duration);
-            sb.append(",\"winningTeams\":").append(winningTeams);
-            sb.append(",\"losingTeams\":").append(losingTeams);
-            sb.append(",\"players\":[");
-            for (int i = 0; i < playerResults.size(); i++) {
-                PlayerSettlement p = playerResults.get(i);
-                sb.append("{\"playerId\":").append(p.getPlayerId());
-                sb.append(",\"heroId\":").append(p.getHeroId());
-                sb.append(",\"teamId\":").append(p.getTeamId());
-                sb.append(",\"winning\":").append(p.isWinning());
-                sb.append(",\"kda\":").append(p.getKills()).append("/").append(p.getDeaths()).append("/").append(p.getAssists());
-                sb.append(",\"rankChange\":").append(p.getRankScoreChange());
-                sb.append(",\"goldReward\":").append(p.getGoldReward());
-                sb.append(",\"expReward\":").append(p.getExpReward());
-                sb.append("}");
-                if (i < playerResults.size() - 1) sb.append(",");
+            try {
+                Map<String, Object> result = new HashMap<>();
+                result.put("battleId", battleId);
+                result.put("mapId", mapId);
+                result.put("duration", duration);
+                result.put("winningTeams", winningTeams);
+                result.put("losingTeams", losingTeams);
+
+                List<Map<String, Object>> players = new ArrayList<>();
+                for (PlayerSettlement p : playerResults) {
+                    Map<String, Object> player = new HashMap<>();
+                    player.put("userId", p.getUserId());
+                    player.put("heroId", p.getHeroId());
+                    player.put("teamId", p.getTeamId());
+                    player.put("winning", p.isWinning());
+                    player.put("kda", p.getKills() + "/" + p.getDeaths() + "/" + p.getAssists());
+                    player.put("rankChange", p.getRankScoreChange());
+                    player.put("goldReward", p.getGoldReward());
+                    player.put("expReward", p.getExpReward());
+                    players.add(player);
+                }
+                result.put("players", players);
+
+                return OBJECT_MAPPER.writeValueAsString(result);
+            } catch (Exception e) {
+                return "{\"error\":\"serialization failed\"}";
             }
-            sb.append("]}");
-            return sb.toString();
         }
     }
 
     @Data
     public static class PlayerSettlement {
-        private long playerId;
+        private long userId;
         private int heroId;
         private int teamId;
         private boolean winning;
@@ -161,4 +173,3 @@ public class SettlementSystem {
         private int expReward;
     }
 }
-

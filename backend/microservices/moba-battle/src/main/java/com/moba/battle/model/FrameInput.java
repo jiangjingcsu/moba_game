@@ -6,7 +6,7 @@ import java.util.List;
 @Data
 public class FrameInput {
     private int frameNumber;
-    private long playerId;
+    private long userId;
     private InputType type;
     private byte[] data;
 
@@ -22,10 +22,10 @@ public class FrameInput {
         return data;
     }
 
-    public static FrameInput deserialize(int frameNumber, long playerId, InputType type, byte[] data) {
+    public static FrameInput deserialize(int frameNumber, long userId, InputType type, byte[] data) {
         FrameInput input = new FrameInput();
         input.setFrameNumber(frameNumber);
-        input.setPlayerId(playerId);
+        input.setUserId(userId);
         input.setType(type);
         input.setData(data);
         return input;

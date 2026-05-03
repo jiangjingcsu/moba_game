@@ -1,6 +1,7 @@
 package com.moba.battle.event;
 
 import com.moba.battle.config.ServerConfig;
+import com.moba.battle.manager.BattleManager;
 import com.moba.common.event.EventTopics;
 import com.moba.common.event.MatchSuccessEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,8 +20,10 @@ public class MatchSuccessConsumer {
 
     private DefaultMQPushConsumer consumer;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ApplicationContext applicationContext;
 
-    public MatchSuccessConsumer(ServerConfig serverConfig) {
+    public MatchSuccessConsumer(ServerConfig serverConfig, ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
         String nameServer = serverConfig.getRocketmqNameServer();
         if (nameServer != null && !nameServer.isEmpty()) {
             try {
@@ -51,8 +55,28 @@ public class MatchSuccessConsumer {
     }
 
     public void onMessage(MatchSuccessEvent event) {
-        log.info("收到匹配成功事件: matchId={}, players={}", event.getMatchId(), event.getPlayerIds().size());
-        log.info("战斗已通过Dubbo RPC创建, 跳过重复创建 matchId={}", event.getMatchId());
+        log.info("收到匹配成功事件: matchId={}, battleId={}, players={}, gameMode={}, teamCount={}, aiMode={}, neededBots={}, aiLevel={}, battleServer={}:{}",
+                event.getMatchId(), event.getBattleId(), event.getUserIds().size(), event.getGameMode(),
+                event.getTeamCount(), event.isAiMode(), event.getNeededBots(), event.getAiLevel(),
+                event.getBattleServerIp(), event.getBattleServerPort());
+
+        try {
+            BattleManager battleManager = applicationContext.getBean(BattleManager.class);
+            long battleId = event.getBattleId();
+            if (battleId <= 0) {
+                log.error("匹配成功事件缺少battleId, matchId={}", event.getMatchId());
+                return;
+            }
+            int teamCount = event.getTeamCount() > 0 ? event.getTeamCount() : 2;
+
+            battleManager.createBattle(battleId, event.getUserIds(), teamCount,
+                    event.getNeededBots(), event.getAiLevel(), event.isAiMode());
+
+            log.info("战斗房间已创建: battleId={}, matchId={}, 玩家数={}, 队伍数={}, aiMode={}, 等待玩家连接...",
+                    battleId, event.getMatchId(), event.getUserIds().size(), teamCount, event.isAiMode());
+        } catch (Exception e) {
+            log.error("创建战斗房间失败: matchId={}, battleId={}", event.getMatchId(), event.getBattleId(), e);
+        }
     }
 
     public void shutdown() {

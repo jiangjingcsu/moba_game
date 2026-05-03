@@ -1,5 +1,5 @@
-﻿﻿nacos:
-  server-addr: 192.168.0.102:8848
+nacos:
+  server-addr: 192.168.0.105:8848
   namespace: public
   group: DEFAULT_GROUP
   username: nacos
@@ -11,7 +11,7 @@
 spring:
   data:
     redis:
-      host: 192.168.0.102
+      host: 192.168.0.105
       port: 6379
       password: jiangjing
       database: 2
@@ -21,27 +21,19 @@ spring:
         max-idle: 10
         min-idle: 5
 
-dubbo:
-  registry:
-    address: nacos://192.168.0.102:8848
-    timeout: 5000
-    parameters:
-      namespace: public
-    register-mode: instance
-  protocol:
-    name: dubbo
-    port: 20883
-    serialization: hessian2
-  provider:
-    prefer-serialization: hessian2
-
 rocketmq:
-  name-server: 192.168.0.102:9876
+  name-server: 192.168.0.105:9876
   producer:
     group: moba-battle-producer
     send-message-timeout: 3000
   consumer:
     group: moba-battle-consumer
+
+jwt:
+  secret: moba-game-jwt-secret-key-2024-must-be-at-least-256-bits
+
+gateway:
+  internal-secret: moba-gateway-internal-secret
 
 battle:
   host: 0.0.0.0
@@ -54,6 +46,7 @@ battle:
   idle-timeout-seconds: 120
   max-frame-length: 10240
   heartbeat-interval-seconds: 30
+  business-thread-count: 8
   tick-interval-ms: 66
   input-delay-frames: 3
   max-rooms: 100
@@ -61,10 +54,10 @@ battle:
   hash-check-interval-frames: 10
   loading-timeout-seconds: 60
   room-cleanup-delay-seconds: 30
+  max-players-per-room: 15
   so-backlog: 1024
   ws-path: /ws/battle
   ws-service-name: moba-battle
-  dubbo-service-name: dubbo-moba-battle
   creep-spawn-interval-ms: 60000
   rune-spawn-interval-ms: 90000
   replay-snapshot-interval: 60
@@ -92,3 +85,6 @@ logging:
   level:
     root: INFO
     com.moba.battle: DEBUG
+
+netty:
+  business-thread-count: 8

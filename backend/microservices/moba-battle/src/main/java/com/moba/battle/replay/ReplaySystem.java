@@ -1,21 +1,31 @@
 package com.moba.battle.replay;
 
-import com.moba.battle.model.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moba.battle.config.ServerConfig;
-import com.moba.battle.config.SpringContextHolder;
+import com.moba.battle.model.BattlePlayer;
+import com.moba.battle.model.BattleSession;
 import lombok.Data;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.util.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 @Slf4j
-@Component
 public class ReplaySystem {
     private static final String REPLAY_DIR = "replays";
 
@@ -32,7 +42,7 @@ public class ReplaySystem {
         }
     }
 
-    public void recordReplay(String battleId, BattleSession session) {
+    public void recordReplay(long battleId, BattleSession session) {
         try {
             ReplayData replayData = buildReplayData(battleId, session);
             String filePath = getReplayFilePath(battleId);
@@ -43,7 +53,7 @@ public class ReplaySystem {
         }
     }
 
-    public ReplayData loadReplay(String battleId) {
+    public ReplayData loadReplay(long battleId) {
         try {
             String filePath = getReplayFilePath(battleId);
             return loadReplayFile(filePath);
@@ -66,14 +76,14 @@ public class ReplaySystem {
         }
     }
 
-    public ReplaySession createReplaySession(String battleId) {
+    public ReplaySession createReplaySession(long battleId) {
         ReplayData replayData = loadReplay(battleId);
         if (replayData == null) return null;
 
         return new ReplaySession(battleId, replayData);
     }
 
-    private ReplayData buildReplayData(String battleId, BattleSession session) {
+    private ReplayData buildReplayData(long battleId, BattleSession session) {
         ReplayData data = new ReplayData();
         data.setBattleId(battleId);
         data.setMapId(session.getMapId());
@@ -82,7 +92,7 @@ public class ReplaySystem {
 
         for (Map.Entry<Long, BattlePlayer> entry : session.getBattlePlayers().entrySet()) {
             ReplayPlayerInfo playerInfo = new ReplayPlayerInfo();
-            playerInfo.setPlayerId(entry.getKey());
+            playerInfo.setUserId(entry.getKey());
             playerInfo.setHeroId(entry.getValue().getHeroId());
             playerInfo.setTeamId(entry.getValue().getTeamId());
             playerInfo.setFinalKills(entry.getValue().getKillCount());
@@ -96,7 +106,7 @@ public class ReplaySystem {
         return data;
     }
 
-    private String getReplayFilePath(String battleId) {
+    private String getReplayFilePath(long battleId) {
         return replayDir + File.separator + battleId + ".replay";
     }
 
@@ -104,7 +114,7 @@ public class ReplaySystem {
         try (FileOutputStream fos = new FileOutputStream(filePath);
              GZIPOutputStream gzos = new GZIPOutputStream(fos);
              OutputStreamWriter writer = new OutputStreamWriter(gzos, StandardCharsets.UTF_8)) {
-            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(writer, data);
         }
     }
@@ -113,14 +123,14 @@ public class ReplaySystem {
         try (FileInputStream fis = new FileInputStream(filePath);
              GZIPInputStream gzis = new GZIPInputStream(fis);
              InputStreamReader reader = new InputStreamReader(gzis, StandardCharsets.UTF_8)) {
-            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(reader, ReplayData.class);
         }
     }
 
     @Data
     public static class ReplayData implements Serializable {
-        private String battleId;
+        private long battleId;
         private int mapId;
         private long startTime;
         private long endTime;
@@ -136,7 +146,7 @@ public class ReplaySystem {
 
     @Data
     public static class ReplayPlayerInfo implements Serializable {
-        private long playerId;
+        private long userId;
         private int heroId;
         private int teamId;
         private int finalKills;
@@ -144,12 +154,13 @@ public class ReplaySystem {
         private int finalAssists;
     }
 
+    @Getter
     public static class ReplaySession {
-        private final String battleId;
+        private final long battleId;
         private final ReplayData replayData;
         private int currentFrame;
 
-        public ReplaySession(String battleId, ReplayData replayData) {
+        public ReplaySession(long battleId, ReplayData replayData) {
             this.battleId = battleId;
             this.replayData = replayData;
             this.currentFrame = 0;
@@ -162,9 +173,5 @@ public class ReplaySystem {
         public void playNextFrame() {
             currentFrame++;
         }
-
-        public String getBattleId() { return battleId; }
-        public ReplayData getReplayData() { return replayData; }
-        public int getCurrentFrame() { return currentFrame; }
     }
 }

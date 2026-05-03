@@ -1,5 +1,6 @@
 package com.moba.common.model;
 
+import com.moba.common.constant.GameMode;
 import lombok.Data;
 import java.io.Serializable;
 import java.util.List;
@@ -8,15 +9,16 @@ import java.util.List;
 public class MatchInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String matchId;
-    private int gameMode;
+    private long matchId;
+    private GameMode gameMode;
     private MatchState state;
     private long createTime;
     private long startTime;
-    private List<Long> playerIds;
+    private List<Long> userIds;
     private int neededPlayers;
     private int aiLevel;
-    private String assignedBattleId;
+    private boolean aiMode;
+    private long assignedBattleId;
 
     public enum MatchState {
         PENDING,

@@ -1,4 +1,4 @@
-export interface Vector2D {
+﻿export interface Vector2D {
   x: number
   y: number
 }
@@ -106,7 +106,7 @@ export interface Hero {
   title: string
   role: HeroRole
   teamId: number
-  playerId: string
+  userId: string
   playerName: string
   position: Vector2D
   velocity?: Vector2D

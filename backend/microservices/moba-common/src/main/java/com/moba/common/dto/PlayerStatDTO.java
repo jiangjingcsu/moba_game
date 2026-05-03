@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Data
 public class PlayerStatDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    private long playerId;
+    private long userId;
     private int teamId;
     private int heroId;
     private int level;

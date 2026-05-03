@@ -29,20 +29,20 @@ public class TokenBlacklistService {
         return reactiveRedisTemplate.hasKey(BLACKLIST_PREFIX + token);
     }
 
-    public Mono<Void> storeRefreshToken(long playerId, String refreshToken, long expireSeconds) {
-        String key = REFRESH_PREFIX + playerId;
+    public Mono<Void> storeRefreshToken(long userId, String refreshToken, long expireSeconds) {
+        String key = REFRESH_PREFIX + userId;
         return reactiveRedisTemplate.opsForValue().set(key, refreshToken, Duration.ofSeconds(expireSeconds))
                 .then();
     }
 
-    public Mono<Boolean> validateRefreshToken(long playerId, String refreshToken) {
-        String key = REFRESH_PREFIX + playerId;
+    public Mono<Boolean> validateRefreshToken(long userId, String refreshToken) {
+        String key = REFRESH_PREFIX + userId;
         return reactiveRedisTemplate.opsForValue().get(key)
                 .map(stored -> stored.equals(refreshToken))
                 .defaultIfEmpty(false);
     }
 
-    public Mono<Void> removeRefreshToken(long playerId) {
-        return reactiveRedisTemplate.delete(REFRESH_PREFIX + playerId).then();
+    public Mono<Void> removeRefreshToken(long userId) {
+        return reactiveRedisTemplate.delete(REFRESH_PREFIX + userId).then();
     }
 }

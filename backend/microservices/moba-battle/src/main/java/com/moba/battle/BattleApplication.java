@@ -5,7 +5,6 @@ import com.moba.battle.config.ServerConfig;
 import com.moba.battle.event.BattleEventProducer;
 import com.moba.battle.event.MatchSuccessConsumer;
 import com.moba.battle.network.NettyServer;
-import com.moba.battle.service.impl.BattleServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -27,15 +26,6 @@ public class BattleApplication {
             ServerConfig serverConfig = ctx.getBean(ServerConfig.class);
             NettyServer nettyServer = ctx.getBean(NettyServer.class);
 
-            BattleServiceImpl battleService = ctx.getBean(BattleServiceImpl.class);
-            new Thread(() -> {
-                try {
-                    battleService.startDubboService(serverConfig);
-                } catch (Exception e) {
-                    log.warn("Dubbo服务启动失败, 服务将继续运行但无法通过RPC调用: {}", e.getMessage());
-                }
-            }, "dubbo-service-starter").start();
-
             new Thread(() -> {
                 try {
                     nettyServer.start();
@@ -50,17 +40,10 @@ public class BattleApplication {
             log.info("MOBA战斗服务器启动完成, 耗时{}ms", elapsed);
             log.info("  客户端WebSocket端口: {}", serverConfig.getPort());
             log.info("  战斗TCP端口: {}", serverConfig.getBattleServerPort());
-            log.info("  Dubbo RPC端口: {}", serverConfig.getDubboPort());
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 log.info("MOBA战斗服务器关闭中...");
                 shutdown();
-
-                try {
-                    battleService.stopDubboService();
-                } catch (Exception e) {
-                    log.error("停止Dubbo服务异常", e);
-                }
 
                 try {
                     BattleEventProducer eventProducer = ctx.getBean(BattleEventProducer.class);

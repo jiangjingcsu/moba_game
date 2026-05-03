@@ -1,5 +1,11 @@
 package com.moba.netty.server;
 
+import com.moba.netty.handler.GatewayAuthHandler;
+import com.moba.netty.handler.HeartbeatHandler;
+import com.moba.netty.protocol.codec.WebSocketProtocolDecoder;
+import com.moba.netty.protocol.codec.WebSocketProtocolEncoder;
+import com.moba.netty.protocol.dispatcher.MessageDispatcher;
+import com.moba.netty.session.SessionManager;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -65,12 +71,35 @@ public abstract class AbstractNettyServer {
         };
     }
 
+    protected void setupStandardWebSocketPipeline(ChannelPipeline pipeline,
+                                                  MessageDispatcher messageDispatcher,
+                                                  SessionManager sessionManager) {
+        pipeline.addLast("httpCodec", new HttpServerCodec());
+        pipeline.addLast("httpAggregator", new HttpObjectAggregator(config.getMaxFrameLength()));
+        pipeline.addLast("idleState", new IdleStateHandler(config.getIdleTimeoutSeconds(), 0, 0, TimeUnit.SECONDS));
+
+        String jwtSecret = config.getJwtSecret();
+        if (jwtSecret != null && !jwtSecret.isEmpty()) {
+            pipeline.addLast("gatewayAuth",
+                    new GatewayAuthHandler("", jwtSecret, sessionManager));
+        }
+
+        pipeline.addLast("webSocketProtocol",
+                new WebSocketServerProtocolHandler(config.getWebSocketPath(), null, true, config.getMaxFrameLength()));
+        pipeline.addLast("wsProtocolDecoder", new WebSocketProtocolDecoder());
+        pipeline.addLast("wsProtocolEncoder", new WebSocketProtocolEncoder());
+        pipeline.addLast("messageDispatcher", messageDispatcher);
+        pipeline.addLast("heartbeatHandler", new HeartbeatHandler());
+    }
+
+    @Deprecated
     protected void setupWebSocketPipeline(ChannelPipeline pipeline) {
         pipeline.addLast("httpCodec", new HttpServerCodec());
         pipeline.addLast("httpAggregator", new HttpObjectAggregator(config.getMaxFrameLength()));
         pipeline.addLast("idleState", new IdleStateHandler(config.getIdleTimeoutSeconds(), 0, 0, TimeUnit.SECONDS));
     }
 
+    @Deprecated
     protected void addWebSocketProtocolHandler(ChannelPipeline pipeline) {
         pipeline.addLast("webSocketProtocol",
                 new WebSocketServerProtocolHandler(config.getWebSocketPath(), null, true, config.getMaxFrameLength()));

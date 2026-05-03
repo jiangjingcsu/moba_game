@@ -16,7 +16,7 @@ public class BattleLog {
     private String id;
 
     @Indexed
-    private String battleId;
+    private long battleId;
 
     @Indexed
     private int gameMode;
@@ -36,7 +36,7 @@ public class BattleLog {
 
     @Data
     public static class PlayerLog {
-        private long playerId;
+        private long userId;
         private int teamId;
         private int heroId;
         private int level;
@@ -65,7 +65,7 @@ public class BattleLog {
     public static class FrameEvent {
         private long frameNumber;
         private String eventType;
-        private long playerId;
+        private long userId;
         private int value1;
         private int value2;
         private String description;

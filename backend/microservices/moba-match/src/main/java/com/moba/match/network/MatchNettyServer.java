@@ -1,32 +1,47 @@
 package com.moba.match.network;
 
-import com.moba.match.network.handler.MatchWebSocketHandler;
-import com.moba.netty.handler.GatewayAuthHandler;
-import com.moba.netty.handler.HeartbeatHandler;
+import com.moba.netty.protocol.dispatcher.MessageDispatcher;
 import com.moba.netty.server.AbstractNettyServer;
 import com.moba.netty.server.NettyServerConfig;
+import com.moba.netty.session.SessionManager;
 import io.netty.channel.ChannelPipeline;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Slf4j
+@Component
 public class MatchNettyServer extends AbstractNettyServer {
 
-    private final String webSocketPath;
-    private final int idleTimeoutSeconds;
+    private final MessageDispatcher messageDispatcher;
+    private final SessionManager sessionManager;
 
-    public MatchNettyServer(int port, String webSocketPath, int idleTimeoutSeconds) {
-        super(NettyServerConfig.of(port));
-        this.webSocketPath = webSocketPath;
-        this.idleTimeoutSeconds = idleTimeoutSeconds;
-        config.setWebSocketPath(webSocketPath);
-        config.setIdleTimeoutSeconds(idleTimeoutSeconds);
+    public MatchNettyServer(@Value("${match.websocket.port}") int port,
+                            @Value("${match.websocket.path}") String webSocketPath,
+                            @Value("${match.websocket.idleTimeoutSeconds}") int idleTimeoutSeconds,
+                            @Value("${jwt.secret}") String jwtSecret,
+                            @Value("${netty.business-thread-count:8}") int businessThreadCount,
+                            MessageDispatcher messageDispatcher,
+                            SessionManager sessionManager) {
+        super(buildNettyConfig(port, webSocketPath, idleTimeoutSeconds, businessThreadCount, jwtSecret));
+        this.messageDispatcher = messageDispatcher;
+        this.sessionManager = sessionManager;
+    }
+
+    private static NettyServerConfig buildNettyConfig(int port, String webSocketPath,
+                                                      int idleTimeoutSeconds, int businessThreadCount,
+                                                      String jwtSecret) {
+        NettyServerConfig nettyConfig = NettyServerConfig.of(port);
+        nettyConfig.setWebSocketPath(webSocketPath);
+        nettyConfig.setIdleTimeoutSeconds(idleTimeoutSeconds);
+        nettyConfig.setBusinessThreadCount(businessThreadCount);
+        nettyConfig.setJwtSecret(jwtSecret);
+        return nettyConfig;
     }
 
     @Override
     protected void setupPipeline(ChannelPipeline pipeline) {
-        setupWebSocketPipeline(pipeline);
-        pipeline.addLast("gatewayAuth", new GatewayAuthHandler());
-        addWebSocketProtocolHandler(pipeline);
-        pipeline.addLast("webSocketHandler", new MatchWebSocketHandler());
-        pipeline.addLast("heartbeatHandler", new HeartbeatHandler());
+        setupStandardWebSocketPipeline(pipeline, messageDispatcher, sessionManager);
     }
 
     @Override

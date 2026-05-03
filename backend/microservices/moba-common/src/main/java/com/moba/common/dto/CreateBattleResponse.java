@@ -9,10 +9,10 @@ public class CreateBattleResponse implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private boolean success;
-    private String battleId;
+    private long battleId;
     private String errorMessage;
 
-    public static CreateBattleResponse ok(String battleId) {
+    public static CreateBattleResponse ok(long battleId) {
         CreateBattleResponse r = new CreateBattleResponse();
         r.setSuccess(true);
         r.setBattleId(battleId);

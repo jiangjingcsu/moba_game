@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class MatchEventProducer {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     @Value("${rocketmq.name-server:}")
     private String nameServer;
@@ -30,6 +30,10 @@ public class MatchEventProducer {
     private int sendTimeoutMs;
 
     private DefaultMQProducer producer;
+
+    public MatchEventProducer(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @PostConstruct
     public void init() {
@@ -67,7 +71,7 @@ public class MatchEventProducer {
             Message msg = new Message(EventTopics.MATCH_SUCCESS, json.getBytes(StandardCharsets.UTF_8));
             SendResult result = producer.send(msg);
             log.info("匹配成功事件已发布: matchId={}, 玩家数={}, 发送状态={}",
-                    event.getMatchId(), event.getPlayerIds().size(), result.getSendStatus());
+                    event.getMatchId(), event.getUserIds().size(), result.getSendStatus());
         } catch (Exception e) {
             log.error("发布匹配成功事件失败: matchId={}", event.getMatchId(), e);
         }

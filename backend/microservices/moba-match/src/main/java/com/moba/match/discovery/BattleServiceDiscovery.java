@@ -6,7 +6,6 @@ import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.moba.match.config.NacosServiceRegistry;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,47 +27,10 @@ public class BattleServiceDiscovery {
 
     private final NacosServiceRegistry nacosServiceRegistry;
     private final Map<String, BattleServerInfo> serverCache = new java.util.concurrent.ConcurrentHashMap<>();
-    private final ScheduledExecutorService refreshScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
-        Thread t = new Thread(r, "battle-service-refresh");
-        t.setDaemon(true);
-        return t;
-    });
+    private ScheduledExecutorService refreshScheduler;
 
     public BattleServiceDiscovery(NacosServiceRegistry nacosServiceRegistry) {
         this.nacosServiceRegistry = nacosServiceRegistry;
-    }
-
-    @Data
-    public static class BattleServerInfo {
-        private String instanceId;
-        private String ip;
-        private int wsPort;
-        private int dubboPort;
-        private int tcpPort;
-        private int roomCount;
-        private int maxRooms;
-        private int playerCount;
-        private int cpuUsage;
-        private int memoryUsage;
-        private int tickDelayMs;
-        private int loadScore;
-        private long lastReportTime;
-        private boolean healthy;
-
-        public double getAvailabilityScore() {
-            double loadFactor = maxRooms > 0 ? (double) roomCount / maxRooms : 1.0;
-            double cpuFactor = cpuUsage / 100.0;
-            double memFactor = memoryUsage / 100.0;
-            double tickFactor = Math.min(1.0, tickDelayMs / 100.0);
-            double timeFactor = Math.max(0, 1.0 - (System.currentTimeMillis() - lastReportTime) / 60000.0);
-
-            return loadScore * 0.4
-                    + (1 - loadFactor) * 25
-                    + (1 - cpuFactor) * 15
-                    + (1 - memFactor) * 10
-                    + (1 - tickFactor) * 5
-                    + timeFactor * 5;
-        }
     }
 
     @PostConstruct
@@ -78,6 +40,12 @@ public class BattleServiceDiscovery {
             log.warn("NacosServiceRegistry中NamingService不可用, 战斗服务发现无法启动");
             return;
         }
+
+        refreshScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r, "battle-service-refresh");
+            t.setDaemon(true);
+            return t;
+        });
 
         refreshBattleServers();
         refreshScheduler.scheduleAtFixedRate(this::refreshBattleServers, 5, 10, TimeUnit.SECONDS);
@@ -113,11 +81,6 @@ public class BattleServiceDiscovery {
                 String tcpPortStr = wsMeta.get("battleTcpPort");
                 if (tcpPortStr != null) {
                     info.setTcpPort(parseIntSafe(tcpPortStr));
-                }
-
-                String dubboPortStr = wsMeta.get("dubboPort");
-                if (dubboPortStr != null) {
-                    info.setDubboPort(parseIntSafe(dubboPortStr));
                 }
 
                 serverCache.put(wsInst.getInstanceId(), info);
@@ -170,7 +133,9 @@ public class BattleServiceDiscovery {
 
     @PreDestroy
     public void shutdown() {
-        refreshScheduler.shutdown();
+        if (refreshScheduler != null) {
+            refreshScheduler.shutdown();
+        }
     }
 
     private int parseIntSafe(String value) {

@@ -4,8 +4,7 @@ import lombok.Data;
 
 @Data
 public class SkillCastRequest {
-    private long playerId;
-    private String battleId;
+    private long battleId;
     private int skillId;
     private float targetX;
     private float targetY;

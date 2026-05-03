@@ -1,7 +1,6 @@
 package com.moba.battle.ai;
 
 import com.moba.battle.config.ServerConfig;
-import com.moba.battle.config.SpringContextHolder;
 import com.moba.battle.model.BattlePlayer;
 import com.moba.battle.model.BattleSession;
 import com.moba.battle.model.FrameInput;
@@ -9,36 +8,37 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Component
 public class AIController {
-    private final Map<String, Map<Long, AIBot>> roomBots;
-    private final Map<Long, AIDecisionMaker> decisionMakers;
-    private final Map<Long, Long> botLastTickFrame;
+    private final Map<Long, Map<Long, AIBot>> roomBots;
+    private final Map<Long, Map<Long, AIDecisionMaker>> roomDecisionMakers;
+    private final Map<Long, Map<Long, Long>> roomBotLastTickFrame;
 
     private final int minBotLevel;
     private final int maxBotLevel;
     private final int defaultBotCountPerTeam;
     private final int aiTickIntervalFrames;
+    private final int tickIntervalMs;
 
     public AIController(ServerConfig serverConfig) {
         this.roomBots = new ConcurrentHashMap<>();
-        this.decisionMakers = new ConcurrentHashMap<>();
-        this.botLastTickFrame = new ConcurrentHashMap<>();
+        this.roomDecisionMakers = new ConcurrentHashMap<>();
+        this.roomBotLastTickFrame = new ConcurrentHashMap<>();
         this.minBotLevel = serverConfig.getMinBotLevel();
         this.maxBotLevel = serverConfig.getMaxBotLevel();
         this.defaultBotCountPerTeam = serverConfig.getDefaultBotCountPerTeam();
         this.aiTickIntervalFrames = serverConfig.getAiTickIntervalFrames();
+        this.tickIntervalMs = serverConfig.getTickIntervalMs();
     }
 
-    public static AIController getInstance() {
-        return SpringContextHolder.getBean(AIController.class);
-    }
-
-    public List<AIBot> createBotsForBattle(String battleId, BattleSession session,
+    public List<AIBot> createBotsForBattle(long battleId, BattleSession session,
                                             int humanPerTeam, int botPerTeam, int botLevel) {
         List<AIBot> bots = new ArrayList<>();
         int totalPlayers = session.getBattlePlayers().size();
@@ -49,23 +49,27 @@ public class AIController {
         int neededBots = (playersPerTeam - existingHumans) * teamCount;
         neededBots = Math.min(neededBots, botPerTeam * teamCount);
 
+        long battleIdHash = Math.abs(Long.hashCode(battleId));
+
         for (int i = 0; i < neededBots; i++) {
             int teamId = i % teamCount;
-            long botId = -1000 - i;
+            long botId = -(battleIdHash % 100000L * 1000L + 1000L + i);
 
             int heroId = selectHeroForBot(i, botLevel);
-            AIBot bot = AIBot.createBot(botId, heroId, teamId, session, botLevel);
+            AIBot bot = AIBot.createBot(botId, heroId, teamId, session, botLevel, tickIntervalMs);
 
             setupPatrolPoints(bot, session, teamId);
 
             addBotToRoom(battleId, bot);
 
-            decisionMakers.put(botId, new AIDecisionMaker(bot));
-            botLastTickFrame.put(botId, 0L);
+            roomDecisionMakers.computeIfAbsent(battleId, k -> new ConcurrentHashMap<>())
+                    .put(botId, new AIDecisionMaker(bot));
+            roomBotLastTickFrame.computeIfAbsent(battleId, k -> new ConcurrentHashMap<>())
+                    .put(botId, 0L);
 
             bots.add(bot);
             log.info("为战斗{}创建AI机器人{} (队伍={}, 英雄={}, 等级={})",
-                    botId, battleId, teamId, heroId, botLevel);
+                    battleId, botId, teamId, heroId, botLevel);
         }
 
         return bots;
@@ -73,8 +77,8 @@ public class AIController {
 
     private int countExistingHumans(BattleSession session) {
         int count = 0;
-        for (Long playerId : session.getBattlePlayers().keySet()) {
-            if (playerId > 0) {
+        for (long userId : session.getBattlePlayers().keySet()) {
+            if (userId > 0) {
                 count++;
             }
         }
@@ -115,16 +119,19 @@ public class AIController {
         bot.addPatrolPoint(midX, midY);
     }
 
-    private void addBotToRoom(String battleId, AIBot bot) {
+    private void addBotToRoom(long battleId, AIBot bot) {
         roomBots.computeIfAbsent(battleId, k -> new ConcurrentHashMap<>())
                 .put(bot.getBotId(), bot);
     }
 
-    public List<FrameInput> updateBots(String battleId, long currentFrame) {
+    public List<FrameInput> updateBots(long battleId, long currentFrame) {
         Map<Long, AIBot> bots = roomBots.get(battleId);
         if (bots == null || bots.isEmpty()) {
             return Collections.emptyList();
         }
+
+        Map<Long, Long> lastTickMap = roomBotLastTickFrame.getOrDefault(battleId, Collections.emptyMap());
+        Map<Long, AIDecisionMaker> dmMap = roomDecisionMakers.getOrDefault(battleId, Collections.emptyMap());
 
         List<FrameInput> inputs = new ArrayList<>();
 
@@ -133,16 +140,16 @@ public class AIController {
                 continue;
             }
 
-            Long lastTick = botLastTickFrame.get(bot.getBotId());
+            Long lastTick = lastTickMap.get(bot.getBotId());
             if (lastTick != null && currentFrame - lastTick < aiTickIntervalFrames) {
                 continue;
             }
-            botLastTickFrame.put(bot.getBotId(), currentFrame);
+            lastTickMap.put(bot.getBotId(), currentFrame);
 
-            AIDecisionMaker decisionMaker = decisionMakers.get(bot.getBotId());
+            AIDecisionMaker decisionMaker = dmMap.get(bot.getBotId());
             if (decisionMaker == null) {
                 decisionMaker = new AIDecisionMaker(bot);
-                decisionMakers.put(bot.getBotId(), decisionMaker);
+                dmMap.put(bot.getBotId(), decisionMaker);
             }
 
             AIState newState = decisionMaker.decide(currentFrame);
@@ -201,7 +208,7 @@ public class AIController {
         if (currentPatrol == null) return null;
 
         FrameInput input = new FrameInput();
-        input.setPlayerId(bot.getBotId());
+        input.setUserId(bot.getBotId());
         input.setType(FrameInput.InputType.MOVE);
         input.setFrameNumber((int) currentFrame);
 
@@ -228,7 +235,7 @@ public class AIController {
         }
 
         FrameInput input = new FrameInput();
-        input.setPlayerId(bot.getBotId());
+        input.setUserId(bot.getBotId());
         input.setType(FrameInput.InputType.MOVE);
         input.setFrameNumber((int) currentFrame);
 
@@ -248,7 +255,7 @@ public class AIController {
         bot.setTarget(targetId);
 
         FrameInput input = new FrameInput();
-        input.setPlayerId(bot.getBotId());
+        input.setUserId(bot.getBotId());
         input.setType(FrameInput.InputType.ATTACK);
         input.setFrameNumber((int) currentFrame);
 
@@ -272,7 +279,7 @@ public class AIController {
         int facing = calculateFacing(bot.getPositionX(), bot.getPositionY(), targetX, targetY);
 
         FrameInput input = new FrameInput();
-        input.setPlayerId(bot.getBotId());
+        input.setUserId(bot.getBotId());
         input.setType(FrameInput.InputType.SKILL_CAST);
         input.setFrameNumber((int) currentFrame);
 
@@ -290,7 +297,7 @@ public class AIController {
         if (retreatPos == null) return null;
 
         FrameInput input = new FrameInput();
-        input.setPlayerId(bot.getBotId());
+        input.setUserId(bot.getBotId());
         input.setType(FrameInput.InputType.MOVE);
         input.setFrameNumber((int) currentFrame);
 
@@ -313,7 +320,7 @@ public class AIController {
         }
 
         FrameInput input = new FrameInput();
-        input.setPlayerId(bot.getBotId());
+        input.setUserId(bot.getBotId());
         input.setType(FrameInput.InputType.MOVE);
         input.setFrameNumber((int) currentFrame);
 
@@ -329,33 +336,31 @@ public class AIController {
         return (int) Math.toDegrees(angle);
     }
 
-    public void removeBotsFromRoom(String battleId) {
+    public void removeBotsFromRoom(long battleId) {
         Map<Long, AIBot> bots = roomBots.remove(battleId);
+        roomDecisionMakers.remove(battleId);
+        roomBotLastTickFrame.remove(battleId);
         if (bots != null) {
-            for (AIBot bot : bots.values()) {
-                decisionMakers.remove(bot.getBotId());
-                botLastTickFrame.remove(bot.getBotId());
-            }
             log.info("从战斗{}移除{}个机器人", battleId, bots.size());
         }
     }
 
-    public int getBotCount(String battleId) {
+    public int getBotCount(long battleId) {
         Map<Long, AIBot> bots = roomBots.get(battleId);
         return bots != null ? bots.size() : 0;
     }
 
-    public boolean isInitializedForBattle(String battleId) {
+    public boolean isInitializedForBattle(long battleId) {
         Map<Long, AIBot> bots = roomBots.get(battleId);
         return bots != null && !bots.isEmpty();
     }
 
-    public List<AIBot> getBots(String battleId) {
+    public List<AIBot> getBots(long battleId) {
         Map<Long, AIBot> bots = roomBots.get(battleId);
         return bots != null ? new ArrayList<>(bots.values()) : Collections.emptyList();
     }
 
-    public void updateBotTarget(String battleId, long botId, Long targetId) {
+    public void updateBotTarget(long battleId, long botId, Long targetId) {
         Map<Long, AIBot> bots = roomBots.get(battleId);
         if (bots != null) {
             AIBot bot = bots.get(botId);
@@ -365,7 +370,7 @@ public class AIController {
         }
     }
 
-    public void notifyBotOfDeath(String battleId, long victimId, long killerId) {
+    public void notifyBotOfDeath(long battleId, long victimId, long killerId) {
         Map<Long, AIBot> bots = roomBots.get(battleId);
         if (bots == null) return;
 

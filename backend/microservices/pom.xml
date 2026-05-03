@@ -16,7 +16,6 @@
         <module>moba-common</module>
         <module>moba-netty-common</module>
         <module>moba-gateway</module>
-        <module>moba-gateway-netty</module>
         <module>moba-business</module>
         <module>moba-match</module>
         <module>moba-battle</module>

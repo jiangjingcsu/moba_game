@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ReplayRepository extends MongoRepository<Replay, String> {
-    Optional<Replay> findByBattleId(String battleId);
+    Optional<Replay> findByBattleId(long battleId);
 }

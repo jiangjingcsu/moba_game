@@ -65,12 +65,12 @@ public class AuthFilter implements GlobalFilter, Ordered {
                     }
 
                     JwtService.TokenInfo tokenInfo = jwtService.parseTokenInfo(token);
-                    if (tokenInfo == null || tokenInfo.getPlayerId() == 0) {
+                    if (tokenInfo == null || tokenInfo.getUserId() == 0) {
                         return unauthorized(exchange.getResponse());
                     }
 
                     ServerHttpRequest modifiedRequest = request.mutate()
-                            .header("X-Player-Id", String.valueOf(tokenInfo.getPlayerId()))
+                            .header("X-User-Id", String.valueOf(tokenInfo.getUserId()))
                             .header("X-Username", tokenInfo.getUsername() != null ? tokenInfo.getUsername() : "")
                             .build();
 

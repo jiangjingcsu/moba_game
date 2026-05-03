@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Data
 public class BattlePlayer {
-    private final long playerId;
+    private final long userId;
     private final int heroId;
     private final int teamId;
     private Position position;
@@ -29,8 +29,8 @@ public class BattlePlayer {
     private Map<Integer, Integer> items;
     private boolean stealthed;
 
-    public BattlePlayer(long playerId, int heroId, int teamId, HeroConfig heroConfig) {
-        this.playerId = playerId;
+    public BattlePlayer(long userId, int heroId, int teamId, HeroConfig heroConfig) {
+        this.userId = userId;
         this.heroId = heroId;
         this.teamId = teamId;
         this.position = new Position(0, 0);
@@ -54,7 +54,7 @@ public class BattlePlayer {
     }
 
     public void takeDamage(int damage) {
-        int actualDamage = Math.max(1, damage - defense / 10);
+        int actualDamage = Math.max(1, damage);
         this.currentHp -= actualDamage;
         if (this.currentHp <= 0) {
             this.currentHp = 0;

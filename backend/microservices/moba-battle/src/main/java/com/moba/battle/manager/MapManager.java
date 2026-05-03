@@ -1,7 +1,6 @@
 package com.moba.battle.manager;
 
 import com.moba.battle.config.ServerConfig;
-import com.moba.battle.config.SpringContextHolder;
 import com.moba.battle.model.BattlePlayer;
 import com.moba.battle.model.Creep;
 import com.moba.battle.model.MOBAMap;
@@ -11,27 +10,36 @@ import com.moba.battle.model.MOBAMap.RuneSpawnPoint;
 import com.moba.battle.model.MOBAMap.SpawnPoint;
 import com.moba.battle.model.MOBAMap.Tower;
 import com.moba.battle.model.Player;
+import com.moba.common.constant.GameMode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Component
 public class MapManager {
-    private final Map<String, MOBAMap> activeMaps;
-    private final Map<String, List<Creep>> roomCreeps;
-    private final Map<String, Map<Integer, Tower>> roomTowers;
-    private final Map<String, Map<Integer, Building>> roomBuildings;
-    private final Map<String, List<RuneSpawnPoint>> roomRunes;
+    private final Map<Long, MOBAMap> activeMaps;
+    private final Map<Long, List<Creep>> roomCreeps;
+    private final Map<Long, Map<Integer, Tower>> roomTowers;
+    private final Map<Long, Map<Integer, Building>> roomBuildings;
+    private final Map<Long, List<RuneSpawnPoint>> roomRunes;
 
     private final long creepSpawnIntervalMs;
     private final long runeSpawnIntervalMs;
     private final int aggroRange;
 
-    public MapManager(ServerConfig serverConfig) {
+    private final BattleManager battleManager;
+
+    public MapManager(ServerConfig serverConfig, @Lazy BattleManager battleManager) {
         this.activeMaps = new ConcurrentHashMap<>();
         this.roomCreeps = new ConcurrentHashMap<>();
         this.roomTowers = new ConcurrentHashMap<>();
@@ -40,13 +48,10 @@ public class MapManager {
         this.creepSpawnIntervalMs = serverConfig.getCreepSpawnIntervalMs();
         this.runeSpawnIntervalMs = serverConfig.getRuneSpawnIntervalMs();
         this.aggroRange = serverConfig.getAggroRange();
+        this.battleManager = battleManager;
     }
 
-    public static MapManager getInstance() {
-        return SpringContextHolder.getBean(MapManager.class);
-    }
-
-    public MOBAMap createMap(String battleId, int mapId, MOBAMap.GameMode mode) {
+    public MOBAMap createMap(long battleId, int mapId, GameMode mode) {
         MOBAMap map = MOBAMap.createMap(mapId, mode);
         activeMaps.put(battleId, map);
 
@@ -76,9 +81,9 @@ public class MapManager {
         return map;
     }
 
-    private void spawnInitialCreeps(String battleId, MOBAMap map) {
+    private void spawnInitialCreeps(long battleId, MOBAMap map) {
         List<Creep> creeps = new ArrayList<>();
-        long creepIdBase = Long.parseLong(battleId.replace("BATTLE_", "")) * 10000;
+        long creepIdBase = battleId * 10000;
         int creepIndex = 0;
 
         for (CreepCamp camp : map.getCreepCamps()) {
@@ -104,7 +109,7 @@ public class MapManager {
             SpawnPoint spawn = map.getSpawnPoint(team);
             if (spawn == null) continue;
 
-            int creepsPerWave = map.getGameMode() == MOBAMap.GameMode.MODE_5V5 ? 5 : 3;
+            int creepsPerWave = map.getGameMode() == GameMode.MODE_5V5 ? 5 : 3;
 
             for (int i = 0; i < creepsPerWave; i++) {
                 long creepId = creepIdBase + creepIndex++;
@@ -126,7 +131,7 @@ public class MapManager {
         roomCreeps.put(battleId, creeps);
     }
 
-    public void updateMap(String battleId, long currentFrame) {
+    public void updateMap(long battleId, long currentFrame) {
         MOBAMap map = activeMaps.get(battleId);
         if (map == null) return;
 
@@ -136,7 +141,7 @@ public class MapManager {
         checkCreepRespawns(battleId, map);
     }
 
-    private void updateTowers(String battleId, long currentFrame) {
+    private void updateTowers(long battleId, long currentFrame) {
         Map<Integer, Tower> towers = roomTowers.get(battleId);
         if (towers == null) return;
 
@@ -144,7 +149,7 @@ public class MapManager {
             if (tower.getHp() <= 0) continue;
 
             if (tower.getCurrentTarget() != null) {
-                BattlePlayer target = BattleManager.getInstance()
+                BattlePlayer target = battleManager
                         .getBattleRoom(battleId)
                         .getSession()
                         .getPlayer(tower.getCurrentTarget());
@@ -159,12 +164,12 @@ public class MapManager {
                 BattlePlayer nearestEnemy = findNearestEnemyInRange(
                         battleId, tower, tower.getTeamId());
                 if (nearestEnemy != null) {
-                    tower.setCurrentTarget(nearestEnemy.getPlayerId());
+                    tower.setCurrentTarget(nearestEnemy.getUserId());
                 }
             }
 
             if (tower.getCurrentTarget() != null && tower.canAttack(currentFrame)) {
-                BattlePlayer target = BattleManager.getInstance()
+                BattlePlayer target = battleManager
                         .getBattleRoom(battleId)
                         .getSession()
                         .getPlayer(tower.getCurrentTarget());
@@ -173,15 +178,15 @@ public class MapManager {
                     target.takeDamage(tower.getDamage());
                     tower.attack(currentFrame);
 
-                    log.debug("防御塔{}攻击玩家{}, 伤害={}（范围={}）",
-                            tower.getTowerId(), target.getPlayerId(), tower.getDamage(), tower.getRange());
+                    log.debug("防御塔{}攻击玩家{}, 伤害={},范围={}",
+                            tower.getTowerId(), target.getUserId(), tower.getDamage(), tower.getRange());
                 }
             }
         }
     }
 
-    private BattlePlayer findNearestEnemyInRange(String battleId, Tower tower, int myTeamId) {
-        BattleRoom room = BattleManager.getInstance().getBattleRoom(battleId);
+    private BattlePlayer findNearestEnemyInRange(long battleId, Tower tower, int myTeamId) {
+        BattleRoom room = battleManager.getBattleRoom(battleId);
         if (room == null) return null;
 
         BattlePlayer nearest = null;
@@ -203,7 +208,7 @@ public class MapManager {
         return nearest;
     }
 
-    private void updateCreeps(String battleId, MOBAMap map, long currentFrame) {
+    private void updateCreeps(long battleId, MOBAMap map, long currentFrame) {
         List<Creep> creeps = roomCreeps.get(battleId);
         if (creeps == null) return;
 
@@ -225,7 +230,7 @@ public class MapManager {
                     if (creep.getCurrentTarget() == null) {
                         creep.setState(Creep.CreepState.MOVING);
                     } else {
-                        BattlePlayer target = BattleManager.getInstance()
+                        BattlePlayer target = battleManager
                                 .getBattleRoom(battleId)
                                 .getSession()
                                 .getPlayer(creep.getCurrentTarget());
@@ -251,15 +256,15 @@ public class MapManager {
         }
     }
 
-    private void updateCreepMovement(Creep creep, String battleId, long currentFrame) {
-        BattleRoom room = BattleManager.getInstance().getBattleRoom(battleId);
+    private void updateCreepMovement(Creep creep, long battleId, long currentFrame) {
+        BattleRoom room = battleManager.getBattleRoom(battleId);
         if (room == null) return;
 
         BattlePlayer nearestEnemy = findNearestEnemyInCreepRange(room, creep);
         if (nearestEnemy != null) {
             int dist = creep.distanceTo(nearestEnemy.getPosition().x, nearestEnemy.getPosition().y);
             if (dist <= creep.getAttackRange()) {
-                creep.setCurrentTarget(nearestEnemy.getPlayerId());
+                creep.setCurrentTarget(nearestEnemy.getUserId());
                 creep.setState(Creep.CreepState.ATTACKING);
                 return;
             }
@@ -301,7 +306,7 @@ public class MapManager {
         return nearest;
     }
 
-    private void checkRuneSpawns(String battleId, long currentFrame) {
+    private void checkRuneSpawns(long battleId, long currentFrame) {
         List<RuneSpawnPoint> runes = roomRunes.get(battleId);
         if (runes == null) return;
 
@@ -310,12 +315,12 @@ public class MapManager {
         for (RuneSpawnPoint rune : runes) {
             if (!rune.isActive() && now - rune.getLastSpawnTime() >= rune.getSpawnInterval() * 1000) {
                 rune.setActive(true);
-                log.debug("符文{}刷新在({}, {})", rune.getRuneType(), rune.getX(), rune.getY());
+                log.debug("符文{}刷新了{}, {})", rune.getRuneType(), rune.getX(), rune.getY());
             }
         }
     }
 
-    private void checkCreepRespawns(String battleId, MOBAMap map) {
+    private void checkCreepRespawns(long battleId, MOBAMap map) {
         List<Creep> creeps = roomCreeps.get(battleId);
         if (creeps == null) return;
 
@@ -329,18 +334,18 @@ public class MapManager {
                         int offsetX = (int) ((creep.getCreepId() % 3) * 30);
                         int offsetY = (int) ((creep.getCreepId() / 3) * 30);
                         creep.respawn(camp.getX() + offsetX, camp.getY() + offsetY);
-                        log.debug("野怪{}重生在({}, {})", creep.getCreepId(), camp.getX(), camp.getY());
+                        log.debug("野怪{}重生了{}, {})", creep.getCreepId(), camp.getX(), camp.getY());
                     }
                 }
             }
         }
     }
 
-    public List<Creep> getCreeps(String battleId) {
+    public List<Creep> getCreeps(long battleId) {
         return roomCreeps.getOrDefault(battleId, Collections.emptyList());
     }
 
-    public List<Creep> getAliveCreeps(String battleId) {
+    public List<Creep> getAliveCreeps(long battleId) {
         List<Creep> all = roomCreeps.get(battleId);
         if (all == null) return Collections.emptyList();
         List<Creep> alive = new ArrayList<>();
@@ -350,17 +355,17 @@ public class MapManager {
         return alive;
     }
 
-    public Tower getTower(String battleId, int towerId) {
+    public Tower getTower(long battleId, int towerId) {
         Map<Integer, Tower> towers = roomTowers.get(battleId);
         return towers != null ? towers.get(towerId) : null;
     }
 
-    public Building getBuilding(String battleId, int buildingId) {
+    public Building getBuilding(long battleId, int buildingId) {
         Map<Integer, Building> buildings = roomBuildings.get(battleId);
         return buildings != null ? buildings.get(buildingId) : null;
     }
 
-    public List<RuneSpawnPoint> getActiveRunes(String battleId) {
+    public List<RuneSpawnPoint> getActiveRunes(long battleId) {
         List<RuneSpawnPoint> runes = roomRunes.get(battleId);
         if (runes == null) return Collections.emptyList();
         List<RuneSpawnPoint> active = new ArrayList<>();
@@ -370,11 +375,11 @@ public class MapManager {
         return active;
     }
 
-    public MOBAMap getMap(String battleId) {
+    public MOBAMap getMap(long battleId) {
         return activeMaps.get(battleId);
     }
 
-    public void removeMap(String battleId) {
+    public void removeMap(long battleId) {
         activeMaps.remove(battleId);
         roomCreeps.remove(battleId);
         roomTowers.remove(battleId);
@@ -383,70 +388,73 @@ public class MapManager {
         log.info("战斗{}地图已移除", battleId);
     }
 
-    public void applyTowerDamage(String battleId, int towerId, int damage) {
+    public void applyTowerDamage(long battleId, int towerId, int damage) {
         Tower tower = getTower(battleId, towerId);
         if (tower != null) {
             tower.setHp(Math.max(0, tower.getHp() - damage));
-            log.info("防御塔{}受到{}伤害, 生命值={}/{}", towerId, damage, tower.getHp(), tower.getMaxHp());
+            log.info("防御塔{}受到{}伤害, 生命值{}/{}", towerId, damage, tower.getHp(), tower.getMaxHp());
             if (tower.getHp() <= 0) {
                 log.info("防御塔{}已被摧毁!", towerId);
             }
         }
     }
 
-    public void applyBuildingDamage(String battleId, int buildingId, int damage) {
+    public void applyBuildingDamage(long battleId, int buildingId, int damage) {
         Building building = getBuilding(battleId, buildingId);
         if (building != null) {
             building.setHp(Math.max(0, building.getHp() - damage));
-            log.info("建筑{}受到{}伤害, 生命值={}/{}", buildingId, damage, building.getHp(), building.getMaxHp());
+            log.info("建筑{}受到{}伤害, 生命值{}/{}", buildingId, damage, building.getHp(), building.getMaxHp());
             if (building.getHp() <= 0) {
                 log.info("建筑{}已被摧毁!", buildingId);
             }
         }
     }
 
-    public String getMapStateJson(String battleId) {
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    public String getMapStateJson(long battleId) {
         MOBAMap map = getMap(battleId);
         if (map == null) return "{}";
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        sb.append("\"mapId\":").append(map.getMapId());
-        sb.append(",\"mapName\":\"").append(map.getMapName()).append("\"");
-        sb.append(",\"mode\":\"").append(map.getGameMode()).append("\"");
-        sb.append(",\"width\":").append(map.getWidth());
-        sb.append(",\"height\":").append(map.getHeight());
+        try {
+            Map<String, Object> result = new HashMap<>();
+            result.put("mapId", map.getMapId());
+            result.put("mapName", map.getMapName());
+            result.put("mode", map.getGameMode());
+            result.put("width", map.getWidth());
+            result.put("height", map.getHeight());
 
-        if (map.getTeamSpawns().size() >= 2) {
-            sb.append(",\"spawns\":[");
-            for (int i = 0; i < map.getTeamSpawns().size(); i++) {
-                SpawnPoint sp = map.getTeamSpawns().get(i);
-                if (i > 0) sb.append(",");
-                sb.append("{\"team\":").append(sp.getTeamId());
-                sb.append(",\"x\":").append(sp.getX());
-                sb.append(",\"y\":").append(sp.getY()).append("}");
+            if (map.getTeamSpawns().size() >= 2) {
+                List<Map<String, Object>> spawns = new ArrayList<>();
+                for (SpawnPoint sp : map.getTeamSpawns()) {
+                    Map<String, Object> spawn = new HashMap<>();
+                    spawn.put("team", sp.getTeamId());
+                    spawn.put("x", sp.getX());
+                    spawn.put("y", sp.getY());
+                    spawns.add(spawn);
+                }
+                result.put("spawns", spawns);
             }
-            sb.append("]");
-        }
 
-        List<Tower> towers = roomTowers.getOrDefault(battleId, Collections.emptyMap()).values().stream().toList();
-        sb.append(",\"towers\":[");
-        boolean first = true;
-        for (Tower t : towers) {
-            if (!first) sb.append(",");
-            first = false;
-            sb.append("{\"id\":").append(t.getTowerId());
-            sb.append(",\"team\":").append(t.getTeamId());
-            sb.append(",\"x\":").append(t.getX());
-            sb.append(",\"y\":").append(t.getY());
-            sb.append(",\"hp\":").append(t.getHp());
-            sb.append(",\"maxHp\":").append(t.getMaxHp());
-            sb.append(",\"tier\":").append(t.getTier()).append("}");
-        }
-        sb.append("]");
+            List<Tower> towers = roomTowers.getOrDefault(battleId, Collections.emptyMap()).values().stream().toList();
+            List<Map<String, Object>> towerList = new ArrayList<>();
+            for (Tower t : towers) {
+                Map<String, Object> tower = new HashMap<>();
+                tower.put("id", t.getTowerId());
+                tower.put("team", t.getTeamId());
+                tower.put("x", t.getX());
+                tower.put("y", t.getY());
+                tower.put("hp", t.getHp());
+                tower.put("maxHp", t.getMaxHp());
+                tower.put("tier", t.getTier());
+                towerList.add(tower);
+            }
+            result.put("towers", towerList);
 
-        sb.append("}");
-        return sb.toString();
+            return OBJECT_MAPPER.writeValueAsString(result);
+        } catch (Exception e) {
+            log.error("序列化地图状态失败: battleId={}", battleId, e);
+            return "{}";
+        }
     }
 }
-

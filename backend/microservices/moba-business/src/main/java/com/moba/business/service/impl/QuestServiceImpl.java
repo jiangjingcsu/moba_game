@@ -31,34 +31,34 @@ public class QuestServiceImpl implements QuestService {
     private final UserRepository userRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    private static final String QUEST_CACHE_PREFIX = "quest:player:";
+    private static final String QUEST_CACHE_PREFIX = "quest:user:";
     private static final long CACHE_EXPIRE_SECONDS = 300;
 
     @Override
-    public List<PlayerQuest> getPlayerQuests(Long playerId, QuestType questType) {
+    public List<PlayerQuest> getPlayerQuests(long userId, QuestType questType) {
         if (questType != null) {
-            return playerQuestRepository.findByPlayerIdAndQuestTypeOrderByCreateTimeAsc(playerId, questType);
+            return playerQuestRepository.findByUserIdAndQuestTypeOrderByCreateTimeAsc(userId, questType);
         }
-        return playerQuestRepository.findByPlayerIdAndStateOrderByCreateTimeAsc(playerId, null);
+        return playerQuestRepository.findByUserIdAndStateOrderByCreateTimeAsc(userId, null);
     }
 
     @Override
-    public List<PlayerQuest> getPlayerActiveQuests(Long playerId) {
-        return playerQuestRepository.findByPlayerIdAndStateOrderByCreateTimeAsc(playerId, QuestState.ACTIVE);
+    public List<PlayerQuest> getPlayerActiveQuests(long userId) {
+        return playerQuestRepository.findByUserIdAndStateOrderByCreateTimeAsc(userId, QuestState.ACTIVE);
     }
 
     @Override
-    public List<PlayerQuest> getPlayerActiveQuests(Long playerId, QuestType questType) {
-        return playerQuestRepository.findByPlayerIdAndQuestTypeAndStateOrderByCreateTimeAsc(playerId, questType, QuestState.ACTIVE);
+    public List<PlayerQuest> getPlayerActiveQuests(long userId, QuestType questType) {
+        return playerQuestRepository.findByUserIdAndQuestTypeAndStateOrderByCreateTimeAsc(userId, questType, QuestState.ACTIVE);
     }
 
     @Override
     @Transactional
-    public PlayerQuest claimReward(Long playerId, Long playerQuestId) {
+    public PlayerQuest claimReward(long userId, Long playerQuestId) {
         PlayerQuest playerQuest = playerQuestRepository.findById(playerQuestId)
                 .orElseThrow(() -> BusinessException.notFound("任务不存在"));
 
-        if (!playerQuest.getPlayerId().equals(playerId)) {
+        if (!playerQuest.getUserId().equals(userId)) {
             throw BusinessException.forbidden("无权领取该任务奖励");
         }
 
@@ -70,20 +70,20 @@ public class QuestServiceImpl implements QuestService {
         playerQuest.setClaimedAt(LocalDateTime.now());
         PlayerQuest saved = playerQuestRepository.save(playerQuest);
 
-        invalidateQuestCache(playerId);
-        log.info("玩家{}领取任务{}奖励({})", playerId, playerQuest.getQuestCode(), playerQuest.getRewardType());
+        invalidateQuestCache(userId);
+        log.info("玩家{}领取任务{}奖励({})", userId, playerQuest.getQuestCode(), playerQuest.getRewardType());
 
         return saved;
     }
 
     @Override
     @Transactional
-    public void refreshDailyQuests(Long playerId) {
+    public void refreshDailyQuests(long userId) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime todayEnd = LocalDateTime.of(now.toLocalDate(), LocalTime.MAX);
 
         playerQuestRepository.expireQuests(
-                playerId,
+                userId,
                 List.of(QuestType.DAILY),
                 QuestState.ACTIVE,
                 QuestState.EXPIRED,
@@ -91,7 +91,7 @@ public class QuestServiceImpl implements QuestService {
         );
 
         List<PlayerQuest> activeDaily = playerQuestRepository
-                .findByPlayerIdAndQuestTypeAndStateIn(playerId, QuestType.DAILY, List.of(QuestState.ACTIVE, QuestState.COMPLETED));
+                .findByUserIdAndQuestTypeAndStateIn(userId, QuestType.DAILY, List.of(QuestState.ACTIVE, QuestState.COMPLETED));
 
         Set<String> existingCodes = activeDaily.stream()
                 .map(PlayerQuest::getQuestCode)
@@ -101,23 +101,23 @@ public class QuestServiceImpl implements QuestService {
 
         for (QuestTemplate template : dailyTemplates) {
             if (!existingCodes.contains(template.getQuestCode())) {
-                createPlayerQuest(playerId, template, todayEnd);
+                createPlayerQuest(userId, template, todayEnd);
             }
         }
 
-        invalidateQuestCache(playerId);
-        log.info("已刷新玩家{}的每日任务", playerId);
+        invalidateQuestCache(userId);
+        log.info("已刷新玩家{}的每日任务", userId);
     }
 
     @Override
     @Transactional
-    public void refreshWeeklyQuests(Long playerId) {
+    public void refreshWeeklyQuests(long userId) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime weekEnd = now.with(TemporalAdjusters.next(DayOfWeek.MONDAY))
                 .with(LocalTime.MIN);
 
         playerQuestRepository.expireQuests(
-                playerId,
+                userId,
                 List.of(QuestType.WEEKLY),
                 QuestState.ACTIVE,
                 QuestState.EXPIRED,
@@ -125,7 +125,7 @@ public class QuestServiceImpl implements QuestService {
         );
 
         List<PlayerQuest> activeWeekly = playerQuestRepository
-                .findByPlayerIdAndQuestTypeAndStateIn(playerId, QuestType.WEEKLY, List.of(QuestState.ACTIVE, QuestState.COMPLETED));
+                .findByUserIdAndQuestTypeAndStateIn(userId, QuestType.WEEKLY, List.of(QuestState.ACTIVE, QuestState.COMPLETED));
 
         Set<String> existingCodes = activeWeekly.stream()
                 .map(PlayerQuest::getQuestCode)
@@ -135,19 +135,19 @@ public class QuestServiceImpl implements QuestService {
 
         for (QuestTemplate template : weeklyTemplates) {
             if (!existingCodes.contains(template.getQuestCode())) {
-                createPlayerQuest(playerId, template, weekEnd);
+                createPlayerQuest(userId, template, weekEnd);
             }
         }
 
-        invalidateQuestCache(playerId);
-        log.info("已刷新玩家{}的每周任务", playerId);
+        invalidateQuestCache(userId);
+        log.info("已刷新玩家{}的每周任务", userId);
     }
 
     @Override
     @Transactional
-    public void initNoviceQuests(Long playerId) {
+    public void initNoviceQuests(long userId) {
         List<PlayerQuest> existing = playerQuestRepository
-                .findByPlayerIdAndQuestTypeOrderByCreateTimeAsc(playerId, QuestType.NOVICE);
+                .findByUserIdAndQuestTypeOrderByCreateTimeAsc(userId, QuestType.NOVICE);
 
         if (!existing.isEmpty()) {
             return;
@@ -156,18 +156,18 @@ public class QuestServiceImpl implements QuestService {
         List<QuestTemplate> noviceTemplates = questTemplateRepository.findByQuestTypeAndEnabledTrueOrderBySortOrderAsc(QuestType.NOVICE);
 
         for (QuestTemplate template : noviceTemplates) {
-            createPlayerQuest(playerId, template, null);
+            createPlayerQuest(userId, template, null);
         }
 
-        invalidateQuestCache(playerId);
-        log.info("已初始化玩家{}的新手任务", playerId);
+        invalidateQuestCache(userId);
+        log.info("已初始化玩家{}的新手任务", userId);
     }
 
     @Override
     @Transactional
-    public void initSeasonQuests(Long playerId) {
+    public void initSeasonQuests(long userId) {
         List<PlayerQuest> existing = playerQuestRepository
-                .findByPlayerIdAndQuestTypeAndStateIn(playerId, QuestType.SEASON, List.of(QuestState.ACTIVE, QuestState.COMPLETED));
+                .findByUserIdAndQuestTypeAndStateIn(userId, QuestType.SEASON, List.of(QuestState.ACTIVE, QuestState.COMPLETED));
 
         Set<String> existingCodes = existing.stream()
                 .map(PlayerQuest::getQuestCode)
@@ -178,20 +178,20 @@ public class QuestServiceImpl implements QuestService {
         for (QuestTemplate template : seasonTemplates) {
             if (!existingCodes.contains(template.getQuestCode())) {
                 LocalDateTime seasonEnd = LocalDateTime.now().plusMonths(3);
-                createPlayerQuest(playerId, template, seasonEnd);
+                createPlayerQuest(userId, template, seasonEnd);
             }
         }
 
-        invalidateQuestCache(playerId);
-        log.info("已初始化玩家{}的赛季任务", playerId);
+        invalidateQuestCache(userId);
+        log.info("已初始化玩家{}的赛季任务", userId);
     }
 
     @Override
     @Transactional
-    public void onBattleEnd(Long playerId, BattleQuestContext context) {
-        checkAndExpireQuests(playerId);
+    public void onBattleEnd(long userId, BattleQuestContext context) {
+        checkAndExpireQuests(userId);
 
-        List<PlayerQuest> activeQuests = playerQuestRepository.findByPlayerIdAndStateOrderByCreateTimeAsc(playerId, QuestState.ACTIVE);
+        List<PlayerQuest> activeQuests = playerQuestRepository.findByUserIdAndStateOrderByCreateTimeAsc(userId, QuestState.ACTIVE);
 
         boolean updated = false;
         for (PlayerQuest quest : activeQuests) {
@@ -201,7 +201,7 @@ public class QuestServiceImpl implements QuestService {
                 if (quest.getCurrentValue() >= quest.getTargetValue()) {
                     quest.setState(QuestState.COMPLETED);
                     quest.setCompletedAt(LocalDateTime.now());
-                    log.info("玩家{}完成任务{}({})", playerId, quest.getQuestCode(), quest.getCategory());
+                    log.info("玩家{}完成任务{}({})", userId, quest.getQuestCode(), quest.getCategory());
                 }
                 playerQuestRepository.save(quest);
                 updated = true;
@@ -209,15 +209,15 @@ public class QuestServiceImpl implements QuestService {
         }
 
         if (updated) {
-            invalidateQuestCache(playerId);
+            invalidateQuestCache(userId);
         }
     }
 
     @Override
     @Transactional
-    public void onPlayerLevelUp(Long playerId, int newLevel) {
+    public void onPlayerLevelUp(long userId, int newLevel) {
         List<PlayerQuest> activeQuests = playerQuestRepository
-                .findByPlayerIdAndCategoryAndState(playerId, QuestCategory.LEVEL_REACH, QuestState.ACTIVE);
+                .findByUserIdAndCategoryAndState(userId, QuestCategory.LEVEL_REACH, QuestState.ACTIVE);
 
         for (PlayerQuest quest : activeQuests) {
             if (newLevel >= quest.getTargetValue()) {
@@ -225,19 +225,19 @@ public class QuestServiceImpl implements QuestService {
                 quest.setState(QuestState.COMPLETED);
                 quest.setCompletedAt(LocalDateTime.now());
                 playerQuestRepository.save(quest);
-                log.info("玩家{}完成等级任务{}, 等级={}", playerId, quest.getQuestCode(), newLevel);
+                log.info("玩家{}完成等级任务{}, 等级={}", userId, quest.getQuestCode(), newLevel);
             }
         }
 
-        checkNoviceQuestUnlock(playerId, newLevel);
-        invalidateQuestCache(playerId);
+        checkNoviceQuestUnlock(userId, newLevel);
+        invalidateQuestCache(userId);
     }
 
     @Override
     @Transactional
-    public void onRankScoreChange(Long playerId, int newRankScore) {
+    public void onRankScoreChange(long userId, int newRankScore) {
         List<PlayerQuest> activeQuests = playerQuestRepository
-                .findByPlayerIdAndCategoryAndState(playerId, QuestCategory.RANK_REACH, QuestState.ACTIVE);
+                .findByUserIdAndCategoryAndState(userId, QuestCategory.RANK_REACH, QuestState.ACTIVE);
 
         for (PlayerQuest quest : activeQuests) {
             if (newRankScore >= quest.getTargetValue()) {
@@ -245,19 +245,19 @@ public class QuestServiceImpl implements QuestService {
                 quest.setState(QuestState.COMPLETED);
                 quest.setCompletedAt(LocalDateTime.now());
                 playerQuestRepository.save(quest);
-                log.info("玩家{}完成段位任务{}, 积分={}", playerId, quest.getQuestCode(), newRankScore);
+                log.info("玩家{}完成段位任务{}, 积分={}", userId, quest.getQuestCode(), newRankScore);
             }
         }
 
-        invalidateQuestCache(playerId);
+        invalidateQuestCache(userId);
     }
 
     @Override
     @Transactional
-    public void checkAndExpireQuests(Long playerId) {
+    public void checkAndExpireQuests(long userId) {
         LocalDateTime now = LocalDateTime.now();
         playerQuestRepository.expireQuests(
-                playerId,
+                userId,
                 List.of(QuestType.DAILY, QuestType.WEEKLY, QuestType.SEASON),
                 QuestState.ACTIVE,
                 QuestState.EXPIRED,
@@ -266,8 +266,8 @@ public class QuestServiceImpl implements QuestService {
     }
 
     @Override
-    public Map<String, Object> getQuestProgressSummary(Long playerId) {
-        String cacheKey = QUEST_CACHE_PREFIX + playerId + ":summary";
+    public Map<String, Object> getQuestProgressSummary(long userId) {
+        String cacheKey = QUEST_CACHE_PREFIX + userId + ":summary";
         @SuppressWarnings("unchecked")
         Map<String, Object> cached = (Map<String, Object>) redisTemplate.opsForValue().get(cacheKey);
         if (cached != null) {
@@ -275,7 +275,7 @@ public class QuestServiceImpl implements QuestService {
         }
 
         List<PlayerQuest> allQuests = playerQuestRepository
-                .findByPlayerIdAndStateOrderByCreateTimeAsc(playerId, null);
+                .findByUserIdAndStateOrderByCreateTimeAsc(userId, null);
 
         Map<String, Object> summary = new LinkedHashMap<>();
 
@@ -307,9 +307,9 @@ public class QuestServiceImpl implements QuestService {
         return summary;
     }
 
-    private PlayerQuest createPlayerQuest(Long playerId, QuestTemplate template, LocalDateTime expireAt) {
+    private PlayerQuest createPlayerQuest(long userId, QuestTemplate template, LocalDateTime expireAt) {
         PlayerQuest playerQuest = new PlayerQuest();
-        playerQuest.setPlayerId(playerId);
+        playerQuest.setUserId(userId);
         playerQuest.setQuestTemplateId(template.getId());
         playerQuest.setQuestCode(template.getQuestCode());
         playerQuest.setQuestType(template.getQuestType());
@@ -348,24 +348,24 @@ public class QuestServiceImpl implements QuestService {
         };
     }
 
-    private void checkNoviceQuestUnlock(Long playerId, int currentLevel) {
+    private void checkNoviceQuestUnlock(long userId, int currentLevel) {
         List<QuestTemplate> noviceTemplates = questTemplateRepository
                 .findByQuestTypeAndEnabledTrueOrderBySortOrderAsc(QuestType.NOVICE);
 
         for (QuestTemplate template : noviceTemplates) {
             if (template.getRequiredLevel() != null && template.getRequiredLevel() > 0
                     && currentLevel >= template.getRequiredLevel()) {
-                boolean exists = playerQuestRepository.existsByPlayerIdAndQuestCode(playerId, template.getQuestCode());
+                boolean exists = playerQuestRepository.existsByUserIdAndQuestCode(userId, template.getQuestCode());
                 if (!exists) {
-                    createPlayerQuest(playerId, template, null);
-                    log.info("为玩家{}在等级{}解锁新手任务{}", playerId, currentLevel, template.getQuestCode());
+                    createPlayerQuest(userId, template, null);
+                    log.info("为玩家{}在等级{}解锁新手任务{}", userId, currentLevel, template.getQuestCode());
                 }
             }
         }
     }
 
-    private void invalidateQuestCache(Long playerId) {
-        Set<String> keys = redisTemplate.keys(QUEST_CACHE_PREFIX + playerId + "*");
+    private void invalidateQuestCache(long userId) {
+        Set<String> keys = redisTemplate.keys(QUEST_CACHE_PREFIX + userId + "*");
         if (keys != null && !keys.isEmpty()) {
             redisTemplate.delete(keys);
         }

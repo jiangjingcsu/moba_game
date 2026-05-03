@@ -134,7 +134,7 @@ public class SkillConfig {
 
     public SkillCastInfo toSkillCastInfo(BattlePlayer caster, long targetId, int targetX, int targetY, int facing, int frameNumber) {
         SkillCastInfo info = new SkillCastInfo();
-        info.setCasterId(caster.getPlayerId());
+        info.setCasterId(caster.getUserId());
         info.setTargetId(targetId);
         info.setCasterTeamId(caster.getTeamId());
         info.setCasterX(caster.getPosition().x);

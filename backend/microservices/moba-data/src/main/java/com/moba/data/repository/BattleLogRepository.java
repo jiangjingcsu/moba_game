@@ -11,10 +11,10 @@ import java.util.Optional;
 
 @Repository
 public interface BattleLogRepository extends MongoRepository<BattleLog, String> {
-    Optional<BattleLog> findByBattleId(String battleId);
+    Optional<BattleLog> findByBattleId(long battleId);
     Page<BattleLog> findByGameMode(int gameMode, Pageable pageable);
     Page<BattleLog> findByWinnerTeamId(int winnerTeamId, Pageable pageable);
     Page<BattleLog> findByStartTimeBetween(long start, long end, Pageable pageable);
-    Page<BattleLog> findByPlayersPlayerIdOrderByStartTimeDesc(long playerId, Pageable pageable);
-    List<BattleLog> findByPlayersPlayerIdOrderByStartTimeDesc(long playerId);
+    Page<BattleLog> findByPlayersUserIdOrderByStartTimeDesc(long userId, Pageable pageable);
+    List<BattleLog> findByPlayersUserIdOrderByStartTimeDesc(long userId);
 }

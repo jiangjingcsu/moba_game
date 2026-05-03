@@ -1,5 +1,6 @@
 package com.moba.battle.model;
 
+import com.moba.common.constant.GameMode;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,11 +28,6 @@ public class MOBAMap {
     private MapRegion safeRegion;
     private MapRegion jungleRegion;
     private MapRegion riverRegion;
-
-    public enum GameMode {
-        MODE_3V3V3,
-        MODE_5V5
-    }
 
     public static MOBAMap createMap(int mapId, GameMode mode) {
         switch (mode) {

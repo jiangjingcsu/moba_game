@@ -1,4 +1,4 @@
-﻿﻿server:
+﻿server:
   port: 8080
 
 spring:
@@ -10,14 +10,14 @@ spring:
     nacos:
       discovery:
         enabled: true
-        server-addr: 192.168.0.102:8848
+        server-addr: 192.168.0.105:8848
         namespace: public
         group: DEFAULT_GROUP
         username: nacos
         password: nacos
         register-enabled: true
       config:
-        server-addr: 192.168.0.102:8848
+        server-addr: 192.168.0.105:8848
         namespace: public
         group: DEFAULT_GROUP
         username: nacos
@@ -69,14 +69,14 @@ spring:
             allowedHeaders: "*"
   data:
     redis:
-      host: 192.168.0.102
+      host: 192.168.0.105
       port: 6379
       password: jiangjing
       database: 0
       timeout: 5000
 
 nacos:
-  server-addr: 192.168.0.102:8848
+  server-addr: 192.168.0.105:8848
   namespace: public
   group: DEFAULT_GROUP
   username: nacos

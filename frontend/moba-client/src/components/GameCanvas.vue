@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <canvas ref="canvasRef" class="game-canvas"></canvas>
 </template>
 
@@ -12,7 +12,7 @@ import { lockstepManager } from '@/engine/LockstepManager'
 import { useGameStore } from '@/stores/game'
 import { HeroRole } from '@/types/game'
 import { heroDefinitions } from '@/data/heroes'
-import { connectToGateway, sendMatchRequest, enterBattle, isConnected, battlePlayerId, disconnect as disconnectBattle } from '@/network'
+import { isConnected, battleuserId, disconnect as disconnectBattle } from '@/network'
 import type { Hero, Vector2D, Skill } from '@/types/game'
 import { Container, Graphics, Texture } from 'pixi.js'
 
@@ -337,7 +337,7 @@ function createTestHero(id: string, name: string, title: string, role: HeroRole,
   }))
 
   return {
-    id, name, title, role, teamId, playerId: id, playerName,
+    id, name, title, role, teamId, userId: id, playerName,
     position: { ...position },
     hp: baseHp, maxHp: baseHp, mp: baseMp, maxMp: baseMp,
     level: 1, experience: 0, experienceToNextLevel: 100,
@@ -416,40 +416,11 @@ async function initTestHeroes(container: Container) {
 }
 
 async function tryConnectBattleServer(): Promise<boolean> {
-  try {
-    const connected = await connectToGateway()
-    if (!connected) {
-      console.warn('Failed to connect to gateway, using offline mode')
-      return false
-    }
-
-    const matchResult = await sendMatchRequest()
-    if (!matchResult.success) {
-      console.warn('Match request failed, using offline mode')
-      return false
-    }
-
-    if (matchResult.battleId) {
-      const heroRole = heroDefinitions.find(d => d.id === gameStore.selectedHeroId)
-      const heroIdNum = heroRole
-        ? ['warrior', 'mage', 'assassin', 'marksman', 'support', 'tank'].indexOf(heroRole.role) + 1
-        : 1
-
-      const enterResult = await enterBattle(matchResult.battleId, heroIdNum, 0)
-      if (!enterResult.success) {
-        console.warn('Enter battle failed:', enterResult.errorMessage)
-        return false
-      }
-
-      console.log('Entered battle:', enterResult.battleId, 'mapId:', enterResult.mapId)
-      return true
-    }
-
-    return false
-  } catch (e) {
-    console.warn('Battle server connection error, using offline mode:', e)
-    return false
+  if (isConnected.value) {
+    return true
   }
+  console.warn('战斗服务器未连接，使用离线模式')
+  return false
 }
 
 function gameLoop() {

@@ -1,8 +1,8 @@
 package com.moba.match.config;
 
 import com.moba.match.network.MatchNettyServer;
+import com.moba.netty.protocol.dispatcher.MessageDispatcher;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
 
@@ -10,26 +10,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class NettyServerRunner implements SmartLifecycle {
 
-    @Value("${match.websocket.port}")
-    private int websocketPort;
-
-    @Value("${match.websocket.path}")
-    private String webSocketPath;
-
-    @Value("${match.websocket.idleTimeoutSeconds}")
-    private int idleTimeoutSeconds;
-
-    private MatchNettyServer nettyServer;
+    private final MatchNettyServer nettyServer;
+    private final MessageDispatcher messageDispatcher;
     private volatile boolean running = false;
+
+    public NettyServerRunner(MatchNettyServer nettyServer, MessageDispatcher messageDispatcher) {
+        this.nettyServer = nettyServer;
+        this.messageDispatcher = messageDispatcher;
+    }
 
     @Override
     public void start() {
         try {
-            nettyServer = new MatchNettyServer(websocketPort, webSocketPath, idleTimeoutSeconds);
             nettyServer.start();
             running = true;
             log.info("匹配WebSocket服务启动成功, 端口={}, 路径={}, 空闲超时={}秒",
-                    websocketPort, webSocketPath, idleTimeoutSeconds);
+                    nettyServer.getConfig().getPort(),
+                    nettyServer.getConfig().getWebSocketPath(),
+                    nettyServer.getConfig().getIdleTimeoutSeconds());
         } catch (Exception e) {
             log.error("匹配WebSocket服务启动失败", e);
         }
@@ -37,9 +35,8 @@ public class NettyServerRunner implements SmartLifecycle {
 
     @Override
     public void stop() {
-        if (nettyServer != null) {
-            nettyServer.stop();
-        }
+        messageDispatcher.shutdown();
+        nettyServer.stop();
         running = false;
         log.info("匹配WebSocket服务已停止");
     }

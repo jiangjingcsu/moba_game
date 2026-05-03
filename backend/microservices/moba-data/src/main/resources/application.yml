@@ -1,4 +1,4 @@
-﻿﻿server:
+server:
   port: 8084
 
 spring:
@@ -15,14 +15,14 @@ spring:
     nacos:
       discovery:
         enabled: true
-        server-addr: 192.168.0.102:8848
+        server-addr: 192.168.0.105:8848
         namespace: public
         group: DEFAULT_GROUP
         username: nacos
         password: nacos
         register-enabled: true
       config:
-        server-addr: 192.168.0.102:8848
+        server-addr: 192.168.0.105:8848
         namespace: public
         group: DEFAULT_GROUP
         username: nacos
@@ -31,11 +31,11 @@ spring:
           enabled: false
   data:
     mongodb:
-      host: 192.168.0.102
+      host: 192.168.0.105
       port: 27017
       database: moba_data
     redis:
-      host: 192.168.0.102
+      host: 192.168.0.105
       port: 6379
       password: jiangjing
       database: 3
@@ -45,15 +45,15 @@ dubbo:
   qos:
     enable: false
   registry:
-    address: nacos://192.168.0.102:8848
+    address: nacos://192.168.0.105:8848
     username: nacos
     password: nacos
-    protocol:
-      name: dubbo
-      port: 20884
+  protocol:
+    name: dubbo
+    port: 20884
 
 rocketmq:
-  name-server: 192.168.0.102:9876
+  name-server: 192.168.0.105:9876
   consumer:
     group: moba-data-consumer
 

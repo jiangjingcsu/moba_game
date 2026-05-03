@@ -46,7 +46,7 @@ public class BattleEndConsumer implements RocketMQListener<BattleEndEvent> {
         try {
             BattleLog battleLog = new BattleLog();
             battleLog.setBattleId(result.getBattleId());
-            battleLog.setGameMode(result.getGameMode());
+            battleLog.setGameMode(result.getGameMode() != null ? result.getGameMode().getCode() : 0);
             battleLog.setStartTime(result.getStartTime());
             battleLog.setEndTime(result.getEndTime());
             battleLog.setDuration(result.getDuration());
@@ -55,7 +55,7 @@ public class BattleEndConsumer implements RocketMQListener<BattleEndEvent> {
             if (result.getPlayers() != null) {
                 battleLog.setPlayers(result.getPlayers().stream().map(p -> {
                     BattleLog.PlayerLog pl = new BattleLog.PlayerLog();
-                    pl.setPlayerId(p.getPlayerId());
+                    pl.setUserId(p.getUserId());
                     pl.setTeamId(p.getTeamId());
                     pl.setHeroId(p.getHeroId());
                     pl.setLevel(p.getLevel());
@@ -96,7 +96,7 @@ public class BattleEndConsumer implements RocketMQListener<BattleEndEvent> {
             if (event.getReplayFrameData() != null) {
                 Replay replay = new Replay();
                 replay.setBattleId(result.getBattleId());
-                replay.setGameMode(result.getGameMode());
+                replay.setGameMode(result.getGameMode() != null ? result.getGameMode().getCode() : 0);
                 replay.setStartTime(result.getStartTime());
                 replay.setEndTime(result.getEndTime());
                 replay.setWinnerTeamId(result.getWinnerTeamId());

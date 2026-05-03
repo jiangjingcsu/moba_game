@@ -1,41 +1,42 @@
 package com.moba.business.service;
 
 import com.moba.business.entity.quest.*;
+import com.moba.common.constant.GameMode;
 
 import java.util.List;
 import java.util.Map;
 
 public interface QuestService {
 
-    List<PlayerQuest> getPlayerQuests(Long playerId, QuestType questType);
+    List<PlayerQuest> getPlayerQuests(long userId, QuestType questType);
 
-    List<PlayerQuest> getPlayerActiveQuests(Long playerId);
+    List<PlayerQuest> getPlayerActiveQuests(long userId);
 
-    List<PlayerQuest> getPlayerActiveQuests(Long playerId, QuestType questType);
+    List<PlayerQuest> getPlayerActiveQuests(long userId, QuestType questType);
 
-    PlayerQuest claimReward(Long playerId, Long playerQuestId);
+    PlayerQuest claimReward(long userId, Long playerQuestId);
 
-    void refreshDailyQuests(Long playerId);
+    void refreshDailyQuests(long userId);
 
-    void refreshWeeklyQuests(Long playerId);
+    void refreshWeeklyQuests(long userId);
 
-    void initNoviceQuests(Long playerId);
+    void initNoviceQuests(long userId);
 
-    void initSeasonQuests(Long playerId);
+    void initSeasonQuests(long userId);
 
-    void onBattleEnd(Long playerId, BattleQuestContext context);
+    void onBattleEnd(long userId, BattleQuestContext context);
 
-    void onPlayerLevelUp(Long playerId, int newLevel);
+    void onPlayerLevelUp(long userId, int newLevel);
 
-    void onRankScoreChange(Long playerId, int newRankScore);
+    void onRankScoreChange(long userId, int newRankScore);
 
-    void checkAndExpireQuests(Long playerId);
+    void checkAndExpireQuests(long userId);
 
-    Map<String, Object> getQuestProgressSummary(Long playerId);
+    Map<String, Object> getQuestProgressSummary(long userId);
 
     record BattleQuestContext(
             boolean isWin,
-            int gameMode,
+            GameMode gameMode,
             int heroId,
             int killCount,
             int deathCount,

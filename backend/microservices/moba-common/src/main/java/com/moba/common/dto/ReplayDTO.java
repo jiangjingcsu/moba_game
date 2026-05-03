@@ -1,5 +1,6 @@
 package com.moba.common.dto;
 
+import com.moba.common.constant.GameMode;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -9,8 +10,8 @@ import java.util.List;
 public class ReplayDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String battleId;
-    private int gameMode;
+    private long battleId;
+    private GameMode gameMode;
     private long startTime;
     private long endTime;
     private int winnerTeamId;
@@ -23,7 +24,7 @@ public class ReplayDTO implements Serializable {
     @Data
     public static class PlayerInfoDTO implements Serializable {
         private static final long serialVersionUID = 1L;
-        private long playerId;
+        private long userId;
         private String nickname;
         private int teamId;
         private int heroId;

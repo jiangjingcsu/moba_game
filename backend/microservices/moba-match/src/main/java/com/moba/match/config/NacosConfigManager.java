@@ -1,51 +1,19 @@
 package com.moba.match.config;
 
-import com.alibaba.nacos.api.NacosFactory;
-import com.alibaba.nacos.api.config.ConfigService;
-import com.alibaba.nacos.api.config.listener.Listener;
-import com.alibaba.nacos.api.exception.NacosException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import lombok.Data;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import java.util.*;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Component
 public class NacosConfigManager {
 
-    @Value("${nacos.server-addr}")
-    private String serverAddr;
-
-    @Value("${nacos.username}")
-    private String username;
-
-    @Value("${nacos.password}")
-    private String password;
-
-    @Value("${nacos.namespace}")
-    private String namespace;
-
-    @Value("${nacos.group}")
-    private String group;
-
     @Value("${nacos.rankTier}")
     private String rankTier;
-
-    @Value("${nacos.config.dataId}")
-    private String configDataId;
-
-    @Value("${nacos.config.timeoutMs}")
-    private long configTimeoutMs;
 
     @Value("${match.rank.initialTolerance}")
     private int initialTolerance;
@@ -59,100 +27,29 @@ public class NacosConfigManager {
     @Value("${match.rank.toleranceExpandIntervalSeconds}")
     private int toleranceExpandIntervalSeconds;
 
-    private ConfigService configService;
     private volatile RankTierConfig rankTierConfig;
-    private final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
-    private final ScheduledExecutorService retryScheduler = Executors.newSingleThreadScheduledExecutor();
 
-    @Data
-    public static class RankTierConfig {
-        private String currentRankTier;
-        private List<RankTierRange> rankTierRanges;
-        private int initialTolerance = 200;
-        private int maxTolerance = 800;
-        private int toleranceExpandStep = 50;
-        private int toleranceExpandIntervalSeconds = 10;
-    }
+    private final NacosConfigConnector connector;
 
-    @Data
-    public static class RankTierRange {
-        private String tierName;
-        private int minScore;
-        private int maxScore;
+    public NacosConfigManager(NacosConfigConnector connector) {
+        this.connector = connector;
     }
 
     @PostConstruct
     public void init() {
-        try {
-            Properties properties = new Properties();
-            properties.setProperty("serverAddr", serverAddr);
-            properties.setProperty("namespace", namespace);
-            properties.setProperty("username", username);
-            properties.setProperty("password", password);
-
-            configService = NacosFactory.createConfigService(properties);
-            log.info("Nacos ConfigService 已创建: serverAddr={}", serverAddr);
-
-            loadConfig();
-
-            configService.addListener(configDataId, group, new Listener() {
-                @Override
-                public Executor getExecutor() {
-                    return Executors.newSingleThreadExecutor();
-                }
-
-                @Override
-                public void receiveConfigInfo(String configInfo) {
-                    log.info("收到Nacos配置变更通知: dataId={}", configDataId);
-                    parseConfig(configInfo);
-                }
-            });
-
-            log.info("Nacos配置监听已注册: dataId={}, group={}", configDataId, group);
-        } catch (NacosException e) {
-            log.warn("Nacos ConfigService初始化失败, 使用本地默认配置: {}", e.getMessage());
-            initDefaultConfig();
-            scheduleRetry();
-        }
-    }
-
-    private void scheduleRetry() {
-        retryScheduler.scheduleAtFixedRate(() -> {
-            try {
-                if (configService == null) {
-                    Properties properties = new Properties();
-                    properties.setProperty("serverAddr", serverAddr);
-                    properties.setProperty("namespace", namespace);
-                    properties.setProperty("username", username);
-                    properties.setProperty("password", password);
-                    configService = NacosFactory.createConfigService(properties);
-                    loadConfig();
-                    log.info("Nacos ConfigService 重连成功");
-                }
-            } catch (Exception ex) {
-                log.warn("Nacos ConfigService 重连失败: {}", ex.getMessage());
-            }
-        }, 10, 30, TimeUnit.SECONDS);
-    }
-
-    private void loadConfig() {
-        try {
-            String config = configService.getConfig(configDataId, group, configTimeoutMs);
-            if (config != null) {
-                parseConfig(config);
-            } else {
-                log.warn("Nacos配置不存在: dataId={}, 使用本地默认配置", configDataId);
-                initDefaultConfig();
-            }
-        } catch (NacosException e) {
-            log.warn("从Nacos加载配置失败, 使用本地默认配置: {}", e.getMessage());
+        String configYaml = connector.getConfig();
+        if (configYaml != null) {
+            parseConfig(configYaml);
+        } else {
             initDefaultConfig();
         }
+
+        connector.addConfigListener(this::parseConfig);
     }
 
     private void parseConfig(String configYaml) {
         try {
-            RankTierConfig parsed = yamlMapper.readValue(configYaml, RankTierConfig.class);
+            RankTierConfig parsed = connector.getYamlMapper().readValue(configYaml, RankTierConfig.class);
             if (parsed.getCurrentRankTier() != null) {
                 this.rankTierConfig = parsed;
                 log.info("Nacos段位配置已更新: currentRankTier={}, 段位区间数={}",
@@ -192,18 +89,6 @@ public class NacosConfigManager {
         range.setMinScore(min);
         range.setMaxScore(max);
         return range;
-    }
-
-    @PreDestroy
-    public void destroy() {
-        retryScheduler.shutdown();
-        if (configService != null) {
-            try {
-                configService.shutDown();
-            } catch (NacosException e) {
-                log.warn("Nacos ConfigService关闭失败", e);
-            }
-        }
     }
 
     public RankTierConfig getRankTierConfig() {

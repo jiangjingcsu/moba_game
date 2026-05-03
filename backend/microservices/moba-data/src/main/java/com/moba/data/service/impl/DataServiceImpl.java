@@ -1,5 +1,6 @@
 package com.moba.data.service.impl;
 
+import com.moba.common.constant.GameMode;
 import com.moba.common.dto.BattleLogDTO;
 import com.moba.common.dto.PlayerStatDTO;
 import com.moba.common.dto.ReplayDTO;
@@ -39,14 +40,14 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public Optional<BattleLogDTO> getBattleLog(String battleId) {
+    public Optional<BattleLogDTO> getBattleLog(long battleId) {
         return battleLogRepository.findByBattleId(battleId).map(this::toDTO);
     }
 
     @Override
-    public List<BattleLogDTO> getPlayerBattleHistory(long playerId, int limit) {
-        Page<BattleLog> page = battleLogRepository.findByPlayersPlayerIdOrderByStartTimeDesc(
-                playerId, PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "startTime")));
+    public List<BattleLogDTO> getUserBattleHistory(long userId, int limit) {
+        Page<BattleLog> page = battleLogRepository.findByPlayersUserIdOrderByStartTimeDesc(
+                userId, PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "startTime")));
         return page.getContent().stream().map(this::toDTO).collect(Collectors.toList());
     }
 
@@ -59,21 +60,21 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public Optional<ReplayDTO> getReplay(String battleId) {
+    public Optional<ReplayDTO> getReplay(long battleId) {
         return replayRepository.findByBattleId(battleId).map(this::toDTO);
     }
 
     @Override
-    public List<BattleLogDTO> getRecentBattles(int gameMode, int limit) {
+    public List<BattleLogDTO> getRecentBattles(GameMode gameMode, int limit) {
         Page<BattleLog> page = battleLogRepository.findByGameMode(
-                gameMode, PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "startTime")));
+                gameMode.getCode(), PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "startTime")));
         return page.getContent().stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     private BattleLog toEntity(BattleLogDTO dto) {
         BattleLog entity = new BattleLog();
         entity.setBattleId(dto.getBattleId());
-        entity.setGameMode(dto.getGameMode());
+        entity.setGameMode(dto.getGameMode() != null ? dto.getGameMode().getCode() : 0);
         entity.setStartTime(dto.getStartTime());
         entity.setEndTime(dto.getEndTime());
         entity.setDuration(dto.getDuration());
@@ -82,7 +83,7 @@ public class DataServiceImpl implements DataService {
         if (dto.getPlayers() != null) {
             entity.setPlayers(dto.getPlayers().stream().map(p -> {
                 BattleLog.PlayerLog pl = new BattleLog.PlayerLog();
-                pl.setPlayerId(p.getPlayerId());
+                pl.setUserId(p.getUserId());
                 pl.setTeamId(p.getTeamId());
                 pl.setHeroId(p.getHeroId());
                 pl.setLevel(p.getLevel());
@@ -122,7 +123,7 @@ public class DataServiceImpl implements DataService {
     private BattleLogDTO toDTO(BattleLog entity) {
         BattleLogDTO dto = new BattleLogDTO();
         dto.setBattleId(entity.getBattleId());
-        dto.setGameMode(entity.getGameMode());
+        dto.setGameMode(GameMode.fromCodeOrNull(entity.getGameMode()));
         dto.setStartTime(entity.getStartTime());
         dto.setEndTime(entity.getEndTime());
         dto.setDuration(entity.getDuration());
@@ -131,7 +132,7 @@ public class DataServiceImpl implements DataService {
         if (entity.getPlayers() != null) {
             dto.setPlayers(entity.getPlayers().stream().map(p -> {
                 PlayerStatDTO pl = new PlayerStatDTO();
-                pl.setPlayerId(p.getPlayerId());
+                pl.setUserId(p.getUserId());
                 pl.setTeamId(p.getTeamId());
                 pl.setHeroId(p.getHeroId());
                 pl.setLevel(p.getLevel());
@@ -171,7 +172,7 @@ public class DataServiceImpl implements DataService {
     private Replay toEntity(ReplayDTO dto) {
         Replay entity = new Replay();
         entity.setBattleId(dto.getBattleId());
-        entity.setGameMode(dto.getGameMode());
+        entity.setGameMode(dto.getGameMode() != null ? dto.getGameMode().getCode() : 0);
         entity.setStartTime(dto.getStartTime());
         entity.setEndTime(dto.getEndTime());
         entity.setWinnerTeamId(dto.getWinnerTeamId());
@@ -183,7 +184,7 @@ public class DataServiceImpl implements DataService {
         if (dto.getPlayers() != null) {
             entity.setPlayers(dto.getPlayers().stream().map(p -> {
                 Replay.PlayerInfo pi = new Replay.PlayerInfo();
-                pi.setPlayerId(p.getPlayerId());
+                pi.setUserId(p.getUserId());
                 pi.setNickname(p.getNickname());
                 pi.setTeamId(p.getTeamId());
                 pi.setHeroId(p.getHeroId());
@@ -200,7 +201,7 @@ public class DataServiceImpl implements DataService {
     private ReplayDTO toDTO(Replay entity) {
         ReplayDTO dto = new ReplayDTO();
         dto.setBattleId(entity.getBattleId());
-        dto.setGameMode(entity.getGameMode());
+        dto.setGameMode(GameMode.fromCodeOrNull(entity.getGameMode()));
         dto.setStartTime(entity.getStartTime());
         dto.setEndTime(entity.getEndTime());
         dto.setWinnerTeamId(entity.getWinnerTeamId());
@@ -212,7 +213,7 @@ public class DataServiceImpl implements DataService {
         if (entity.getPlayers() != null) {
             dto.setPlayers(entity.getPlayers().stream().map(p -> {
                 ReplayDTO.PlayerInfoDTO pi = new ReplayDTO.PlayerInfoDTO();
-                pi.setPlayerId(p.getPlayerId());
+                pi.setUserId(p.getUserId());
                 pi.setNickname(p.getNickname());
                 pi.setTeamId(p.getTeamId());
                 pi.setHeroId(p.getHeroId());

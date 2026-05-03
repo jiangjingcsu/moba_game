@@ -14,6 +14,8 @@ public class NettyServerConfig {
     private int maxFrameLength = 65536;
     private String webSocketPath = "/ws";
     private int heartbeatIntervalSeconds = 30;
+    private int businessThreadCount = 8;
+    private String jwtSecret;
 
     public static NettyServerConfig of(String host, int port) {
         NettyServerConfig config = new NettyServerConfig();

@@ -8,9 +8,8 @@ public interface BattleService {
 
     CreateBattleResponse createBattle(CreateBattleRequest request);
 
-    BattleResultDTO getBattleResult(String battleId);
-
-    boolean isBattleRunning(String battleId);
+    BattleResultDTO getBattleResult(long battleId);
+    boolean isBattleRunning(long battleId);
 
     int getRoomCount();
 

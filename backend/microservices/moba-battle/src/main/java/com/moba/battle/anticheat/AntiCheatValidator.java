@@ -1,6 +1,5 @@
 package com.moba.battle.anticheat;
 
-import com.moba.battle.config.SpringContextHolder;
 import com.moba.battle.model.BattlePlayer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,12 +18,11 @@ public class AntiCheatValidator {
         this.skillRecords = new ConcurrentHashMap<>();
     }
 
-    public static AntiCheatValidator getInstance() {
-        return SpringContextHolder.getBean(AntiCheatValidator.class);
-    }
+    private static final int MOVE_VIOLATION_THRESHOLD = 10;
+    private static final int SKILL_VIOLATION_THRESHOLD = 5;
 
-    public boolean validateMove(long playerId, BattlePlayer player, float targetX, float targetY, long deltaTimeMs) {
-        PlayerMoveRecord record = moveRecords.computeIfAbsent(playerId, k -> new PlayerMoveRecord());
+    public boolean validateMove(long userId, BattlePlayer player, float targetX, float targetY, long deltaTimeMs) {
+        PlayerMoveRecord record = moveRecords.computeIfAbsent(userId, k -> new PlayerMoveRecord());
 
         int dx = (int)targetX - player.getPosition().x;
         int dy = (int)targetY - player.getPosition().y;
@@ -40,37 +38,41 @@ public class AntiCheatValidator {
 
         if (!isValid) {
             log.warn("移动速度验证失败: player={}, distance={}, max={}, pos=({}, {})",
-                    playerId, distance, maxDistance, targetX, targetY);
+                    userId, distance, maxDistance, targetX, targetY);
             record.violationCount++;
+            if (record.violationCount >= MOVE_VIOLATION_THRESHOLD) {
+                log.error("玩家{}移动违规次数达到阈值{}, 标记为可疑并拒绝操作", userId, MOVE_VIOLATION_THRESHOLD);
+                return false;
+            }
         }
 
         return isValid;
     }
 
-    public boolean validateSkillCast(long playerId, BattlePlayer player, int skillId) {
+    public boolean validateSkillCast(long userId, BattlePlayer player, int skillId) {
         long currentTime = System.currentTimeMillis();
 
         BattlePlayer.Skill skill = player.getSkills().get(skillId);
         if (skill == null) return false;
 
-        SkillCastRecord record = skillRecords.computeIfAbsent(playerId, k -> new SkillCastRecord());
+        SkillCastRecord record = skillRecords.computeIfAbsent(userId, k -> new SkillCastRecord());
 
         long timeSinceLastCast = currentTime - skill.getLastCastTime();
         if (timeSinceLastCast < skill.getCooldown()) {
             log.warn("技能冷却违规: player={}, skill={}, elapsed={}, cd={}",
-                    playerId, skillId, timeSinceLastCast, skill.getCooldown());
+                    userId, skillId, timeSinceLastCast, skill.getCooldown());
             record.violationCount++;
             return false;
         }
 
         if (player.getCurrentMp() < skill.getMpCost()) {
             log.warn("技能魔法值不足: player={}, skill={}, mp={}, cost={}",
-                    playerId, skillId, player.getCurrentMp(), skill.getMpCost());
+                    userId, skillId, player.getCurrentMp(), skill.getMpCost());
             record.violationCount++;
             return false;
         }
 
-        skillRecords.put(playerId, record);
+        skillRecords.put(userId, record);
         return true;
     }
 
@@ -86,27 +88,27 @@ public class AntiCheatValidator {
         return true;
     }
 
-    public boolean checkPlayerSuspicion(long playerId) {
-        PlayerMoveRecord moveRecord = moveRecords.get(playerId);
-        if (moveRecord != null && moveRecord.violationCount > 10) {
+    public boolean checkPlayerSuspicion(long userId) {
+        PlayerMoveRecord moveRecord = moveRecords.get(userId);
+        if (moveRecord != null && moveRecord.violationCount >= MOVE_VIOLATION_THRESHOLD) {
             log.error("玩家{}被标记为可疑行为: {}次移动违规",
-                    playerId, moveRecord.violationCount);
+                    userId, moveRecord.violationCount);
             return true;
         }
 
-        SkillCastRecord skillRecord = skillRecords.get(playerId);
-        if (skillRecord != null && skillRecord.violationCount > 5) {
+        SkillCastRecord skillRecord = skillRecords.get(userId);
+        if (skillRecord != null && skillRecord.violationCount >= SKILL_VIOLATION_THRESHOLD) {
             log.error("玩家{}被标记为可疑技能使用: {}次冷却违规",
-                    playerId, skillRecord.violationCount);
+                    userId, skillRecord.violationCount);
             return true;
         }
 
         return false;
     }
 
-    public void clearPlayerRecord(long playerId) {
-        moveRecords.remove(playerId);
-        skillRecords.remove(playerId);
+    public void clearPlayerRecord(long userId) {
+        moveRecords.remove(userId);
+        skillRecords.remove(userId);
     }
 
     private static class PlayerMoveRecord {

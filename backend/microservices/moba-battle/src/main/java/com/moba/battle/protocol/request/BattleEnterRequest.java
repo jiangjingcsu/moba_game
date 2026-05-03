@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class BattleEnterRequest {
-    private String roomId;
+    private long battleId;
     private int heroId;
     private int teamId;
 }

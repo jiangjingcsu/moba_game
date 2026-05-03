@@ -1,5 +1,5 @@
-﻿﻿nacos:
-  server-addr: 192.168.0.102:8848
+nacos:
+  server-addr: 192.168.0.105:8848
   username: nacos
   password: nacos
   namespace: public
@@ -42,40 +42,27 @@ match:
   defaultRankScore: 1000
 
 redis:
-  host: 192.168.0.102
+  host: 192.168.0.105
   port: 6379
   password: jiangjing
   database: 1
   timeout: 5000
 
-dubbo:
-  application:
-    name: dubbo-moba-match
-    qos-enable: false
-  registry:
-    address: nacos://192.168.0.102:8848
-    username: nacos
-    password: nacos
-    parameters:
-      namespace: public
-    register-mode: instance
-  protocol:
-    name: dubbo
-    port: 20782
-    serialization: hessian2
-  provider:
-    prefer-serialization: hessian2
-  consumer:
-    prefer-serialization: hessian2
-    timeout: 3000
-    retries: 0
-
 rocketmq:
-  name-server: 192.168.0.102:9876
+  name-server: 192.168.0.105:9876
   producer-group: moba-match-producer
   send-timeout-ms: 3000
+
+jwt:
+  secret: moba-game-jwt-secret-key-2024-must-be-at-least-256-bits
+
+gateway:
+  internal-secret: moba-gateway-internal-secret
 
 logging:
   level:
     root: INFO
     com.moba.match: DEBUG
+
+netty:
+  business-thread-count: 4

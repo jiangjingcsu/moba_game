@@ -18,7 +18,6 @@
     </appender>
 
     <logger name="com.moba.battle" level="DEBUG"/>
-    <logger name="org.apache.dubbo" level="WARN"/>
     <logger name="org.apache.rocketmq" level="WARN"/>
     <logger name="io.netty" level="INFO"/>
     <logger name="com.alibaba.nacos.client.naming" level="WARN"/>

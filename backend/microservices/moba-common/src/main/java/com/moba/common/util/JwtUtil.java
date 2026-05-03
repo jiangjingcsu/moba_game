@@ -12,9 +12,9 @@ import java.util.Map;
 
 public class JwtUtil {
 
-    public static String generateToken(long playerId, String username, String secret, long expirationMs) {
+    public static String generateToken(long userId, String username, String secret, long expirationMs) {
         return Jwts.builder()
-                .claims(Map.of("playerId", playerId, "username", username))
+                .claims(Map.of("userId", userId, "username", username))
                 .subject(username)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expirationMs))
@@ -38,11 +38,11 @@ public class JwtUtil {
         return parseToken(token, secret) != null;
     }
 
-    public static Long getPlayerId(Claims claims) {
+    public static Long getUserId(Claims claims) {
         if (claims == null) return null;
-        Object playerId = claims.get("playerId");
-        if (playerId instanceof Integer) return ((Integer) playerId).longValue();
-        if (playerId instanceof Long) return (Long) playerId;
+        Object userId = claims.get("userId");
+        if (userId instanceof Integer) return ((Integer) userId).longValue();
+        if (userId instanceof Long) return (Long) userId;
         return null;
     }
 

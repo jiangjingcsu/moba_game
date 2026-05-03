@@ -4,8 +4,7 @@ import lombok.Data;
 
 @Data
 public class BattleActionRequest {
-    private long playerId;
-    private String battleId;
+    private long battleId;
     private int actionType;
     private float targetX;
     private float targetY;

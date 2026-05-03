@@ -61,7 +61,7 @@ public class PhysicsWorld {
         return physicsCoord / worldScale;
     }
 
-    public long createPlayerBody(long playerId, float gameX, float gameY, float collisionRadius) {
+    public long createPlayerBody(long userId, float gameX, float gameY, float collisionRadius) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;
         bodyDef.position.set(toPhysics(gameX), toPhysics(gameY));
@@ -83,9 +83,9 @@ public class PhysicsWorld {
 
         body.createFixture(fixtureDef);
 
-        long bodyId = bodyMapper.registerBody(body, playerId, PhysicsBodyMapper.BodyType.PLAYER);
+        long bodyId = bodyMapper.registerBody(body, userId, PhysicsBodyMapper.BodyType.PLAYER);
         log.debug("玩家物理体已创建: 玩家ID={}, 物理体ID={}, 位置=({},{})",
-                playerId, bodyId, gameX, gameY);
+                userId, bodyId, gameX, gameY);
         return bodyId;
     }
 

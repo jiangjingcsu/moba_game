@@ -1,4 +1,4 @@
-import { useGameStore } from '@/stores/game'
+﻿import { useGameStore } from '@/stores/game'
 import { getFrameBuffer, getCurrentFrame, sendMoveInput, sendSkillInput, isConnected, isSynced, requestResync } from '@/network'
 import type { Hero, Vector2D, Skill } from '@/types/game'
 import { heroDefinitions } from '@/data/heroes'
@@ -99,7 +99,7 @@ export class LockstepManager {
       title: definition?.title || '',
       role,
       teamId: data.teamId ?? 0,
-      playerId: heroId,
+      userId: heroId,
       playerName: `Player_${heroId}`,
       position: data.position || { x: 0, y: 0 },
       hp: data.hp ?? baseHp,

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="login-screen">
     <div class="login-bg">
       <div class="particles"></div>
@@ -89,7 +89,7 @@ async function handleLogin() {
     const result = await httpLogin(username.value, password.value)
     if (result.success && result.playerInfo) {
       gameStore.setPlayerInfo({
-        playerId: result.playerInfo.playerId,
+        userId: result.playerInfo.userId,
         playerName: result.playerInfo.playerName || username.value,
         nickname: result.playerInfo.nickname || result.playerInfo.playerName || username.value,
         rank: result.playerInfo.rank || 1,
@@ -107,7 +107,7 @@ async function handleLogin() {
     }
   } catch (e: any) {
     gameStore.setPlayerInfo({
-      playerId: 1,
+      userId: 1,
       playerName: username.value,
       nickname: username.value,
       rank: 3,

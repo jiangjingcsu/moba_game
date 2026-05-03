@@ -46,14 +46,14 @@ public class MapTerrainSystem {
             boolean inBase = isInTerrain(px, py, template.getTerrain().getBases());
 
             if (inBush) {
-                currentInBush.add(player.getPlayerId());
+                currentInBush.add(player.getUserId());
                 player.setStealthed(true);
             } else {
                 player.setStealthed(false);
             }
 
             if (inRiver) {
-                currentInRiver.add(player.getPlayerId());
+                currentInRiver.add(player.getUserId());
                 applyRiverSlow(player);
             } else {
                 removeRiverSlow(player);
@@ -62,7 +62,7 @@ public class MapTerrainSystem {
             if (inBase) {
                 TerrainRegion baseRegion = findBaseForPosition(px, py);
                 if (baseRegion != null && baseRegion.getTeamId() == player.getTeamId()) {
-                    currentInBase.add(player.getPlayerId());
+                    currentInBase.add(player.getUserId());
                     applyBaseHeal(player, baseRegion.getHealRate());
                 }
             }
@@ -93,9 +93,9 @@ public class MapTerrainSystem {
     }
 
     private void applyRiverSlow(BattlePlayer player) {
-        long playerId = player.getPlayerId();
-        if (!originalSpeeds.containsKey(playerId)) {
-            originalSpeeds.put(playerId, (float) player.getMoveSpeed());
+        long userId = player.getUserId();
+        if (!originalSpeeds.containsKey(userId)) {
+            originalSpeeds.put(userId, (float) player.getMoveSpeed());
         }
 
         if (template.getTerrain().getRiver() != null) {
@@ -103,7 +103,7 @@ public class MapTerrainSystem {
                 if (river.contains(player.getPosition().x, player.getPosition().y)) {
                     float factor = river.getSpeedFactor();
                     if (factor <= 0) factor = 0.7f;
-                    float originalSpeed = originalSpeeds.get(playerId);
+                    float originalSpeed = originalSpeeds.get(userId);
                     int slowedSpeed = (int) (originalSpeed * factor);
                     if (player.getMoveSpeed() != slowedSpeed) {
                         player.setMoveSpeed(slowedSpeed);
@@ -115,8 +115,8 @@ public class MapTerrainSystem {
     }
 
     private void removeRiverSlow(BattlePlayer player) {
-        long playerId = player.getPlayerId();
-        Float originalSpeed = originalSpeeds.remove(playerId);
+        long userId = player.getUserId();
+        Float originalSpeed = originalSpeeds.remove(userId);
         if (originalSpeed != null) {
             player.setMoveSpeed(originalSpeed.intValue());
         }
@@ -134,16 +134,16 @@ public class MapTerrainSystem {
         }
     }
 
-    public boolean isPlayerInBush(long playerId) {
-        return playersInBush.contains(playerId);
+    public boolean isPlayerInBush(long userId) {
+        return playersInBush.contains(userId);
     }
 
-    public boolean isPlayerInRiver(long playerId) {
-        return playersInRiver.contains(playerId);
+    public boolean isPlayerInRiver(long userId) {
+        return playersInRiver.contains(userId);
     }
 
-    public boolean isPlayerInBase(long playerId) {
-        return playersInBase.contains(playerId);
+    public boolean isPlayerInBase(long userId) {
+        return playersInBase.contains(userId);
     }
 
     public boolean isInEnemyBase(BattlePlayer player) {

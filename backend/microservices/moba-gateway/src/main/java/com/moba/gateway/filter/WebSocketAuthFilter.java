@@ -61,17 +61,17 @@ public class WebSocketAuthFilter implements GlobalFilter, Ordered {
                     }
 
                     JwtService.TokenInfo tokenInfo = jwtService.parseTokenInfo(token);
-                    if (tokenInfo == null || tokenInfo.getPlayerId() == 0) {
+                    if (tokenInfo == null || tokenInfo.getUserId() == 0) {
                         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                         return exchange.getResponse().setComplete();
                     }
 
                     ServerHttpRequest modifiedRequest = request.mutate()
-                            .header("X-Player-Id", String.valueOf(tokenInfo.getPlayerId()))
+                            .header("X-User-Id", String.valueOf(tokenInfo.getUserId()))
                             .header("X-Username", tokenInfo.getUsername() != null ? tokenInfo.getUsername() : "")
                             .build();
 
-                    log.debug("WebSocket认证成功: playerId={}, username={}", tokenInfo.getPlayerId(), tokenInfo.getUsername());
+                    log.debug("WebSocket认证成功: userId={}, username={}", tokenInfo.getUserId(), tokenInfo.getUsername());
                     return chain.filter(exchange.mutate().request(modifiedRequest).build());
                 });
     }

@@ -1,6 +1,6 @@
 package com.moba.battle.model;
 
-import io.netty.channel.ChannelHandlerContext;
+import com.moba.netty.user.User;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,12 +10,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 @Slf4j
 public class Player {
-    private long playerId;
+    private long userId;
     private String playerName;
     private int level;
     private int rank;
     private int rankScore;
-    private ChannelHandlerContext ctx;
+    private User user;
     private PlayerState state;
     private long currentBattleId;
     private long lastHeartbeatTime;
@@ -49,12 +49,14 @@ public class Player {
     }
 
     public boolean isConnected() {
-        return ctx != null && ctx.channel().isActive();
+        return user != null && user.isActive();
     }
 
     public void sendToClient(Object msg) {
-        if (ctx != null && ctx.channel().isActive()) {
-            ctx.writeAndFlush(msg);
+        if (user != null && user.isActive()) {
+            if (msg instanceof com.moba.netty.protocol.MessagePacket) {
+                user.send((com.moba.netty.protocol.MessagePacket) msg);
+            }
         }
     }
 }

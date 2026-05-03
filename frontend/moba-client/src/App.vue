@@ -7,6 +7,7 @@
     <LoadingScreen v-if="gameStore.gameState === 'loading'" />
     <GameCanvas v-if="gameStore.gameState === 'playing'" />
     <GameUI v-if="gameStore.gameState === 'playing'" />
+    <DebugSidebar />
   </div>
 </template>
 
@@ -19,6 +20,7 @@ import MatchScreen from './components/MatchScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 import GameCanvas from './components/GameCanvas.vue'
 import GameUI from './components/GameUI.vue'
+import DebugSidebar from './components/DebugSidebar.vue'
 import { useGameStore } from './stores/game'
 
 const gameStore = useGameStore()

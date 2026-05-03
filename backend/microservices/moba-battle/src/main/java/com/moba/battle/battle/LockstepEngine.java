@@ -1,15 +1,21 @@
 package com.moba.battle.battle;
-import com.moba.battle.storage.BattleLogStorage;
 
-import com.moba.battle.config.SpringContextHolder;
-import com.moba.battle.config.ServerConfig;
-import com.moba.battle.model.*;
+import com.moba.battle.model.BattlePlayer;
+import com.moba.battle.model.BattleSession;
+import com.moba.battle.model.FrameInput;
+import com.moba.battle.model.FrameState;
+import com.moba.battle.model.SkillConfig;
 import com.moba.battle.ai.AIController;
-import com.moba.battle.ai.AIState;
 import com.moba.battle.ai.AIBot;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,7 +25,7 @@ public class LockstepEngine {
     private static final int MAX_FRAME_STATES = 3600;
     private static final int MAX_FRAME_HASHES = 1000;
 
-    private final String battleId;
+    private final long battleId;
     private final BattleSession session;
     private final int tickRate;
     private final long tickIntervalMs;
@@ -33,6 +39,7 @@ public class LockstepEngine {
     private final ConcurrentLinkedQueue<FrameInput> pendingInputs;
 
     private final List<FrameState> frameStates;
+    private final Object frameStatesLock = new Object();
     private final Map<Integer, Long> frameHashes;
 
     private long lastTickTime;
@@ -45,35 +52,14 @@ public class LockstepEngine {
     private AIController aiController;
     private boolean aiEnabled;
 
-    public LockstepEngine(String battleId, BattleSession session) {
-        ServerConfig config = SpringContextHolder.getBean(ServerConfig.class);
-        this.battleId = battleId;
-        this.session = session;
-        this.tickRate = config.getTickRate();
-        this.tickIntervalMs = 1000 / tickRate;
-        this.inputDelayFrames = config.getInputDelayFrames();
-        this.hashCheckIntervalFrames = config.getHashCheckIntervalFrames();
+    private SkillCollisionSystem collisionSystem;
+    private static final Map<Integer, SkillConfig> SKILL_CONFIGS = SkillConfig.loadAllSkills();
 
-        this.currentFrame = 0;
-        this.running = false;
-
-        this.frameInputs = new ConcurrentHashMap<>();
-        this.pendingInputs = new ConcurrentLinkedQueue<>();
-        this.frameStates = Collections.synchronizedList(new ArrayList<>());
-        this.frameHashes = new ConcurrentHashMap<>();
-
-        this.lastTickTime = 0;
-        this.syncErrorCount = new AtomicInteger(0);
-
-        this.randomSeed = System.nanoTime();
-        this.randomGenerator = new Random(randomSeed);
-        this.aiEnabled = false;
-
-        log.info("锁步引擎已创建: battleId={}, 帧率={}Hz, 输入延迟={}帧",
-                battleId, tickRate, inputDelayFrames);
+    public LockstepEngine(int tickRate, int defaultGridSize, long battleId) {
+        this(battleId, null, tickRate, 2, 60);
     }
 
-    public LockstepEngine(String battleId, BattleSession session, int tickRate, int inputDelayFrames, int hashCheckIntervalFrames) {
+    public LockstepEngine(long battleId, BattleSession session, int tickRate, int inputDelayFrames, int hashCheckIntervalFrames) {
         this.battleId = battleId;
         this.session = session;
         this.tickRate = tickRate;
@@ -86,7 +72,7 @@ public class LockstepEngine {
 
         this.frameInputs = new ConcurrentHashMap<>();
         this.pendingInputs = new ConcurrentLinkedQueue<>();
-        this.frameStates = Collections.synchronizedList(new ArrayList<>());
+        this.frameStates = new ArrayList<>();
         this.frameHashes = new ConcurrentHashMap<>();
 
         this.lastTickTime = 0;
@@ -102,6 +88,10 @@ public class LockstepEngine {
 
     public void setEventListener(BattleEventListener listener) {
         this.eventListener = listener;
+    }
+
+    public void setCollisionSystem(SkillCollisionSystem system) {
+        this.collisionSystem = system;
     }
 
     public void enableAI(AIController controller, int botLevel) {
@@ -150,10 +140,12 @@ public class LockstepEngine {
         executeGameLogic();
 
         FrameState state = captureState();
-        if (frameStates.size() >= MAX_FRAME_STATES) {
-            frameStates.subList(0, frameStates.size() - MAX_FRAME_STATES / 2).clear();
+        synchronized (frameStatesLock) {
+            if (frameStates.size() >= MAX_FRAME_STATES) {
+                frameStates.subList(0, frameStates.size() - MAX_FRAME_STATES / 2).clear();
+            }
+            frameStates.add(state);
         }
-        frameStates.add(state);
 
         if (currentFrame % hashCheckIntervalFrames == 0) {
             long hash = state.computeHash();
@@ -166,7 +158,7 @@ public class LockstepEngine {
         }
 
         if (eventListener != null) {
-            eventListener.onFrameUpdate(currentFrame, state);
+            eventListener.onFrameUpdate(battleId, currentFrame, state);
         }
 
         checkGameOver();
@@ -175,8 +167,8 @@ public class LockstepEngine {
     private void collectInputs() {
         List<FrameInput> inputs = new ArrayList<>();
 
-        for (Long playerId : session.getBattlePlayers().keySet()) {
-            FrameInput input = pollInputForPlayer(playerId);
+        for (long userId : session.getBattlePlayers().keySet()) {
+            FrameInput input = pollInputForPlayer(userId);
             if (input != null) {
                 input.setFrameNumber(currentFrame);
                 inputs.add(input);
@@ -193,11 +185,11 @@ public class LockstepEngine {
         }
     }
 
-    private FrameInput pollInputForPlayer(long playerId) {
+    private FrameInput pollInputForPlayer(long userId) {
         Iterator<FrameInput> iterator = pendingInputs.iterator();
         while (iterator.hasNext()) {
             FrameInput input = iterator.next();
-            if (input.getPlayerId() == playerId) {
+            if (input.getUserId() == userId) {
                 iterator.remove();
                 return input;
             }
@@ -219,7 +211,7 @@ public class LockstepEngine {
         List<FrameInput> inputs = frameInputs.getOrDefault(currentFrame, Collections.emptyList());
 
         for (FrameInput input : inputs) {
-            BattlePlayer player = session.getPlayer(input.getPlayerId());
+            BattlePlayer player = session.getPlayer(input.getUserId());
             if (player == null) continue;
 
             switch (input.getType()) {
@@ -244,178 +236,177 @@ public class LockstepEngine {
         updateDeadPlayers();
     }
 
-    private SkillCollisionSystem collisionSystem;
-    private static final Map<Integer, SkillConfig> SKILL_CONFIGS = SkillConfig.loadAllSkills();
-
-    public void setCollisionSystem(SkillCollisionSystem system) {
-        this.collisionSystem = system;
-    }
+    private static final com.fasterxml.jackson.databind.ObjectMapper JSON_MAPPER =
+            new com.fasterxml.jackson.databind.ObjectMapper();
 
     private void handleMove(BattlePlayer player, FrameInput input) {
         if (player.isDead()) return;
 
-        String content = new String(input.getData());
-        String[] parts = content.split("\\|");
-        if (parts.length < 4) return;
+        try {
+            com.fasterxml.jackson.databind.JsonNode node = JSON_MAPPER.readTree(input.getData());
+            int targetX = node.get("x").asInt();
+            int targetY = node.get("y").asInt();
 
-        int targetX = Integer.parseInt(parts[2]);
-        int targetY = Integer.parseInt(parts[3]);
+            int dx = targetX - player.getPosition().x;
+            int dy = targetY - player.getPosition().y;
+            int distance = (int) Math.sqrt(dx * dx + dy * dy);
 
-        int dx = targetX - player.getPosition().x;
-        int dy = targetY - player.getPosition().y;
-        int distance = (int) Math.sqrt(dx * dx + dy * dy);
+            int maxMove = player.getMoveSpeed() / tickRate;
 
-        int maxMove = player.getMoveSpeed() / tickRate;
+            int newX, newY;
+            if (distance <= maxMove) {
+                newX = targetX;
+                newY = targetY;
+            } else {
+                newX = player.getPosition().x + (dx * maxMove / Math.max(1, distance));
+                newY = player.getPosition().y + (dy * maxMove / Math.max(1, distance));
+            }
 
-        int newX, newY;
-        if (distance <= maxMove) {
-            newX = targetX;
-            newY = targetY;
-        } else {
-            newX = player.getPosition().x + (dx * maxMove / Math.max(1, distance));
-            newY = player.getPosition().y + (dy * maxMove / Math.max(1, distance));
-        }
+            player.getPosition().x = newX;
+            player.getPosition().y = newY;
 
-        player.getPosition().x = newX;
-        player.getPosition().y = newY;
+            if (collisionSystem != null) {
+                collisionSystem.getGridDetector().updatePlayerPosition(player);
+            }
 
-        if (collisionSystem != null) {
-            collisionSystem.getGridDetector().updatePlayerPosition(player);
-        }
-
-        if (eventListener != null) {
-            eventListener.onPlayerMove(player.getPlayerId(), newX, newY);
+            if (eventListener != null) {
+                eventListener.onPlayerMove(battleId, player.getUserId(), newX, newY);
+            }
+        } catch (Exception e) {
+            log.warn("移动数据解析失败: userId={}", player.getUserId());
         }
     }
 
     private void handleAttack(BattlePlayer player, FrameInput input) {
         if (player.isDead()) return;
 
-        String content = new String(input.getData());
-        String[] parts = content.split("\\|");
-        if (parts.length < 3) return;
+        try {
+            com.fasterxml.jackson.databind.JsonNode node = JSON_MAPPER.readTree(input.getData());
+            long targetId = node.get("targetId").asLong();
+            BattlePlayer target = session.getPlayer(targetId);
 
-        long targetId = Long.parseLong(parts[2]);
-        BattlePlayer target = session.getPlayer(targetId);
+            if (target == null || target.getTeamId() == player.getTeamId()) return;
 
-        if (target == null || target.getTeamId() == player.getTeamId()) return;
+            int damage = calculateDamage(player, target);
+            target.takeDamage(damage);
 
-        int damage = calculateDamage(player, target);
-        target.takeDamage(damage);
+            if (eventListener != null) {
+                eventListener.onPlayerAttack(battleId, player.getUserId(), targetId, damage);
+            }
 
-        if (eventListener != null) {
-            eventListener.onPlayerAttack(player.getPlayerId(), targetId, damage);
-        }
-
-        if (target.isDead()) {
-            onPlayerKilled(player, target);
+            if (target.isDead()) {
+                onPlayerKilled(player, target);
+            }
+        } catch (Exception e) {
+            log.warn("攻击数据解析失败: userId={}", player.getUserId());
         }
     }
 
     private void handleSkillCast(BattlePlayer player, FrameInput input) {
         if (player.isDead()) return;
 
-        String content = new String(input.getData());
-        String[] parts = content.split("\\|");
-        if (parts.length < 4) return;
+        try {
+            com.fasterxml.jackson.databind.JsonNode node = JSON_MAPPER.readTree(input.getData());
+            int skillId = node.get("skillId").asInt();
+            int targetX = node.get("x").asInt();
+            int targetY = node.get("y").asInt();
+            int facing = node.has("facing") ? node.get("facing").asInt() : 0;
 
-        int skillId = Integer.parseInt(parts[1]);
-        long targetId = 0;
-        int targetX = Integer.parseInt(parts[2]);
-        int targetY = Integer.parseInt(parts[3]);
-        int facing = parts.length > 4 ? Integer.parseInt(parts[4]) : 0;
-
-        BattlePlayer.Skill skill = player.getSkills().get(skillId);
-        if (skill == null) {
-            skill = createDefaultSkill(skillId);
-            player.getSkills().put(skillId, skill);
-        }
-
-        long currentTime = currentFrame * tickIntervalMs;
-        if (!skill.canCast(currentTime)) {
-            return;
-        }
-
-        if (player.getCurrentMp() < skill.getMpCost()) {
-            return;
-        }
-
-        skill.setLastCastTime(currentTime);
-        player.setCurrentMp(player.getCurrentMp() - skill.getMpCost());
-
-        if (collisionSystem != null) {
-            SkillConfig skillConfig = SKILL_CONFIGS.get(skillId);
-            if (skillConfig == null) {
-                skillConfig = createDefaultSkillConfig(skillId);
+            BattlePlayer.Skill skill = player.getSkills().get(skillId);
+            if (skill == null) {
+                skill = createDefaultSkill(skillId);
+                player.getSkills().put(skillId, skill);
             }
 
-            SkillCollisionSystem.SkillCastInfo castInfo = skillConfig.toSkillCastInfo(
-                    player, targetId, targetX, targetY, facing, currentFrame);
+            long currentTime = currentFrame * tickIntervalMs;
+            if (!skill.canCast(currentTime)) {
+                return;
+            }
 
-            List<Long> hitPlayers = collisionSystem.checkSkillHit(castInfo);
+            if (player.getCurrentMp() < skill.getMpCost()) {
+                return;
+            }
 
-            for (Long hitPlayerId : hitPlayers) {
-                BattlePlayer hitPlayer = session.getPlayer(hitPlayerId);
-                if (hitPlayer != null && hitPlayer.getTeamId() != player.getTeamId()) {
-                    int damage = calculateSkillDamage(player, hitPlayer, skill);
-                    hitPlayer.takeDamage(damage);
+            skill.setLastCastTime(currentTime);
+            player.setCurrentMp(player.getCurrentMp() - skill.getMpCost());
 
-                    if (eventListener != null) {
-                        eventListener.onSkillCast(player.getPlayerId(), skillId, hitPlayerId, damage);
-                    }
+            if (collisionSystem != null) {
+                SkillConfig skillConfig = SKILL_CONFIGS.get(skillId);
+                if (skillConfig == null) {
+                    skillConfig = createDefaultSkillConfig(skillId);
+                }
 
-                    if (hitPlayer.isDead()) {
-                        onPlayerKilled(player, hitPlayer);
+                long targetId = 0;
+                SkillCollisionSystem.SkillCastInfo castInfo = skillConfig.toSkillCastInfo(
+                        player, targetId, targetX, targetY, facing, currentFrame);
+
+                List<Long> hitPlayers = collisionSystem.checkSkillHit(castInfo);
+
+                for (Long hitUserId : hitPlayers) {
+                    BattlePlayer hitPlayer = session.getPlayer(hitUserId);
+                    if (hitPlayer != null && hitPlayer.getTeamId() != player.getTeamId()) {
+                        int damage = calculateSkillDamage(player, hitPlayer, skill);
+                        hitPlayer.takeDamage(damage);
+
+                        if (eventListener != null) {
+                            eventListener.onSkillCast(battleId, player.getUserId(), skillId, hitUserId, damage);
+                        }
+
+                        if (hitPlayer.isDead()) {
+                            onPlayerKilled(player, hitPlayer);
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            log.warn("技能数据解析失败: userId={}", player.getUserId());
         }
     }
 
     private void handleUseItem(BattlePlayer player, FrameInput input) {
-        String content = new String(input.getData());
-        String[] parts = content.split("\\|");
-        if (parts.length < 3) return;
+        try {
+            com.fasterxml.jackson.databind.JsonNode node = JSON_MAPPER.readTree(input.getData());
+            int itemId = node.get("itemId").asInt();
+            player.getItems().merge(itemId, 1, Integer::sum);
 
-        int itemId = Integer.parseInt(parts[2]);
-        player.getItems().merge(itemId, 1, Integer::sum);
-
-        if (eventListener != null) {
-            eventListener.onItemUse(player.getPlayerId(), itemId);
+            if (eventListener != null) {
+                eventListener.onItemUse(battleId, player.getUserId(), itemId);
+            }
+        } catch (Exception e) {
+            log.warn("道具使用数据解析失败: userId={}", player.getUserId());
         }
     }
 
     private void handleBuyItem(BattlePlayer player, FrameInput input) {
-        String content = new String(input.getData());
-        String[] parts = content.split("\\|");
-        if (parts.length < 3) return;
+        try {
+            com.fasterxml.jackson.databind.JsonNode node = JSON_MAPPER.readTree(input.getData());
+            int itemId = node.get("itemId").asInt();
+            int price = getItemPrice(itemId);
 
-        int itemId = Integer.parseInt(parts[2]);
-        int price = getItemPrice(itemId);
+            if (player.getGold() >= price) {
+                player.addGold(-price);
+                player.getItems().merge(itemId, 1, Integer::sum);
 
-        if (player.getGold() >= price) {
-            player.addGold(-price);
-            player.getItems().merge(itemId, 1, Integer::sum);
-
-            if (eventListener != null) {
-                eventListener.onItemBuy(player.getPlayerId(), itemId, price);
+                if (eventListener != null) {
+                    eventListener.onItemBuy(battleId, player.getUserId(), itemId, price);
+                }
             }
+        } catch (Exception e) {
+            log.warn("购买数据解析失败: userId={}", player.getUserId());
         }
     }
 
     private int calculateDamage(BattlePlayer attacker, BattlePlayer defender) {
         int baseAttack = attacker.getAttackPower();
         int defense = defender.getDefense();
-        int damage = Math.max(1, baseAttack - defense / 10);
-        return damage;
+        return Math.max(1, baseAttack - defense / 10);
     }
 
     private int calculateSkillDamage(BattlePlayer attacker, BattlePlayer defender, BattlePlayer.Skill skill) {
         int baseAttack = attacker.getAttackPower();
         int defense = defender.getDefense();
         float skillMultiplier = 1.0f + skill.getLevel() * 0.2f;
-        int damage = Math.max(1, (int)(baseAttack * skillMultiplier) - defense / 10);
-        return damage;
+        return Math.max(1, (int)(baseAttack * skillMultiplier) - defense / 10);
     }
 
     private void onPlayerKilled(BattlePlayer killer, BattlePlayer victim) {
@@ -424,26 +415,20 @@ public class LockstepEngine {
 
         BattleSession.BattleEvent killEvent = new BattleSession.BattleEvent();
         killEvent.setTimestamp(System.currentTimeMillis());
-        killEvent.setPlayerId(killer.getPlayerId());
+        killEvent.setUserId(killer.getUserId());
         killEvent.setType(BattleSession.BattleEvent.EventType.KILL);
-        killEvent.setData("target=" + victim.getPlayerId());
+        killEvent.setData("target=" + victim.getUserId());
         session.recordEvent(killEvent);
 
         BattleSession.BattleEvent deathEvent = new BattleSession.BattleEvent();
         deathEvent.setTimestamp(System.currentTimeMillis());
-        deathEvent.setPlayerId(victim.getPlayerId());
+        deathEvent.setUserId(victim.getUserId());
         deathEvent.setType(BattleSession.BattleEvent.EventType.DEATH);
-        deathEvent.setData("killer=" + killer.getPlayerId());
+        deathEvent.setData("killer=" + killer.getUserId());
         session.recordEvent(deathEvent);
 
-        BattleLogStorage.getInstance().submitBattleEvent(
-                session.getBattleId(),
-                "PLAYER_KILL",
-                "killer=" + killer.getPlayerId() + "|victim=" + victim.getPlayerId() + "|gold=300"
-        );
-
         if (eventListener != null) {
-            eventListener.onPlayerKill(killer.getPlayerId(), victim.getPlayerId());
+            eventListener.onPlayerKill(battleId, killer.getUserId(), victim.getUserId());
         }
     }
 
@@ -452,7 +437,7 @@ public class LockstepEngine {
             if (player.isDead()) {
                 player.updateDeadState();
                 if (!player.isDead() && eventListener != null) {
-                    eventListener.onPlayerRespawn(player.getPlayerId());
+                    eventListener.onPlayerRespawn(battleId, player.getUserId());
                 }
             }
         }
@@ -497,7 +482,7 @@ public class LockstepEngine {
             stop();
 
             if (eventListener != null) {
-                eventListener.onGameOver();
+                eventListener.onGameOver(battleId);
             }
         }
     }
@@ -572,7 +557,9 @@ public class LockstepEngine {
     }
 
     public List<FrameState> getFrameStates() {
-        return Collections.unmodifiableList(frameStates);
+        synchronized (frameStatesLock) {
+            return Collections.unmodifiableList(new ArrayList<>(frameStates));
+        }
     }
 
     public BattleSession getSession() {
@@ -580,15 +567,14 @@ public class LockstepEngine {
     }
 
     public interface BattleEventListener {
-        void onFrameUpdate(int frameNumber, FrameState state);
-        void onPlayerMove(long playerId, int x, int y);
-        void onPlayerAttack(long attackerId, long targetId, int damage);
-        void onSkillCast(long playerId, int skillId, long targetId, int damage);
-        void onPlayerKill(long killerId, long victimId);
-        void onPlayerRespawn(long playerId);
-        void onItemUse(long playerId, int itemId);
-        void onItemBuy(long playerId, int itemId, int price);
-        void onGameOver();
+        void onFrameUpdate(long battleId, int frameNumber, FrameState state);
+        void onPlayerMove(long battleId, long userId, int x, int y);
+        void onPlayerAttack(long battleId, long attackerId, long targetId, int damage);
+        void onSkillCast(long battleId, long userId, int skillId, long targetId, int damage);
+        void onPlayerKill(long battleId, long killerId, long victimId);
+        void onPlayerRespawn(long battleId, long userId);
+        void onItemUse(long battleId, long userId, int itemId);
+        void onItemBuy(long battleId, long userId, int itemId, int price);
+        void onGameOver(long battleId);
     }
 }
-

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="main-menu">
     <div class="menu-background">
       <div class="particles"></div>
@@ -291,7 +291,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useGameStore } from '@/stores/game'
 import { heroDefinitions, roleIcons, roleNames } from '@/data/heroes'
 import { HeroRole } from '@/types/game'
-import { httpLogin, httpRegister, joinMatch, getMatchStatus, cancelMatch, connectToGateway, enterBattle, isConnected, ping } from '@/network'
+import { httpLogin, httpRegister, joinMatch, getMatchStatus, cancelMatch, connectToMatchService, enterBattle, isConnected, ping } from '@/network'
 
 const emit = defineEmits<{
   (e: 'start-game'): void
@@ -375,7 +375,7 @@ const handleLogin = async () => {
 
     if (result.success && result.playerInfo) {
       gameStore.setPlayerInfo({
-        playerId: result.playerInfo.playerId,
+        userId: result.playerInfo.userId,
         playerName: result.playerInfo.nickname || result.playerInfo.playerName,
         rank: result.playerInfo.rank,
         rankScore: result.playerInfo.rankScore,
@@ -411,9 +411,9 @@ const handleStartGame = async () => {
   gameStore.setGameState('matching')
 
   try {
-    const connected = await connectToGateway()
+    const connected = await connectToMatchService()
     if (!connected) {
-      loginError.value = '连接网关失败'
+      loginError.value = '连接匹配服务失败'
       isMatching.value = false
       gameStore.setGameState('menu')
       return

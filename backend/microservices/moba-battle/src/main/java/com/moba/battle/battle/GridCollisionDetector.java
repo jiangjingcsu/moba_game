@@ -24,7 +24,7 @@ public class GridCollisionDetector {
     }
 
     public void updatePlayerPosition(BattlePlayer player) {
-        players.put(player.getPlayerId(), player);
+        players.put(player.getUserId(), player);
         rebuildGrid();
     }
 
@@ -39,8 +39,8 @@ public class GridCollisionDetector {
         }
     }
 
-    public List<BattlePlayer> getPlayersInRadius(long playerId, float radius) {
-        BattlePlayer player = players.get(playerId);
+    public List<BattlePlayer> getPlayersInRadius(long userId, float radius) {
+        BattlePlayer player = players.get(userId);
         if (player == null) return Collections.emptyList();
 
         int playerGridX = Math.floorDiv(player.getPosition().x, cellSize);
@@ -58,7 +58,7 @@ public class GridCollisionDetector {
                 List<Long> cellPlayers = grid.get(key);
                 if (cellPlayers != null) {
                     for (Long otherId : cellPlayers) {
-                        if (otherId.equals(playerId)) continue;
+                        if (otherId.equals(userId)) continue;
 
                         BattlePlayer other = players.get(otherId);
                         if (other != null) {
@@ -116,8 +116,8 @@ public class GridCollisionDetector {
         return result;
     }
 
-    public List<BattlePlayer> getPlayersInRect(long playerId, float width, float height) {
-        BattlePlayer player = players.get(playerId);
+    public List<BattlePlayer> getPlayersInRect(long userId, float width, float height) {
+        BattlePlayer player = players.get(userId);
         if (player == null) return Collections.emptyList();
 
         int playerGridX = Math.floorDiv(player.getPosition().x, cellSize);
@@ -141,7 +141,7 @@ public class GridCollisionDetector {
             }
         }
 
-        resultIds.remove(playerId);
+        resultIds.remove(userId);
         List<BattlePlayer> result = new ArrayList<>();
         for (Long id : resultIds) {
             BattlePlayer other = players.get(id);

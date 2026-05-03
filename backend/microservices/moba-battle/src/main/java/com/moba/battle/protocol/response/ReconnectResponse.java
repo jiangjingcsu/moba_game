@@ -5,20 +5,21 @@ import lombok.Data;
 @Data
 public class ReconnectResponse {
     private boolean success;
-    private String battleState;
-    private String errorMessage;
+    private String message;
+    private String stateJson;
 
-    public static ReconnectResponse success(String battleState) {
+    public static ReconnectResponse success(String stateJson) {
         ReconnectResponse r = new ReconnectResponse();
         r.setSuccess(true);
-        r.setBattleState(battleState);
+        r.setMessage("重连成功");
+        r.setStateJson(stateJson);
         return r;
     }
 
-    public static ReconnectResponse failure(String errorMessage) {
+    public static ReconnectResponse failure(String message) {
         ReconnectResponse r = new ReconnectResponse();
         r.setSuccess(false);
-        r.setErrorMessage(errorMessage);
+        r.setMessage(message);
         return r;
     }
 }

@@ -10,7 +10,7 @@ spring:
     nacos:
       discovery:
         enabled: true
-        server-addr: 192.168.0.102:8848
+        server-addr: 192.168.0.105:8848
         namespace: public
         group: DEFAULT_GROUP
         username: nacos
@@ -20,7 +20,7 @@ spring:
           dubbo.port: 20881
           dubbo.protocol: dubbo
       config:
-        server-addr: 192.168.0.102:8848
+        server-addr: 192.168.0.105:8848
         namespace: public
         group: DEFAULT_GROUP
         username: nacos
@@ -28,7 +28,7 @@ spring:
         import-check:
           enabled: false
   datasource:
-    url: jdbc:mysql://192.168.0.102:3306/moba_business?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true
+    url: jdbc:mysql://192.168.0.105:3306/moba_business?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true
     username: root
     password: jiangjing
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -41,7 +41,7 @@ spring:
     show-sql: false
   data:
     redis:
-      host: 192.168.0.102
+      host: 192.168.0.105
       port: 6379
       password: jiangjing
       database: 0
@@ -51,7 +51,7 @@ dubbo:
   qos:
     enable: false
   registry:
-    address: nacos://192.168.0.102:8848
+    address: nacos://192.168.0.105:8848
     username: nacos
     password: nacos
     parameters:
@@ -65,6 +65,10 @@ dubbo:
     prefer-serialization: hessian2
   consumer:
     prefer-serialization: hessian2
+
+rocketmq:
+  name-server: 192.168.0.105:9876
+  consumer-group: moba-business-consumer
 
 sentinel:
   enabled: false

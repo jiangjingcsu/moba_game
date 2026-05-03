@@ -49,10 +49,10 @@ public class BattleEventProducer {
             byte[] body = objectMapper.writeValueAsBytes(event);
             Message msg = new Message(EventTopics.BATTLE_END, body);
             producer.send(msg);
-            String battleId = event.getResult() != null ? event.getResult().getBattleId() : "unknown";
+            long battleId = event.getResult() != null ? event.getResult().getBattleId() : 0;
             log.info("战斗结束事件已发布: battleId={}", battleId);
         } catch (Exception e) {
-            String battleId = event.getResult() != null ? event.getResult().getBattleId() : "unknown";
+            long battleId = event.getResult() != null ? event.getResult().getBattleId() : 0;
             log.error("发布战斗结束事件失败: battleId={}", battleId, e);
         }
     }

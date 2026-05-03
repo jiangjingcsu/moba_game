@@ -1,5 +1,6 @@
 package com.moba.common.dto;
 
+import com.moba.common.constant.GameMode;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,8 +9,8 @@ import java.io.Serializable;
 public class MatchRequestDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private long playerId;
+    private long userId;
     private String nickname;
     private int rankScore;
-    private int gameMode;
+    private GameMode gameMode;
 }

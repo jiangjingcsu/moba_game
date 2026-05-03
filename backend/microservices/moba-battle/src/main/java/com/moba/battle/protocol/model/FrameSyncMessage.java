@@ -22,13 +22,13 @@ public class FrameSyncMessage {
 
     @Data
     public static class InputEntry {
-        private long playerId;
+        private long userId;
         private String inputType;
         private String data;
 
         public static InputEntry fromFrameInput(FrameInput fi) {
             InputEntry entry = new InputEntry();
-            entry.setPlayerId(fi.getPlayerId());
+            entry.setUserId(fi.getUserId());
             entry.setInputType(fi.getType().name());
             entry.setData(fi.getData() != null ? new String(fi.getData()) : "");
             return entry;
@@ -50,18 +50,18 @@ public class FrameSyncMessage {
             return e;
         }
 
-        public static EventEntry death(long playerId, long killerId) {
+        public static EventEntry death(long userId, long killerId) {
             EventEntry e = new EventEntry();
             e.setEventType("DEATH");
-            e.setSourceId(playerId);
+            e.setSourceId(userId);
             e.setTargetId(killerId);
             return e;
         }
 
-        public static EventEntry respawn(long playerId) {
+        public static EventEntry respawn(long userId) {
             EventEntry e = new EventEntry();
             e.setEventType("RESPAWN");
-            e.setSourceId(playerId);
+            e.setSourceId(userId);
             return e;
         }
 
@@ -83,10 +83,10 @@ public class FrameSyncMessage {
             return e;
         }
 
-        public static EventEntry move(long playerId, float x, float y) {
+        public static EventEntry move(long userId, float x, float y) {
             EventEntry e = new EventEntry();
             e.setEventType("MOVE");
-            e.setSourceId(playerId);
+            e.setSourceId(userId);
             e.setValue((int) x);
             return e;
         }
@@ -107,10 +107,10 @@ public class FrameSyncMessage {
         private int hp;
         private int mp;
 
-        public static PlayerCorrection fromPlayer(FrameState state, long playerId) {
-            FrameState.FixedPosition pos = state.getPlayerPositions().get(playerId);
-            Integer hp = state.getPlayerHp().get(playerId);
-            Integer mp = state.getPlayerMp().get(playerId);
+        public static PlayerCorrection fromPlayer(FrameState state, long userId) {
+            FrameState.FixedPosition pos = state.getPlayerPositions().get(userId);
+            Integer hp = state.getPlayerHp().get(userId);
+            Integer mp = state.getPlayerMp().get(userId);
             if (pos == null && hp == null) return null;
 
             PlayerCorrection c = new PlayerCorrection();
@@ -126,7 +126,7 @@ public class FrameSyncMessage {
 
     @Data
     public static class PlayerSnapshot {
-        private long playerId;
+        private long userId;
         private int heroId;
         private int teamId;
         private float x;
@@ -179,7 +179,7 @@ public class FrameSyncMessage {
         Map<Long, PlayerSnapshot> snapshots = new HashMap<>();
         for (Map.Entry<Long, FrameState.FixedPosition> entry : state.getPlayerPositions().entrySet()) {
             PlayerSnapshot ps = new PlayerSnapshot();
-            ps.setPlayerId(entry.getKey());
+            ps.setUserId(entry.getKey());
             ps.setX(entry.getValue().x);
             ps.setY(entry.getValue().y);
             Integer hp = state.getPlayerHp().get(entry.getKey());

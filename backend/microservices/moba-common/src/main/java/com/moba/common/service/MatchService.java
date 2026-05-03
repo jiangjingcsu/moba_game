@@ -1,5 +1,6 @@
 package com.moba.common.service;
 
+import com.moba.common.constant.GameMode;
 import com.moba.common.dto.MatchRequestDTO;
 import com.moba.common.dto.MatchResultDTO;
 
@@ -9,9 +10,9 @@ public interface MatchService {
 
     boolean joinMatch(MatchRequestDTO request);
 
-    boolean cancelMatch(long playerId);
+    boolean cancelMatch(long userId);
 
-    Optional<MatchResultDTO> getMatchResult(long playerId);
+    Optional<MatchResultDTO> getMatchResult(long userId);
 
-    int getQueueSize(int gameMode);
+    int getQueueSize(GameMode gameMode);
 }

@@ -27,7 +27,7 @@ public class JwtService {
 
     @Data
     public static class TokenInfo {
-        private long playerId;
+        private long userId;
         private String username;
     }
 
@@ -43,9 +43,9 @@ public class JwtService {
         return cachedSigningKey;
     }
 
-    public String generateToken(long playerId, String username) {
+    public String generateToken(long userId, String username) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("playerId", playerId);
+        claims.put("userId", userId);
         claims.put("username", username);
 
         return Jwts.builder()
@@ -82,19 +82,19 @@ public class JwtService {
         if (claims == null) return null;
 
         TokenInfo info = new TokenInfo();
-        Object playerId = claims.get("playerId");
-        if (playerId instanceof Integer) {
-            info.setPlayerId(((Integer) playerId).longValue());
-        } else if (playerId instanceof Long) {
-            info.setPlayerId((Long) playerId);
+        Object userId = claims.get("userId");
+        if (userId instanceof Integer) {
+            info.setUserId(((Integer) userId).longValue());
+        } else if (userId instanceof Long) {
+            info.setUserId((Long) userId);
         }
         info.setUsername(claims.getSubject());
         return info;
     }
 
-    public long getPlayerIdFromToken(String token) {
+    public long getUserIdFromToken(String token) {
         TokenInfo info = parseTokenInfo(token);
-        return info != null ? info.getPlayerId() : 0;
+        return info != null ? info.getUserId() : 0;
     }
 
     public String getUsernameFromToken(String token) {

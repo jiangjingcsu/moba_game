@@ -1,12 +1,15 @@
 package com.moba.battle.monitor;
 
 import com.moba.battle.config.ServerConfig;
-import com.moba.battle.config.SpringContextHolder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
@@ -16,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 @Component
-public class ServerMonitor {
+public class ServerMonitor implements DisposableBean {
     private final ScheduledExecutorService scheduler;
 
     private final AtomicInteger tickDelayMs;
@@ -49,8 +52,17 @@ public class ServerMonitor {
         startAlertCheck();
     }
 
-    public static ServerMonitor getInstance() {
-        return SpringContextHolder.getBean(ServerMonitor.class);
+    @Override
+    public void destroy() {
+        scheduler.shutdown();
+        try {
+            if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                scheduler.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            scheduler.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 
     private void startAlertCheck() {

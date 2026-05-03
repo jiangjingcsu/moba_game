@@ -1,5 +1,6 @@
 package com.moba.common.service;
 
+import com.moba.common.constant.GameMode;
 import com.moba.common.dto.BattleLogDTO;
 import com.moba.common.dto.ReplayDTO;
 
@@ -10,13 +11,13 @@ public interface DataService {
 
     BattleLogDTO saveBattleLog(BattleLogDTO battleLog);
 
-    Optional<BattleLogDTO> getBattleLog(String battleId);
+    Optional<BattleLogDTO> getBattleLog(long battleId);
 
-    List<BattleLogDTO> getPlayerBattleHistory(long playerId, int limit);
+    List<BattleLogDTO> getUserBattleHistory(long userId, int limit);
 
     ReplayDTO saveReplay(ReplayDTO replay);
 
-    Optional<ReplayDTO> getReplay(String battleId);
+    Optional<ReplayDTO> getReplay(long battleId);
 
-    List<BattleLogDTO> getRecentBattles(int gameMode, int limit);
+    List<BattleLogDTO> getRecentBattles(GameMode gameMode, int limit);
 }

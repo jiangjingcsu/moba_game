@@ -20,6 +20,7 @@ public class ServerConfig {
     private int maxFrameLength;
     private int battleServerPort;
     private int heartbeatIntervalSeconds;
+    private int businessThreadCount;
     private int tickIntervalMs;
     private int inputDelayFrames;
     private int maxRooms;
@@ -41,6 +42,9 @@ public class ServerConfig {
     private String nacosUsername;
     private String nacosPassword;
 
+    private String jwtSecret;
+    private String gatewaySecret;
+
     private String redisHost;
     private int redisPort;
     private String redisPassword;
@@ -55,15 +59,12 @@ public class ServerConfig {
     private int rocketmqSendMsgTimeout;
     private String rocketmqConsumerGroup;
 
-    private int dubboPort;
-    private int dubboRegistryTimeout;
-
     private int loadingTimeoutSeconds;
     private int roomCleanupDelaySeconds;
+    private int maxPlayersPerRoom;
     private int soBacklog;
     private String wsPath;
     private String wsServiceName;
-    private String dubboServiceName;
 
     private long creepSpawnIntervalMs;
     private long runeSpawnIntervalMs;
@@ -90,9 +91,9 @@ public class ServerConfig {
         loadBattleConfig();
         loadPhysicsConfig();
         loadRedisConfig();
-        loadDubboConfig();
         loadRocketmqConfig();
         loadNacosConfig();
+        loadJwtConfig();
         loadGameplayConfig();
     }
 
@@ -107,6 +108,7 @@ public class ServerConfig {
         maxFrameLength = NacosConfigLoader.getRequiredInt(mergedConfig, "battle.max-frame-length");
         battleServerPort = NacosConfigLoader.getRequiredInt(mergedConfig, "battle.battle-server-port");
         heartbeatIntervalSeconds = NacosConfigLoader.getRequiredInt(mergedConfig, "battle.heartbeat-interval-seconds");
+        businessThreadCount = NacosConfigLoader.getNestedInt(mergedConfig, "battle.business-thread-count", 8);
         tickIntervalMs = NacosConfigLoader.getRequiredInt(mergedConfig, "battle.tick-interval-ms");
         inputDelayFrames = NacosConfigLoader.getRequiredInt(mergedConfig, "battle.input-delay-frames");
         maxRooms = NacosConfigLoader.getRequiredInt(mergedConfig, "battle.max-rooms");
@@ -114,10 +116,10 @@ public class ServerConfig {
         hashCheckIntervalFrames = NacosConfigLoader.getRequiredInt(mergedConfig, "battle.hash-check-interval-frames");
         loadingTimeoutSeconds = NacosConfigLoader.getRequiredInt(mergedConfig, "battle.loading-timeout-seconds");
         roomCleanupDelaySeconds = NacosConfigLoader.getRequiredInt(mergedConfig, "battle.room-cleanup-delay-seconds");
+        maxPlayersPerRoom = NacosConfigLoader.getRequiredInt(mergedConfig, "battle.max-players-per-room");
         soBacklog = NacosConfigLoader.getRequiredInt(mergedConfig, "battle.so-backlog");
         wsPath = NacosConfigLoader.getRequiredString(mergedConfig, "battle.ws-path");
         wsServiceName = NacosConfigLoader.getRequiredString(mergedConfig, "battle.ws-service-name");
-        dubboServiceName = NacosConfigLoader.getRequiredString(mergedConfig, "battle.dubbo-service-name");
     }
 
     private void loadPhysicsConfig() {
@@ -142,11 +144,6 @@ public class ServerConfig {
         redisPoolMinIdle = NacosConfigLoader.getRequiredInt(mergedConfig, "spring.data.redis.pool.min-idle");
     }
 
-    private void loadDubboConfig() {
-        dubboPort = NacosConfigLoader.getRequiredInt(mergedConfig, "dubbo.protocol.port");
-        dubboRegistryTimeout = NacosConfigLoader.getRequiredInt(mergedConfig, "dubbo.registry.timeout");
-    }
-
     private void loadRocketmqConfig() {
         String ns = NacosConfigLoader.getNestedString(mergedConfig, "rocketmq.name-server");
         if (ns != null && !ns.isEmpty() && !ns.startsWith("$")) {
@@ -163,6 +160,11 @@ public class ServerConfig {
         nacosGroup = NacosConfigLoader.getRequiredString(mergedConfig, "nacos.group");
         nacosUsername = NacosConfigLoader.getRequiredString(mergedConfig, "nacos.username");
         nacosPassword = NacosConfigLoader.getRequiredString(mergedConfig, "nacos.password");
+    }
+
+    private void loadJwtConfig() {
+        jwtSecret = NacosConfigLoader.getRequiredString(mergedConfig, "jwt.secret");
+        gatewaySecret = NacosConfigLoader.getRequiredString(mergedConfig, "gateway.internal-secret");
     }
 
     private void loadGameplayConfig() {

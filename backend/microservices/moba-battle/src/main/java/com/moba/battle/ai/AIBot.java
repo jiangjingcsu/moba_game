@@ -1,8 +1,6 @@
 package com.moba.battle.ai;
 import com.moba.battle.model.HeroConfig;
 
-import com.moba.battle.config.ServerConfig;
-import com.moba.battle.config.SpringContextHolder;
 import com.moba.battle.model.BattlePlayer;
 import com.moba.battle.model.BattleSession;
 import lombok.Data;
@@ -35,8 +33,7 @@ public class AIBot {
 
     private final int tickIntervalMs;
 
-    public AIBot(long botId, BattlePlayer battlePlayer, int aiLevel, BattleSession session) {
-        ServerConfig config = SpringContextHolder.getBean(ServerConfig.class);
+    public AIBot(long botId, BattlePlayer battlePlayer, int aiLevel, BattleSession session, int tickIntervalMs) {
         this.botId = botId;
         this.battlePlayer = battlePlayer;
         this.aiLevel = aiLevel;
@@ -52,7 +49,7 @@ public class AIBot {
         this.lastAttackFrame = 0;
         this.lastSkillCastFrame = 0;
         this.threatTable = new HashMap<>();
-        this.tickIntervalMs = config.getTickIntervalMs();
+        this.tickIntervalMs = tickIntervalMs;
     }
 
     public void setState(AIState newState, long currentFrame) {
@@ -125,12 +122,12 @@ public class AIBot {
         return session.getPlayer(currentTargetId);
     }
 
-    public void updateThreatTable(long playerId, float threat) {
-        threatTable.merge(playerId, threat, Float::sum);
+    public void updateThreatTable(long userId, float threat) {
+        threatTable.merge(userId, threat, Float::sum);
     }
 
-    public Float getThreatLevel(long playerId) {
-        return threatTable.getOrDefault(playerId, 0f);
+    public Float getThreatLevel(long userId) {
+        return threatTable.getOrDefault(userId, 0f);
     }
 
     public void clearThreatTable() {
@@ -198,7 +195,7 @@ public class AIBot {
         List<Long> allies = new ArrayList<>();
         for (Map.Entry<Long, BattlePlayer> entry : session.getBattlePlayers().entrySet()) {
             BattlePlayer player = entry.getValue();
-            if (player.getTeamId() == getTeamId() && player.getPlayerId() != botId && !player.isDead()) {
+            if (player.getTeamId() == getTeamId() && player.getUserId() != botId && !player.isDead()) {
                 int dx = player.getPosition().x - getPositionX();
                 int dy = player.getPosition().y - getPositionY();
                 int distance = (int) Math.sqrt(dx * dx + dy * dy);
@@ -255,11 +252,11 @@ public class AIBot {
         return distanceTo(target.getPosition().x, target.getPosition().y);
     }
 
-    public static AIBot createBot(long botId, int heroId, int teamId, BattleSession session, int aiLevel) {
+    public static AIBot createBot(long botId, int heroId, int teamId, BattleSession session, int aiLevel, int tickIntervalMs) {
         HeroConfig heroConfig = HeroConfig.getHeroConfig(heroId);
         BattlePlayer battlePlayer = new BattlePlayer(botId, heroId, teamId, heroConfig);
         session.addPlayer(botId, battlePlayer);
-        return new AIBot(botId, battlePlayer, aiLevel, session);
+        return new AIBot(botId, battlePlayer, aiLevel, session, tickIntervalMs);
     }
 }
 

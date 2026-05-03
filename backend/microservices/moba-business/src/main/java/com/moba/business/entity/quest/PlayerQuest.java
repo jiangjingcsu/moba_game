@@ -19,7 +19,7 @@ public class PlayerQuest {
     private Long id;
 
     @Column(nullable = false)
-    private Long playerId;
+    private long userId;
 
     @Column(nullable = false)
     private Long questTemplateId;

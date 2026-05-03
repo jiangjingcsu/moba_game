@@ -1,45 +1,109 @@
-export enum MessageId {
-    HEARTBEAT_REQ = (0x01 << 8) | (1 << 3) | 0,
-    HEARTBEAT_RESP = (0x01 << 8) | (1 << 3) | 1,
-    LOGIN_REQ = (0x02 << 8) | (1 << 3) | 0,
-    LOGIN_RESP = (0x02 << 8) | (1 << 3) | 1,
-    RECONNECT_REQ = (0x02 << 8) | (2 << 3) | 0,
-    RECONNECT_RESP = (0x02 << 8) | (2 << 3) | 1,
-    MATCH_JOIN_REQ = (0x03 << 8) | (1 << 3) | 0,
-    MATCH_JOIN_RESP = (0x03 << 8) | (1 << 3) | 1,
-    MATCH_STATUS_REQ = (0x03 << 8) | (2 << 3) | 0,
-    MATCH_STATUS_RESP = (0x03 << 8) | (2 << 3) | 1,
-    MATCH_CANCEL_REQ = (0x03 << 8) | (3 << 3) | 0,
-    MATCH_CANCEL_RESP = (0x03 << 8) | (3 << 3) | 1,
-    MATCH_SUCCESS_NOTIFY = (0x03 << 8) | (4 << 3) | 2,
-    BATTLE_ENTER_REQ = (0x04 << 8) | (1 << 3) | 0,
-    BATTLE_ENTER_RESP = (0x04 << 8) | (1 << 3) | 1,
-    BATTLE_READY_REQ = (0x04 << 8) | (2 << 3) | 0,
-    BATTLE_READY_RESP = (0x04 << 8) | (2 << 3) | 1,
-    BATTLE_ACTION_REQ = (0x04 << 8) | (3 << 3) | 0,
-    BATTLE_SKILL_CAST_REQ = (0x04 << 8) | (4 << 3) | 0,
-    BATTLE_STATE_NOTIFY = (0x04 << 8) | (5 << 3) | 2,
-    BATTLE_END_NOTIFY = (0x04 << 8) | (6 << 3) | 2,
-    BATTLE_FRAME_SYNC_NOTIFY = (0x04 << 8) | (7 << 3) | 2,
-    BATTLE_COUNTDOWN_NOTIFY = (0x04 << 8) | (8 << 3) | 2,
-    BATTLE_START_NOTIFY = (0x04 << 8) | (9 << 3) | 2,
-    BATTLE_EVENT_NOTIFY = (0x04 << 8) | (10 << 3) | 2,
-    BATTLE_HASH_CHECK_NOTIFY = (0x04 << 8) | (11 << 3) | 2,
-    BATTLE_STATE_CORRECTION_NOTIFY = (0x04 << 8) | (12 << 3) | 2,
-    ROOM_CREATE_REQ = (0x05 << 8) | (1 << 3) | 0,
-    ROOM_CREATE_RESP = (0x05 << 8) | (1 << 3) | 1,
-    ROOM_JOIN_REQ = (0x05 << 8) | (2 << 3) | 0,
-    ROOM_JOIN_RESP = (0x05 << 8) | (2 << 3) | 1,
-    ROOM_LEAVE_REQ = (0x05 << 8) | (3 << 3) | 0,
-    ROOM_STATE_NOTIFY = (0x05 << 8) | (4 << 3) | 2,
-    CHAT_REQ = (0x06 << 8) | (1 << 3) | 0,
-    CHAT_NOTIFY = (0x06 << 8) | (1 << 3) | 2,
-    EMOTE_REQ = (0x06 << 8) | (2 << 3) | 0,
-    EMOTE_NOTIFY = (0x06 << 8) | (2 << 3) | 2,
-    SPECTATOR_JOIN_REQ = (0x07 << 8) | (1 << 3) | 0,
-    SPECTATOR_JOIN_RESP = (0x07 << 8) | (1 << 3) | 1,
-    SPECTATOR_LEAVE_REQ = (0x07 << 8) | (2 << 3) | 0,
+﻿export enum ExtensionId {
+    SYSTEM = 0x01,
+    AUTH = 0x02,
+    MATCH = 0x03,
+    BATTLE = 0x04,
+    ROOM = 0x05,
+    SOCIAL = 0x06,
+    SPECTATOR = 0x07,
 }
+
+export enum SystemCmdId {
+    HEARTBEAT = 1,
+}
+
+export enum AuthCmdId {
+    LOGIN = 1,
+    RECONNECT = 2,
+}
+
+export enum MatchCmdId {
+    JOIN = 1,
+    STATUS = 2,
+    CANCEL = 3,
+    SUCCESS_NOTIFY = 4,
+    PROGRESS_NOTIFY = 5,
+}
+
+export enum BattleCmdId {
+    ENTER = 1,
+    READY = 2,
+    ACTION = 3,
+    SKILL_CAST = 4,
+    RECONNECT = 5,
+    STATE_NOTIFY = 6,
+    END_NOTIFY = 7,
+    FRAME_SYNC = 8,
+    COUNTDOWN_NOTIFY = 9,
+    START_NOTIFY = 10,
+    EVENT_NOTIFY = 11,
+    HASH_CHECK = 12,
+    STATE_CORRECTION = 13,
+}
+
+export enum RoomCmdId {
+    CREATE = 1,
+    JOIN = 2,
+    LEAVE = 3,
+    STATE_NOTIFY = 4,
+}
+
+export enum SocialCmdId {
+    CHAT = 1,
+    EMOTE = 2,
+}
+
+export enum SpectatorCmdId {
+    JOIN = 1,
+    LEAVE = 2,
+}
+
+export interface MessageRoute {
+    extId: number
+    cmdId: number
+}
+
+export function route(extId: ExtensionId, cmdId: number): MessageRoute {
+    return { extId, cmdId }
+}
+
+export function routeKey(extId: number, cmdId: number): string {
+    return `${extId}:${cmdId}`
+}
+
+export const MessageRoute = {
+    HEARTBEAT: route(ExtensionId.SYSTEM, SystemCmdId.HEARTBEAT),
+    LOGIN: route(ExtensionId.AUTH, AuthCmdId.LOGIN),
+    RECONNECT: route(ExtensionId.AUTH, AuthCmdId.RECONNECT),
+    MATCH_JOIN: route(ExtensionId.MATCH, MatchCmdId.JOIN),
+    MATCH_STATUS: route(ExtensionId.MATCH, MatchCmdId.STATUS),
+    MATCH_CANCEL: route(ExtensionId.MATCH, MatchCmdId.CANCEL),
+    MATCH_SUCCESS_NOTIFY: route(ExtensionId.MATCH, MatchCmdId.SUCCESS_NOTIFY),
+    MATCH_PROGRESS_NOTIFY: route(ExtensionId.MATCH, MatchCmdId.PROGRESS_NOTIFY),
+    BATTLE_ENTER: route(ExtensionId.BATTLE, BattleCmdId.ENTER),
+    BATTLE_READY: route(ExtensionId.BATTLE, BattleCmdId.READY),
+    BATTLE_ACTION: route(ExtensionId.BATTLE, BattleCmdId.ACTION),
+    BATTLE_SKILL_CAST: route(ExtensionId.BATTLE, BattleCmdId.SKILL_CAST),
+    BATTLE_RECONNECT: route(ExtensionId.BATTLE, BattleCmdId.RECONNECT),
+    BATTLE_STATE_NOTIFY: route(ExtensionId.BATTLE, BattleCmdId.STATE_NOTIFY),
+    BATTLE_END_NOTIFY: route(ExtensionId.BATTLE, BattleCmdId.END_NOTIFY),
+    BATTLE_FRAME_SYNC: route(ExtensionId.BATTLE, BattleCmdId.FRAME_SYNC),
+    BATTLE_COUNTDOWN_NOTIFY: route(ExtensionId.BATTLE, BattleCmdId.COUNTDOWN_NOTIFY),
+    BATTLE_START_NOTIFY: route(ExtensionId.BATTLE, BattleCmdId.START_NOTIFY),
+    BATTLE_EVENT_NOTIFY: route(ExtensionId.BATTLE, BattleCmdId.EVENT_NOTIFY),
+    BATTLE_HASH_CHECK: route(ExtensionId.BATTLE, BattleCmdId.HASH_CHECK),
+    BATTLE_STATE_CORRECTION: route(ExtensionId.BATTLE, BattleCmdId.STATE_CORRECTION),
+    ROOM_CREATE: route(ExtensionId.ROOM, RoomCmdId.CREATE),
+    ROOM_JOIN: route(ExtensionId.ROOM, RoomCmdId.JOIN),
+    ROOM_LEAVE: route(ExtensionId.ROOM, RoomCmdId.LEAVE),
+    ROOM_STATE_NOTIFY: route(ExtensionId.ROOM, RoomCmdId.STATE_NOTIFY),
+    CHAT: route(ExtensionId.SOCIAL, SocialCmdId.CHAT),
+    EMOTE: route(ExtensionId.SOCIAL, SocialCmdId.EMOTE),
+    SPECTATOR_JOIN: route(ExtensionId.SPECTATOR, SpectatorCmdId.JOIN),
+    SPECTATOR_LEAVE: route(ExtensionId.SPECTATOR, SpectatorCmdId.LEAVE),
+} as const
+
+export const MessageId = MessageRoute
 
 export const MatchStatus = {
     WAITING: 0,
@@ -50,7 +114,7 @@ export const MatchStatus = {
 
 export interface LoginResponse {
     success: boolean
-    playerId: number
+    userId: number
     playerName: string
     rank: number
     rankScore: number
@@ -59,7 +123,7 @@ export interface LoginResponse {
 
 export interface MatchResponse {
     success: boolean
-    matchId: string
+    battleId?: number
     gameMode: number
     currentPlayers: number
     neededPlayers: number
@@ -70,8 +134,7 @@ export interface MatchResponse {
 
 export interface MatchStatusResponse {
     found: boolean
-    matchId?: string
-    battleId?: string
+    battleId?: number
     battleServerIp?: string
     battleServerPort?: number
     gameMode?: number
@@ -79,17 +142,28 @@ export interface MatchStatusResponse {
 }
 
 export interface MatchSuccessNotify {
-    matchId: string
-    battleId: string
+    matchId: number
+    battleId: number
+    gameMode: number
+    teamCount: number
+    userIds: number[]
     battleServerIp: string
     battleServerPort: number
+    aiMode: boolean
+    aiLevel: number
+    matchTime: number
+}
+
+export interface MatchProgressNotify {
+    matchId: number
+    currentPlayers: number
+    neededPlayers: number
     gameMode: number
-    playerIds: number[]
 }
 
 export interface BattleEnterResponse {
     success: boolean
-    battleId: string
+    battleId: number
     mapId: number
     mapConfig: string
     errorMessage: string
@@ -112,7 +186,7 @@ export interface BattleStateUpdate {
 
 export interface BattleEndNotify {
     winnerTeamId: number
-    battleId: string
+    battleId: number
     duration: number
     stats: any
 }

@@ -1,10 +1,10 @@
-import { defineStore } from 'pinia'
+﻿import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Hero, TeamInfo, ChatMessage, GameEvent, Vector2D } from '@/types/game'
 import { HeroRole } from '@/types/game'
 
 export interface PlayerInfo {
-  playerId: number
+  userId: number
   playerName: string
   nickname: string
   rank: number
@@ -18,7 +18,7 @@ export interface PlayerInfo {
 }
 
 export interface BattleInfo {
-  battleId: string
+  battleId: number
   mapId: number
   mapConfig: string
   heroId: number
@@ -27,6 +27,7 @@ export interface BattleInfo {
 
 export interface GameMode {
   id: string
+  code: number
   name: string
   description: string
   icon: string
@@ -72,11 +73,12 @@ export const useGameStore = defineStore('game', () => {
   const matchWaitTime = ref(0)
 
   const gameModes = ref<GameMode[]>([
-    { id: 'ranked_3v3v3', name: '排位赛', description: '3v3v3 竞技排位，赢取段位积分', icon: '🏆', type: 'ranked', playerCount: '3v3v3', mapName: '三方峡谷', isLocked: false, lockReason: '' },
-    { id: 'casual_3v3v3', name: '匹配赛', description: '3v3v3 休闲匹配，轻松对战', icon: '⚔️', type: 'casual', playerCount: '3v3v3', mapName: '三方峡谷', isLocked: false, lockReason: '' },
-    { id: 'casual_1v1', name: '单挑模式', description: '1v1 单人对决，展示个人实力', icon: '🤺', type: 'casual', playerCount: '1v1', mapName: '竞技场', isLocked: false, lockReason: '' },
-    { id: 'custom', name: '自定义房间', description: '创建或加入自定义房间', icon: '🏠', type: 'custom', playerCount: '自定义', mapName: '自选', isLocked: false, lockReason: '' },
-    { id: 'tutorial', name: '新手教程', description: '学习游戏基础操作和规则', icon: '📖', type: 'tutorial', playerCount: '单人', mapName: '训练场', isLocked: false, lockReason: '' },
+    { id: 'ranked_3v3v3', code: 3, name: '排位赛', description: '3v3v3 竞技排位，赢取段位积分', icon: '🏆', type: 'ranked', playerCount: '3v3v3', mapName: '三方峡谷', isLocked: false, lockReason: '' },
+    { id: 'casual_3v3v3', code: 3, name: '匹配赛', description: '3v3v3 休闲匹配，轻松对战', icon: '⚔️', type: 'casual', playerCount: '3v3v3', mapName: '三方峡谷', isLocked: false, lockReason: '' },
+    { id: 'pve_3v3v3', code: 5, name: '人机模式', description: '3v3v3 人机对战，练习英雄技巧', icon: '🤖', type: 'pve', playerCount: '3v3v3', mapName: '三方峡谷', isLocked: false, lockReason: '' },
+    { id: 'casual_5v5', code: 2, name: '5v5匹配', description: '5v5 休闲对战，经典模式', icon: '🛡️', type: 'casual', playerCount: '5v5', mapName: '标准战场', isLocked: false, lockReason: '' },
+    { id: 'pve_5v5', code: 4, name: '5v5人机', description: '5v5 人机对战，练习配合', icon: '🤖', type: 'pve', playerCount: '5v5', mapName: '标准战场', isLocked: false, lockReason: '' },
+    { id: 'tutorial', code: 0, name: '新手教程', description: '学习游戏基础操作和规则', icon: '📖', type: 'tutorial', playerCount: '单人', mapName: '训练场', isLocked: false, lockReason: '' },
   ])
 
   const dailyTasks = ref<DailyTask[]>([

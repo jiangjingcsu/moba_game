@@ -1,30 +1,47 @@
 package com.moba.battle.storage;
 
-import com.moba.battle.config.SpringContextHolder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
-public class BattleLogStorage {
+public class BattleLogStorage implements DisposableBean {
     private final String storageDir;
     private final ExecutorService asyncExecutor;
     private final BlockingQueue<BattleLogEntry> logQueue;
     private volatile boolean running;
+    private final DateTimeFormatter dateFormatter;
 
     public BattleLogStorage() {
         this.storageDir = "battle_logs";
         this.asyncExecutor = Executors.newSingleThreadExecutor();
-        this.logQueue = new LinkedBlockingQueue<>();
+        this.logQueue = new LinkedBlockingQueue<>(10000);
         this.running = true;
+        this.dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault());
 
         try {
             Files.createDirectories(Paths.get(storageDir));
@@ -33,10 +50,6 @@ public class BattleLogStorage {
         }
 
         startLogConsumer();
-    }
-
-    public static BattleLogStorage getInstance() {
-        return SpringContextHolder.getBean(BattleLogStorage.class);
     }
 
     private void startLogConsumer() {
@@ -61,7 +74,7 @@ public class BattleLogStorage {
         logQueue.offer(entry);
     }
 
-    public void submitBattleEvent(String battleId, String eventType, String data) {
+    public void submitBattleEvent(long battleId, String eventType, String data) {
         BattleLogEntry entry = new BattleLogEntry();
         entry.setBattleId(battleId);
         entry.setEventType(eventType);
@@ -71,7 +84,7 @@ public class BattleLogStorage {
         submitLog(entry);
     }
 
-    public void submitBattleSnapshot(String battleId, int frameNumber, String stateJson) {
+    public void submitBattleSnapshot(long battleId, int frameNumber, String stateJson) {
         BattleLogEntry entry = new BattleLogEntry();
         entry.setBattleId(battleId);
         entry.setEventType("STATE_SNAPSHOT");
@@ -84,7 +97,7 @@ public class BattleLogStorage {
 
     private void saveLogEntry(BattleLogEntry entry) {
         try {
-            String dateStr = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new Date(entry.getTimestamp()));
+            String dateStr = dateFormatter.format(Instant.ofEpochMilli(entry.getTimestamp()));
             String dateDir = storageDir + File.separator + dateStr;
             Files.createDirectories(Paths.get(dateDir));
 
@@ -106,47 +119,8 @@ public class BattleLogStorage {
         return entry.getTimestamp() + "|" + entry.getLogType() + "|" + entry.getEventType() + "|" + entry.getFrameNumber() + "|" + entry.getData();
     }
 
-    public List<BattleLogEntry> loadBattleLogs(String battleId, String dateStr) {
-        List<BattleLogEntry> logs = new ArrayList<>();
-        String filePath = storageDir + File.separator + dateStr + File.separator + battleId + ".log.gz";
-
-        try (FileInputStream fis = new FileInputStream(filePath);
-             GZIPInputStream gzis = new GZIPInputStream(fis);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(gzis))) {
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                BattleLogEntry entry = deserializeLogEntry(line);
-                if (entry != null) {
-                    logs.add(entry);
-                }
-            }
-        } catch (IOException e) {
-            log.error("加载战斗日志失败 {}: {}", battleId, dateStr, e);
-        }
-
-        return logs;
-    }
-
-    private BattleLogEntry deserializeLogEntry(String line) {
-        try {
-            String[] parts = line.split("\\|", 5);
-            if (parts.length < 5) return null;
-
-            BattleLogEntry entry = new BattleLogEntry();
-            entry.setTimestamp(Long.parseLong(parts[0]));
-            entry.setLogType(BattleLogEntry.LogType.valueOf(parts[1]));
-            entry.setEventType(parts[2]);
-            entry.setFrameNumber(Integer.parseInt(parts[3]));
-            entry.setData(parts[4]);
-            return entry;
-        } catch (Exception e) {
-            log.error("反序列化日志条目失败: {}", line, e);
-            return null;
-        }
-    }
-
-    public void stop() {
+    @Override
+    public void destroy() {
         running = false;
         asyncExecutor.shutdown();
         try {
@@ -155,12 +129,13 @@ public class BattleLogStorage {
             }
         } catch (InterruptedException e) {
             asyncExecutor.shutdownNow();
+            Thread.currentThread().interrupt();
         }
     }
 
     @Data
     public static class BattleLogEntry {
-        private String battleId;
+        private long battleId;
         private long timestamp;
         private LogType logType;
         private String eventType;
